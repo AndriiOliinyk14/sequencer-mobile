@@ -6,16 +6,16 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {useCountContext} from '../../context/countContext';
-import {useGlobalContext} from '../../context/globalContext';
-import {CounterModule} from '../../NativeModules';
-import {PlayerState} from '../../types/PlayerStatus';
-import {DialogEnum} from '../../types';
+import { useCountContext } from '../../context/countContext';
+import { useGlobalContext } from '../../context/globalContext';
+import { CounterModule } from '../../NativeModules';
+import { DialogEnum } from '../../types';
+import { PlayerState } from '../../types/PlayerStatus';
 
 const Transport = () => {
-  const {count} = useCountContext();
-  const {actions, state} = useGlobalContext();
-  const {playerStatus, patternLength} = state;
+  const { count } = useCountContext();
+  const { actions, state } = useGlobalContext();
+  const { playerStatus, patternLength } = state;
 
   const buttonTitle = playerStatus === PlayerState.PLAYING ? 'Stop' : 'Start';
 
@@ -44,20 +44,6 @@ const Transport = () => {
     CounterModule.setPatternLength(value);
   };
 
-  // const handleOnStopRecording = (name: string) => {
-  //   SamplerModule.stopRecordingSample(name, data => {
-  //     console.log('fileUrl', data);
-
-  //     if (!data) {
-  //       return;
-  //     }
-
-  //     console.log('addSample', (data as string).replace('file://', ''));
-
-  //     SamplerModule.addSample(name, data, data => actions.setSamples(data));
-  //   });
-  // };
-
   return (
     <View style={styles.container}>
       <Text style={styles.count}>{count}</Text>
@@ -84,10 +70,6 @@ const Transport = () => {
           32
         </Text>
       </TouchableNativeFeedback>
-      <Button
-        title="Mixer"
-        onPress={() => actions.openDialog(DialogEnum.MIXER)}
-      />
       <Button
         title="REC"
         onPress={() => actions.openDialog(DialogEnum.RECORD)}
@@ -126,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export {Transport};
+export { Transport };

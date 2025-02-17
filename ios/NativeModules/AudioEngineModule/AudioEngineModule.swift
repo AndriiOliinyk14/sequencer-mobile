@@ -7,7 +7,6 @@
 
 import Foundation
 import AVFAudio
-import React
 
 
 class AudioEngineModule {

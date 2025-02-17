@@ -12,6 +12,7 @@
 
 RCT_EXTERN_METHOD(addSample:(NSString *)name url:(NSString *)url settings:(NSDictionary)settings callback: (RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(playSample:(NSString *)name)
-RCT_EXTERN_METHOD(setSampleVolume:(NSString *)name volume:(float *)volume)
+RCT_EXTERN_METHOD(setSampleVolume:(NSString *)name value:(float *)value)
+RCT_EXTERN_METHOD(setSampleReverb:(NSString *)name value:(float *)value)
 
 @end

@@ -14,7 +14,7 @@ function usePlayer() {
         SamplerModule.playSample(sample.key);
       }
     });
-  }, [count, samples]);
+  }, [count]);
 }
 
 export {usePlayer};

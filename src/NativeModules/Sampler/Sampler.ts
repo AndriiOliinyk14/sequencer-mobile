@@ -14,7 +14,8 @@ interface SamplerInterface {
     }) => void,
   ) => void;
   playSample: (name: string) => void;
-  setSampleVolume: (name: string, volume: number) => void;
+  setSampleVolume: (name: string, value: number) => void;
+  setSampleReverb: (name: string, value: number) => void;
 }
 
 export const SamplerModule = NativeModules.SamplerModule as SamplerInterface;

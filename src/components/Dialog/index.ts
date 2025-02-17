@@ -1,2 +1,3 @@
+export * from './NewProjectDialog';
 export * from './RecordDialog';
-export * from './MixerDialog';
+export * from './AddSampleDialog';

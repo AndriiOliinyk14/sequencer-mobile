@@ -30,8 +30,6 @@ const RecordDialog = () => {
 
   const handleOnStop = () => {
     RecorderModule.stop(data => {
-      console.log('fileUrl', data);
-
       if (!data) {
         return;
       }
@@ -82,7 +80,7 @@ const RecordDialog = () => {
   };
 
   return (
-    <Dialog isVisible={dialogs.record.visible} onClose={handleOnClose}>
+    <Dialog isVisible={dialogs.RECORD.visible} onClose={handleOnClose}>
       <>
         <TextInput
           style={styles.textField}

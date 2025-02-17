@@ -1,11 +1,12 @@
 import React from 'react';
-import {MixerDialog, RecordDialog} from '../components';
+import {NewProjectDialog, RecordDialog, AddSampleDialog} from '../components';
 
 const Dialogs = () => {
   return (
     <>
       <RecordDialog />
-      <MixerDialog />
+      <NewProjectDialog />
+      <AddSampleDialog />
     </>
   );
 };

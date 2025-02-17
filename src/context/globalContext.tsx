@@ -1,6 +1,8 @@
 import React, {createContext, useContext, useReducer} from 'react';
-import {DialogEnum, SampleSettings} from '../types';
+import {DialogEnum, Sample, SampleSettings} from '../types';
 import {PlayerState} from '../types/PlayerStatus';
+import {CounterModule, SamplerModule} from '../NativeModules';
+import RNFS from 'react-native-fs';
 
 type Pattern = {[key: string]: {isOn: boolean}[]};
 
@@ -11,11 +13,7 @@ interface InitialState {
       isOn: boolean;
     }[];
   };
-  samples: {
-    key: string;
-    title: string;
-    settings: SampleSettings;
-  }[];
+  samples: Sample[];
   bpm: number;
   patternLength: number;
   dialogs: {
@@ -29,10 +27,18 @@ interface ContextInterface {
   state: InitialState;
   actions: {
     updatePattern: (key: string, pattern: Pattern) => void;
+    setPatterns: (patterns: Record<string, Pattern>) => void;
     setPlayerStatus: (status: PlayerState) => void;
     setSample: (key: string, title: string, settings: SampleSettings) => void;
+    updateSample: (key: string, data: Partial<SampleSettings>) => void;
     setBpm: (bpm: number) => void;
     setPatternLength: (length: number) => void;
+    setInitialProject: (
+      patterns: Record<string, Pattern>,
+      samples: Sample[],
+      bpm: number,
+      patternLength: number,
+    ) => void;
     openDialog: (name: string) => void;
     closeDialog: (name: string) => void;
   };
@@ -48,7 +54,10 @@ const initialState = {
     [DialogEnum.RECORD]: {
       visible: false,
     },
-    [DialogEnum.MIXER]: {
+    [DialogEnum.NEW_PROJECT]: {
+      visible: false,
+    },
+    [DialogEnum.ADD_SAMPLE]: {
       visible: false,
     },
   },
@@ -58,10 +67,13 @@ export const Context = createContext<ContextInterface>({
   state: initialState,
   actions: {
     updatePattern: () => {},
+    setPatterns: () => {},
     setPlayerStatus: () => {},
     setSample: () => {},
+    updateSample: () => {},
     setBpm: () => {},
     setPatternLength: () => {},
+    setInitialProject: () => {},
     openDialog: () => {},
     closeDialog: () => {},
   },
@@ -72,8 +84,10 @@ export const GLOBAL_ACTION_TYPES = {
   SET_COUNT: 'SET_COUNT',
   UPDATE_PATTERN: 'UPDATE_PATTERN',
   SET_SAMPLE: 'SET_SAMPLE',
+  UPDATE_SAMPLE: 'UPDATE_SAMPLE',
   SET_BPM: 'SET_BPM',
   SET_PATTERN_LENGTH: 'SET_PATTERN_LENGTH',
+  SET_PATTERNS: 'SET_PATTERNS',
   OPEN_DIALOG: 'OPEN_DIALOG',
   CLOSE_DIALOG: 'CLOSE_DIALOG',
 };
@@ -88,6 +102,8 @@ const reducer = (state: InitialState, action: any) => {
       return {...state, patterns: action.payload};
     case GLOBAL_ACTION_TYPES.SET_SAMPLE:
       return {...state, samples: [...state.samples, action.payload]};
+    case GLOBAL_ACTION_TYPES.UPDATE_SAMPLE:
+      return {...state, samples: action.payload};
     case GLOBAL_ACTION_TYPES.SET_BPM:
       return {...state, bpm: action.payload};
     case GLOBAL_ACTION_TYPES.SET_PATTERN_LENGTH:
@@ -108,17 +124,19 @@ const reducer = (state: InitialState, action: any) => {
 };
 
 export const ContextProvider = ({children}: any) => {
+  const path = RNFS.MainBundlePath;
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const updatePattern = (key: string, pattern: Pattern) => {
     dispatch({
-      type: 'UPDATE_PATTERN',
+      type: GLOBAL_ACTION_TYPES.UPDATE_PATTERN,
       payload: {...state.patterns, [key]: pattern},
     });
   };
 
   const setPlayerStatus = (status: PlayerState) => {
-    dispatch({type: 'SET_PLAYER_STATUS', payload: status});
+    dispatch({type: GLOBAL_ACTION_TYPES.SET_PLAYER_STATUS, payload: status});
   };
 
   const setSample = (key: string, title: string, settings: SampleSettings) => {
@@ -126,7 +144,29 @@ export const ContextProvider = ({children}: any) => {
       return;
     }
 
-    dispatch({type: 'SET_SAMPLE', payload: {key, title, settings}});
+    SamplerModule.addSample(key, path + `/${key}.wav`, settings, () => {
+      dispatch({
+        type: GLOBAL_ACTION_TYPES.SET_SAMPLE,
+        payload: {key, title, settings},
+      });
+
+      updatePattern(key);
+    });
+  };
+
+  const updateSample = (key: string, data: Partial<SampleSettings>) => {
+    const samples = state.samples.map((sample: Sample) => {
+      if (sample.key === key) {
+        return {...sample, settings: {...sample.settings, ...data}};
+      }
+
+      return sample;
+    });
+
+    dispatch({
+      type: GLOBAL_ACTION_TYPES.UPDATE_SAMPLE,
+      payload: samples,
+    });
   };
 
   const setBpm = (bpm: number) => {
@@ -135,6 +175,28 @@ export const ContextProvider = ({children}: any) => {
 
   const setPatternLength = (length: number) => {
     dispatch({type: GLOBAL_ACTION_TYPES.SET_PATTERN_LENGTH, payload: length});
+  };
+
+  const setPatterns = (patterns: Record<string, Pattern>) => {
+    dispatch({type: GLOBAL_ACTION_TYPES.SET_PATTERNS, payload: patterns});
+  };
+
+  const setInitialProject = (
+    patterns: Record<string, Pattern>,
+    samples: Sample[],
+    bpm: number,
+    patternLength: number,
+  ) => {
+    setPatterns(patterns);
+    setBpm(bpm);
+    setPatternLength(patternLength);
+
+    samples.forEach(sample => {
+      setSample(sample.key, sample.title!, sample.settings);
+    });
+
+    CounterModule.setPatternLength(patternLength);
+    CounterModule.setBpm(bpm);
   };
 
   const openDialog = (name: string) => {
@@ -153,8 +215,11 @@ export const ContextProvider = ({children}: any) => {
 
   const actions = {
     updatePattern,
+    setPatterns,
     setPlayerStatus,
     setSample,
+    setInitialProject,
+    updateSample,
     setBpm,
     setPatternLength,
     openDialog,

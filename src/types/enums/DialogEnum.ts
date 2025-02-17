@@ -1,4 +1,5 @@
 export enum DialogEnum {
-  RECORD = 'record',
-  MIXER = 'mixer',
+  RECORD = 'RECORD',
+  NEW_PROJECT = 'NEW_PROJECT',
+  ADD_SAMPLE = 'ADD_SAMPLE',
 }

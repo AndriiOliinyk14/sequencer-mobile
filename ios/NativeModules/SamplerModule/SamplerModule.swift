@@ -68,10 +68,9 @@ class SamplerModule: NSObject {
     }
   }
   
-  @objc func setSampleVolume (_ name: String, volume: Float) {
-    print("volume", volume)
+  @objc func setSampleVolume (_ name: String, value: Float) {
     if let sample = samples.first(where: { $0.name == name }) {
-      sample.setVolume(volume)
+      sample.setVolume(value)
     } else {
       print("Sample not found: \(name)")
     }
@@ -85,12 +84,12 @@ class SamplerModule: NSObject {
   //    }
   //  }
   //
-  //  @objc func setSampleReverb (_ name: String, reverb: Float) {
-  //    if let sample = samples.first(where: { $0.name == name }) {
-  //      sample.setReverb(reverb)
-  //    } else {
-  //      print("Sample not found: \(name)")
-  //    }
-  //  }
+  @objc func setSampleReverb (_ name: String, value: Float) {
+    if let sample = samples.first(where: { $0.name == name }) {
+      sample.setReverb(value)
+    } else {
+      print("Sample not found: \(name)")
+    }
+  }
   //
 }

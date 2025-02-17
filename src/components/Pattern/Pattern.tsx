@@ -1,22 +1,20 @@
-import React, {FC} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, { FC } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import {useGlobalContext} from '../../context/globalContext';
-import {Step} from './Step';
+import { useGlobalContext } from '../../context/globalContext';
+import { Step } from './Step';
 
 interface PatternProps {
   name: string;
-  pattern: {isOn: boolean}[];
+  pattern: { isOn: boolean }[];
 }
 
-const Pattern: FC<PatternProps> = ({name, pattern}) => {
-  const {state, actions} = useGlobalContext();
-  const {patternLength} = state;
-  const {updatePattern} = actions;
+const Pattern: FC<PatternProps> = ({ name, pattern }) => {
+  const { state, actions } = useGlobalContext();
+  const { patternLength } = state;
+  const { updatePattern } = actions;
 
-  console.log('name', name, pattern);
-
-  const handleOnPress = (index: number, value: {isOn: boolean}) => {
+  const handleOnPress = (index: number, value: { isOn: boolean }) => {
     const newPattern = [...(state?.patterns[name] || [])];
     newPattern[index] = value;
     updatePattern(name, newPattern as any);
@@ -27,7 +25,7 @@ const Pattern: FC<PatternProps> = ({name, pattern}) => {
       <Text>Pattern: {name}</Text>
 
       <View style={styles.steps}>
-        {Array.from({length: patternLength}).map((_, index) => (
+        {Array.from({ length: patternLength }).map((_, index) => (
           <View
             style={[
               styles.stepsGroup,
@@ -38,7 +36,7 @@ const Pattern: FC<PatternProps> = ({name, pattern}) => {
               isActive={pattern?.[index]?.isOn}
               onPress={() => {
                 const value = !pattern?.[index]?.isOn;
-                handleOnPress(index, {isOn: value});
+                handleOnPress(index, { isOn: value });
               }}
             />
           </View>
@@ -48,7 +46,7 @@ const Pattern: FC<PatternProps> = ({name, pattern}) => {
   );
 };
 
-export {Pattern};
+export { Pattern };
 
 const styles = StyleSheet.create({
   steps: {

@@ -16,7 +16,6 @@ struct SampleSettings {
 }
 
 
-
 class SampleModule {
   var name: String
   var url: URL
@@ -68,6 +67,6 @@ class SampleModule {
   
   
   func setReverb(_ reverb: Float){
-    self.reverb.wetDryMix = reverb
+    self.reverb.wetDryMix = reverb * 100
   }
 }

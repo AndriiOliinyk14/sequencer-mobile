@@ -1,38 +1,37 @@
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {Pattern, Transport} from '../components';
-import {Indicator} from '../components/Indicator/Indicator';
-import {useGlobalContext} from '../context/globalContext';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {useCount} from '../hooks/useCount';
 import {useInit} from '../hooks/useInit';
 import {usePlayer} from '../hooks/usePlayer';
+import {Home} from '../screens/Home';
+import {Sequencer} from '../screens/Sequencer';
 import Dialogs from './Dialogs';
 
+const Stack = createNativeStackNavigator();
+
 function App(): React.JSX.Element {
-  const {state} = useGlobalContext();
-  const {patterns, samples} = state;
-
-  console.log('samples', samples);
-  console.log('patterns', patterns);
-
   useCount();
   useInit();
   usePlayer();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Dialogs />
-      <View style={styles.content}>
-        <Transport />
-        <Indicator />
-        {samples.map(sample => (
-          <Pattern
-            key={sample.key}
-            name={sample.key}
-            pattern={patterns[sample.key]}
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            // options={{ headerShown: false }}
+            name="Sequencer"
+            options={({route}: any) => {
+              return {title: route.params?.id};
+            }}
+            component={Sequencer}
           />
-        ))}
-      </View>
+        </Stack.Navigator>
+        <Dialogs />
+      </NavigationContainer>
     </SafeAreaView>
   );
 }
