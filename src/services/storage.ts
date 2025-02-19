@@ -8,12 +8,26 @@ class StorageService {
     this.storage = new MMKV({id: this.id});
   }
 
+  async createProject(name: string, data: any) {
+    try {
+      const key = `projects.${name}`;
+
+      if (await this.checkOnExistProject(key)) {
+        throw `Project "${name}" already exist`;
+      }
+
+      this.storage.set(key, JSON.stringify(data));
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async saveProject(name: string, data: any) {
     try {
       const key = `projects.${name}`;
 
-      if (await this.checkOnUniqName(key)) {
-        throw `Project "${name}" already exist`;
+      if (!(await this.checkOnExistProject(key))) {
+        throw `Project "${name}" doesn't exist`;
       }
 
       this.storage.set(key, JSON.stringify(data));
@@ -58,7 +72,7 @@ class StorageService {
     } catch (error) {}
   }
 
-  async checkOnUniqName(name: string) {
+  async checkOnExistProject(name: string) {
     try {
       const allKeys = this.storage.getAllKeys();
       return allKeys.some(key => key === name);

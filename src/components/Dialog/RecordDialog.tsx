@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, StyleSheet, TextInput} from 'react-native';
 
-import {RecorderModule, SamplerModule} from '../../NativeModules';
+import {RecorderModule} from '../../NativeModules';
 import {useGlobalContext} from '../../context/globalContext';
 import {DialogEnum} from '../../types';
 import {Dialog} from './Dialog';
@@ -51,15 +51,7 @@ const RecordDialog = () => {
       reverb: 0,
     };
 
-    const addSample = (data: any) => {
-      actions.setSample(data.key, data.key, {
-        volume: data.volume,
-        pan: data.pan,
-        reverb: data.reverb,
-      });
-    };
-
-    SamplerModule.addSample(trackName, filePath, settings, addSample);
+    actions.setRecordedSample(trackName, filePath, settings);
     actions.closeDialog(DialogEnum.RECORD);
   };
 

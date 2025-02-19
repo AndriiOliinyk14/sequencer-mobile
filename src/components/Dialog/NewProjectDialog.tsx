@@ -11,6 +11,8 @@ export const NewProjectDialog = () => {
   const {state, actions} = useGlobalContext();
   const {dialogs} = state;
 
+  const dialogInfo = dialogs.NEW_PROJECT;
+
   const [input, setInput] = useState('');
   const [bpm, setBPM] = useState(120);
 
@@ -20,7 +22,7 @@ export const NewProjectDialog = () => {
     try {
       if (!input) return;
 
-      await storage.saveProject(input, {bpm, patternLength: 16});
+      await storage.createProject(input, {bpm, patternLength: 16});
       navigation.navigate('Sequencer', {id: input});
       handleOnClose();
     } catch (error) {
@@ -32,6 +34,7 @@ export const NewProjectDialog = () => {
 
   const handleOnClose = () => {
     actions.closeDialog(DialogEnum.NEW_PROJECT);
+    dialogInfo.options?.refreshProjectList();
   };
 
   const handleNameOnChange = (value: string) => {
@@ -78,6 +81,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingHorizontal: 40,
+    gap: 20,
   },
   inputs: {
     width: '100%',

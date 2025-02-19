@@ -4,41 +4,59 @@ import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {useGlobalContext} from '../context/globalContext';
 import {storage} from '../services/storage';
 import {DialogEnum} from '../types';
+import {useTheme} from '@react-navigation/native';
 
 export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   navigation,
 }) => {
+  const {colors} = useTheme();
   const {actions} = useGlobalContext();
 
   const [projects, setProjects] = useState<string[]>([]);
 
+  const fetchProjects = async () => {
+    const projectNames = await storage.getProjectNames();
+    if (projectNames?.length) {
+      setProjects(projectNames.splice(0, 10));
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      const projectNames = await storage.getProjectNames();
-      if (projectNames?.length) {
-        setProjects(projectNames.splice(0, 5));
-      }
-    })();
+    fetchProjects();
   }, []);
 
   const handleOpenNewProjectDialog = () => {
-    actions.openDialog(DialogEnum.NEW_PROJECT);
+    actions.openDialog(DialogEnum.NEW_PROJECT, {
+      refreshProjectList: fetchProjects,
+    });
   };
 
   const handleOpenProject = id => {
     navigation.navigate('Sequencer', {id});
   };
 
+  const handleRemoveProject = async id => {
+    await storage.deleteProject(id);
+    fetchProjects();
+  };
+
   return (
     <View style={styles.container}>
-      <Button onPress={handleOpenNewProjectDialog} title="New Project" />
+      <Button onPress={handleOpenNewProjectDialog} title="Create Project" />
 
       <View style={{paddingTop: 100}}>
-        <Text>Recent Projects:</Text>
+        <Text style={{color: colors.text}}>Recent Projects:</Text>
         <FlatList
           data={projects}
           renderItem={({item}) => (
-            <Button onPress={() => handleOpenProject(item)} title={item} />
+            <View style={styles.buttonsWrapper}>
+              <Button onPress={() => handleOpenProject(item)} title={item} />
+              <Button
+                onPress={() => handleRemoveProject(item)}
+                title={'Delete'}
+                color={'red'}
+              />
+            </View>
           )}
         />
       </View>
@@ -54,9 +72,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  projectButton: {
-    backgroundColor: '#717895',
-    paddingHorizontal: 12,
-    marginBottom: 4,
+  buttonsWrapper: {
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

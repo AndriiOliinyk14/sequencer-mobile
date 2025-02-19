@@ -19,6 +19,7 @@ class CounterModule:RCTEventEmitter {
   }
   
   @objc func setBpm(_ bpm:NSNumber){
+    print("bpm",bpm)
     self.bpm = bpm.doubleValue
   }
   

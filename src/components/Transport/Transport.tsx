@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Button,
   StyleSheet,
@@ -6,16 +6,18 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import { useCountContext } from '../../context/countContext';
-import { useGlobalContext } from '../../context/globalContext';
-import { CounterModule } from '../../NativeModules';
-import { DialogEnum } from '../../types';
-import { PlayerState } from '../../types/PlayerStatus';
+import {useCountContext} from '../../context/countContext';
+import {useGlobalContext} from '../../context/globalContext';
+import {CounterModule} from '../../NativeModules';
+import {DialogEnum} from '../../types';
+import {PlayerState} from '../../types/PlayerStatus';
+import {useTheme} from '@react-navigation/native';
 
 const Transport = () => {
-  const { count } = useCountContext();
-  const { actions, state } = useGlobalContext();
-  const { playerStatus, patternLength } = state;
+  const {count} = useCountContext();
+  const {actions, state} = useGlobalContext();
+  const {colors} = useTheme();
+  const {playerStatus, patternLength} = state;
 
   const buttonTitle = playerStatus === PlayerState.PLAYING ? 'Stop' : 'Start';
 
@@ -39,6 +41,13 @@ const Transport = () => {
   //   CounterModule.setBpm(value);
   // };
 
+  useEffect(() => {
+    return () => {
+      CounterModule.stop();
+      actions.setPlayerStatus(PlayerState.STOPPED);
+    };
+  }, []);
+
   const handlePatternLengthChange = (value: number) => {
     actions.setPatternLength(value);
     CounterModule.setPatternLength(value);
@@ -54,6 +63,7 @@ const Transport = () => {
         <Text
           style={[
             styles.patternLength,
+            {color: colors.text},
             patternLength === 16 && styles.patternLengthIsActive,
           ]}>
           16
@@ -65,6 +75,7 @@ const Transport = () => {
         <Text
           style={[
             styles.patternLength,
+            {color: colors.text},
             patternLength === 32 && styles.patternLengthIsActive,
           ]}>
           32
@@ -100,7 +111,6 @@ const styles = StyleSheet.create({
   patternLength: {
     padding: 4,
     borderRadius: 4,
-    color: 'black',
   },
   patternLengthIsActive: {
     backgroundColor: 'red',
@@ -108,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Transport };
+export {Transport};

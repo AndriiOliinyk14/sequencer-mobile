@@ -1,4 +1,4 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {useTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
@@ -16,22 +16,28 @@ function App(): React.JSX.Element {
   useInit();
   usePlayer();
 
+  const {colors} = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen
-            // options={{ headerShown: false }}
-            name="Sequencer"
-            options={({route}: any) => {
-              return {title: route.params?.id};
-            }}
-            component={Sequencer}
-          />
-        </Stack.Navigator>
-        <Dialogs />
-      </NavigationContainer>
+    <SafeAreaView
+      style={[styles.container, {backgroundColor: colors.background}]}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Sequencer"
+          options={({route}: any) => {
+            return {
+              title: route.params?.id,
+            };
+          }}
+          component={Sequencer}
+        />
+      </Stack.Navigator>
+      <Dialogs />
     </SafeAreaView>
   );
 }
@@ -39,7 +45,6 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#ffffff',
     height: '100%',
     width: '100%',
     flex: 1,

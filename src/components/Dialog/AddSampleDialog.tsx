@@ -1,16 +1,25 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Dialog} from './Dialog';
-import {Button, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import {useGlobalContext} from '../../context/globalContext';
 import {DialogEnum} from '../../types';
+import {icons} from '../icons';
+import {Dialog} from './Dialog';
 
 const list = [
-  {key: 'kick', title: 'Kick'},
-  {key: 'snare', title: 'Snare'},
-  {key: 'clap', title: 'Clap'},
-  {key: 'closed-hi-hat', title: 'Closed Hi-hat'},
-  {key: 'open-hi-hat', title: 'Open Hi-hat'},
-  {key: 'crash', title: 'Crash'},
+  {key: 'kick', title: 'Kick', icon: icons.kick},
+  {key: 'snare', title: 'Snare', icon: icons.snare},
+  {key: 'claps', title: 'Claps', icon: icons.claps},
+  {key: 'hi-hat', title: 'Closed Hi-hat', icon: icons.claps},
+  {key: 'open-hi-hat', title: 'Open Hi-hat', icon: icons.claps},
+  {key: 'crash', title: 'Crash', icon: icons.claps},
 ];
 
 const settings = {
@@ -21,10 +30,16 @@ const settings = {
 
 export const AddSampleDialog = () => {
   const {state, actions} = useGlobalContext();
+  const {colors} = useTheme();
   const [selectedSample, setSelectedSample] = useState<{
     key: string;
     title: string;
   } | null>(null);
+
+  const samples = state.samples;
+  const dialogData = state.dialogs.ADD_SAMPLE;
+
+  const isNewSample = dialogData?.options?.type === 'ADD_SAMPLE';
 
   const handleAddSample = () => {
     if (selectedSample) {
@@ -33,32 +48,70 @@ export const AddSampleDialog = () => {
     }
   };
 
+  const handleReplaceSample = () => {
+    if (selectedSample) {
+      actions.replaceSample(
+        dialogData.options.key,
+        selectedSample.key,
+        selectedSample.title,
+      );
+      handleClose();
+    }
+  };
+
+  const handleConfirmButton = () => {
+    if (isNewSample) {
+      handleAddSample();
+    } else {
+      handleReplaceSample();
+    }
+  };
+
   const handleClose = () => {
     actions.closeDialog(DialogEnum.ADD_SAMPLE);
     setSelectedSample(null);
   };
 
+  const title = isNewSample ? 'Add sample' : 'Change sample';
+
   return (
-    <Dialog isVisible={state.dialogs.ADD_SAMPLE.visible} onClose={handleClose}>
+    <Dialog isVisible={dialogData.visible} onClose={handleClose}>
       <View style={styles.samples}>
         {list.map(item => {
+          const isUsedAlready = samples?.some(
+            sample => sample.key === item.key,
+          );
+          console.log(samples);
           return (
             <TouchableHighlight
               key={item.key}
+              disabled={isUsedAlready}
               style={[
                 styles.sample,
-                selectedSample?.key === item.key && styles.selectedSample,
+                selectedSample?.key === item.key && {
+                  backgroundColor: colors.primary,
+                },
+                isUsedAlready && {backgroundColor: 'grey'},
               ]}
               onPress={() => setSelectedSample(item)}>
-              <Text>{item.key}</Text>
+              <View style={styles.instrument}>
+                <Image source={item.icon} />
+                <Text
+                  style={[
+                    {color: colors.text, fontWeight: 'bold'},
+                    isUsedAlready && {color: colors.background},
+                  ]}>
+                  {item.title}
+                </Text>
+              </View>
             </TouchableHighlight>
           );
         })}
       </View>
       <Button
         disabled={!selectedSample}
-        onPress={handleAddSample}
-        title="Add sample"
+        onPress={handleConfirmButton}
+        title={title}
       />
     </Dialog>
   );
@@ -70,6 +123,12 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 40,
   },
-  sample: {backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 4},
-  selectedSample: {backgroundColor: 'blue'},
+  sample: {paddingHorizontal: 10, paddingVertical: 4},
+  selectedSample: {backgroundColor: '#92ccff'},
+  instrument: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
+    alignItems: 'center',
+  },
 });

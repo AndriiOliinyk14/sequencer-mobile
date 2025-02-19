@@ -1,3 +1,4 @@
+import {useTheme} from '@react-navigation/native';
 import React, {FC} from 'react';
 import {Button, StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
@@ -9,9 +10,11 @@ interface DialogProps {
 }
 
 export const Dialog: FC<DialogProps> = ({isVisible, onClose, children}) => {
+  const {colors} = useTheme();
+
   return (
     <Modal isVisible={isVisible}>
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: colors.background}]}>
         <Button title="Close" onPress={onClose} />
         <View style={styles.content}>{children}</View>
       </View>
@@ -22,10 +25,7 @@ export const Dialog: FC<DialogProps> = ({isVisible, onClose, children}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: '#ffffff',
-    height: '80%',
     width: '100%',
-    // flex: 1,
   },
   content: {
     paddingTop: 40,

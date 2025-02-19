@@ -11,16 +11,19 @@ const Indicator = () => {
 
   return (
     <View style={styles.container}>
-      {Array.from({length: patternLength}).map((_, index) => (
-        <View
-          key={index}
-          style={[
-            styles.indicator,
-            count - 1 === index && styles.activeIndicator,
-            (index + 1) % 4 === 0 && styles.everyFourthStep,
-          ]}
-        />
-      ))}
+      <View style={styles.instrument}></View>
+      <View style={styles.indicators}>
+        {Array.from({length: patternLength}).map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.indicator,
+              count - 1 === index && styles.activeIndicator,
+              (index + 1) % 4 === 0 && styles.everyFourthStep,
+            ]}
+          />
+        ))}
+      </View>
     </View>
   );
 };
@@ -31,9 +34,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 10,
+    width: '100%',
+    gap: 6,
+  },
+  instrument: {
+    width: 40,
+    height: 20,
+    // backgroundColor: 'red',
+  },
+  indicators: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1,
     width: '100%',
     gap: 2,
   },
