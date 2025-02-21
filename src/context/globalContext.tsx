@@ -44,6 +44,7 @@ interface ContextInterface {
     ) => void;
     updateSample: (key: string, data: Partial<SampleSettings>) => void;
     replaceSample: (oldKey: string, newKey: string, newTitle: string) => void;
+    removeSample: (key: string) => void;
     setBpm: (bpm: number) => void;
     setPatternLength: (length: number) => void;
     setInitialProject: (
@@ -87,6 +88,7 @@ export const Context = createContext<ContextInterface>({
     setRecordedSample: () => {},
     updateSample: () => {},
     replaceSample: () => {},
+    removeSample: () => {},
     setBpm: () => {},
     setPatternLength: () => {},
     setInitialProject: () => {},
@@ -103,6 +105,7 @@ export const GLOBAL_ACTION_TYPES = {
   SET_SAMPLE: 'SET_SAMPLE',
   UPDATE_SAMPLE: 'UPDATE_SAMPLE',
   REPLACE_SAMPLE: 'REPLACE_SAMPLE',
+  REMOVE_SAMPLE: 'REMOVE_SAMPLE',
   SET_BPM: 'SET_BPM',
   SET_PATTERN_LENGTH: 'SET_PATTERN_LENGTH',
   OPEN_DIALOG: 'OPEN_DIALOG',
@@ -119,6 +122,7 @@ const reducer = (state: InitialState, action: any) => {
     case GLOBAL_ACTION_TYPES.UPDATE_PATTERNS:
       return {...state, patterns: action.payload};
     case GLOBAL_ACTION_TYPES.REPLACE_SAMPLE:
+    case GLOBAL_ACTION_TYPES.REMOVE_SAMPLE:
       return {
         ...state,
         patterns: action.payload.patterns,
@@ -235,6 +239,28 @@ export const ContextProvider = ({children}: any) => {
     }
   };
 
+  const removeSample = (key: string) => {
+    const sampleIndex = (state.samples as Array<any>).findIndex(
+      item => item.key === key,
+    );
+
+    if (sampleIndex >= 0) {
+      const newSamples = [...state.samples];
+      newSamples.splice(sampleIndex, 1);
+
+      const newPatterns = {
+        ...state.patterns,
+      };
+
+      delete newPatterns[key];
+
+      dispatch({
+        type: GLOBAL_ACTION_TYPES.REMOVE_SAMPLE,
+        payload: {samples: newSamples, patterns: newPatterns},
+      });
+    }
+  };
+
   const updateSample = (key: string, data: Partial<SampleSettings>) => {
     const samples = state.samples.map((sample: Sample) => {
       if (sample.key === key) {
@@ -307,6 +333,7 @@ export const ContextProvider = ({children}: any) => {
     setInitialProject,
     updateSample,
     replaceSample,
+    removeSample,
     setBpm,
     setPatternLength,
     openDialog,

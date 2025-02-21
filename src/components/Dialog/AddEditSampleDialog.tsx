@@ -17,9 +17,9 @@ const list = [
   {key: 'kick', title: 'Kick', icon: icons.kick},
   {key: 'snare', title: 'Snare', icon: icons.snare},
   {key: 'claps', title: 'Claps', icon: icons.claps},
-  {key: 'hi-hat', title: 'Closed Hi-hat', icon: icons.claps},
-  {key: 'open-hi-hat', title: 'Open Hi-hat', icon: icons.claps},
-  {key: 'crash', title: 'Crash', icon: icons.claps},
+  {key: 'hi-hat', title: 'Closed Hi-hat', icon: icons['hi-hat']},
+  {key: 'open-hi-hat', title: 'Open Hi-hat', icon: icons['open-hi-hat']},
+  {key: 'crash', title: 'Crash', icon: icons.crash},
 ];
 
 const settings = {
@@ -28,7 +28,7 @@ const settings = {
   reverb: 0,
 };
 
-export const AddSampleDialog = () => {
+export const AddEditSampleDialog = () => {
   const {state, actions} = useGlobalContext();
   const {colors} = useTheme();
   const [selectedSample, setSelectedSample] = useState<{
@@ -67,6 +67,11 @@ export const AddSampleDialog = () => {
     }
   };
 
+  const handleRemoveSample = () => {
+    actions.removeSample(dialogData?.options?.key);
+    handleClose();
+  };
+
   const handleClose = () => {
     actions.closeDialog(DialogEnum.ADD_SAMPLE);
     setSelectedSample(null);
@@ -81,30 +86,33 @@ export const AddSampleDialog = () => {
           const isUsedAlready = samples?.some(
             sample => sample.key === item.key,
           );
-          console.log(samples);
           return (
-            <TouchableHighlight
-              key={item.key}
-              disabled={isUsedAlready}
-              style={[
-                styles.sample,
-                selectedSample?.key === item.key && {
-                  backgroundColor: colors.primary,
-                },
-                isUsedAlready && {backgroundColor: 'grey'},
-              ]}
-              onPress={() => setSelectedSample(item)}>
-              <View style={styles.instrument}>
-                <Image source={item.icon} />
-                <Text
+            <>
+              {!isUsedAlready && (
+                <TouchableHighlight
+                  key={item.key}
+                  disabled={isUsedAlready}
                   style={[
-                    {color: colors.text, fontWeight: 'bold'},
-                    isUsedAlready && {color: colors.background},
-                  ]}>
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableHighlight>
+                    styles.sample,
+                    selectedSample?.key === item.key && {
+                      backgroundColor: colors.primary,
+                    },
+                    isUsedAlready && {backgroundColor: 'grey'},
+                  ]}
+                  onPress={() => setSelectedSample(item)}>
+                  <View style={styles.instrument}>
+                    <Image style={styles.instrumentImg} source={item.icon} />
+                    <Text
+                      style={[
+                        {color: colors.text, fontWeight: 'bold'},
+                        isUsedAlready && {color: colors.background},
+                      ]}>
+                      {item.title}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              )}
+            </>
           );
         })}
       </View>
@@ -112,6 +120,11 @@ export const AddSampleDialog = () => {
         disabled={!selectedSample}
         onPress={handleConfirmButton}
         title={title}
+      />
+      <Button
+        onPress={handleRemoveSample}
+        color="red"
+        title={'Remove Sample'}
       />
     </Dialog>
   );
@@ -130,5 +143,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
     alignItems: 'center',
+  },
+  instrumentImg: {
+    width: 40,
+    height: 30,
+    objectFit: 'contain',
   },
 });

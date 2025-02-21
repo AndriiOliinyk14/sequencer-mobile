@@ -19,7 +19,6 @@ class CounterModule:RCTEventEmitter {
   }
   
   @objc func setBpm(_ bpm:NSNumber){
-    print("bpm",bpm)
     self.bpm = bpm.doubleValue
   }
   
@@ -42,8 +41,6 @@ class CounterModule:RCTEventEmitter {
       self.count += 1
       self.sendEvent(withName: "TimerUpdate", body: ["count": self.count])
     }
-    
-    
     
     DispatchQueue.main.async {
       self.timer = Timer.scheduledTimer(withTimeInterval: intervalValue, repeats: true) { _ in

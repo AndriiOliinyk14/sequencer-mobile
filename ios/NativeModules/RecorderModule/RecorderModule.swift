@@ -35,7 +35,7 @@ class RecorderModule :NSObject{
     let fileURL = documentsPath.appendingPathComponent("\(name).wav")
     self.recordingURL = fileURL
     
-    
+
     
     let settings:[String : Any] = [
       AVFormatIDKey: kAudioFormatLinearPCM,
@@ -97,9 +97,5 @@ class RecorderModule :NSObject{
     
     player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts) //
     player.play()
-    
-    
-    
-    
   }
 }

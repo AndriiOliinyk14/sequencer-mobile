@@ -31,11 +31,12 @@ class SampleModule {
     self.url = url
     self.player = AVAudioPlayerNode()
     self.reverb = AVAudioUnitReverb()
+    
     self.file = try! AVAudioFile(forReading: url)
+    
     self.audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
     
     try! file.read(into: audioBuffer)
-    
     
     reverb.wetDryMix = settings.reverb
     player.volume = settings.volume
@@ -51,15 +52,13 @@ class SampleModule {
   }
   
   func play(){
-    player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts)
-    player.play()
+    self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
+    self.player.play();
   }
-  
   
   func setVolume(_ volume: Float){
     player.volume = volume
   }
-  
   
   func setPan(_ pan: Float){
     player.pan = pan

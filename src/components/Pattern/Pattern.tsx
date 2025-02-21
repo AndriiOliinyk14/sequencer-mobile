@@ -12,7 +12,7 @@ interface PatternProps {
   pattern: {isOn: boolean}[];
 }
 
-const Pattern: FC<PatternProps> = ({name, id, pattern}) => {
+const Pattern: FC<PatternProps> = ({id, pattern}) => {
   const {state, actions} = useGlobalContext();
   const {patternLength} = state;
   const {updatePattern} = actions;
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    filter: 'invert(1)',
   },
   instrumentImg: {
     width: 40,

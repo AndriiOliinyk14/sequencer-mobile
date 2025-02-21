@@ -17,7 +17,7 @@ class SamplerModule: NSObject {
   var engine: AVAudioEngine
   
   override init (){
-    engine = AVAudioEngine()
+    engine = AudioEngineModule.shared._engine
     recorder = RecorderModule()
     let audioSession = AVAudioSession.sharedInstance()
     
@@ -39,6 +39,7 @@ class SamplerModule: NSObject {
   
   @objc func addSample(_ name: String, url: String, settings: [String: Float], callback: RCTResponseSenderBlock) {
     guard let fileURL = URL(string: url) else {
+      print("Invalid URL string")
       return
     }
     
@@ -76,14 +77,6 @@ class SamplerModule: NSObject {
     }
   }
   
-  //  @objc func setSamplePan (_ name: String, pan: Float) {
-  //    if let sample = samples.first(where: { $0.name == name }) {
-  //      sample.setPan(pan)
-  //    } else {
-  //      print("Sample not found: \(name)")
-  //    }
-  //  }
-  //
   @objc func setSampleReverb (_ name: String, value: Float) {
     if let sample = samples.first(where: { $0.name == name }) {
       sample.setReverb(value)
