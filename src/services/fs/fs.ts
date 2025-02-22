@@ -1,4 +1,6 @@
 import RNFS, {writeFile} from 'react-native-fs';
+import {SaveAudioInterface} from './fs.types';
+import uuid from 'react-native-uuid';
 
 class FSService {
   private _fs;
@@ -17,24 +19,23 @@ class FSService {
     return this._fs.DocumentDirectoryPath;
   }
 
-  async saveAudio(fileName: string, format: 'wav' = 'wav', fileBinary: string) {
+  async saveAudio(data: SaveAudioInterface) {
     try {
       await RNFS.mkdir(this._samplesFolderPath);
+      const filePath = `${this._samplesFolderPath}/${data.id}.${data.format}`;
 
-      let counter = 1;
+      try {
+        await writeFile(filePath, data.binaryData, 'base64');
 
-      let filePath = `${this._samplesFolderPath}/${fileName}`;
-
-      while (await RNFS.exists(filePath)) {
-        filePath = `${filePath}_${counter}`;
-        counter++;
+        console.log(
+          'FSService.saveAudio: Audio file saved successfully: ',
+          filePath,
+        );
+      } catch (error) {
+        console.error('FSService.saveAudio: ', error);
       }
 
-      const filePathWithFormat = `${filePath}.${format}`;
-      await writeFile(filePathWithFormat, fileBinary, 'base64');
-
-      console.log('Audio file saved successfully: ', filePathWithFormat);
-      return filePathWithFormat;
+      return filePath;
     } catch (error) {
       throw `FSService.uploadAudio ${error}`;
     }

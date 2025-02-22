@@ -45,7 +45,7 @@ export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
       <Button onPress={handleOpenNewProjectDialog} title="Create Project" />
 
       <Link screen="Samples" params={{id: 'jane'}}>
-        Go to Jane's profile
+        Samples Library
       </Link>
 
       <View style={{paddingTop: 100}}>

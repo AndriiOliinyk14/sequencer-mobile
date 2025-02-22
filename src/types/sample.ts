@@ -11,8 +11,11 @@ export type Sample = {
   settings: SampleSettings;
 };
 
-export type SampleEntity = {
-  id: string;
-  name: string;
-  path: string;
-};
+export class SampleEntity {
+  constructor(
+    public id: string,
+    public name: string,
+    public path: string,
+    public icon?: string,
+  ) {}
+}

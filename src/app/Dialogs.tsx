@@ -1,5 +1,10 @@
 import React from 'react';
-import {NewProjectDialog, RecordDialog, AddEditSampleDialog} from '../components';
+import {
+  NewProjectDialog,
+  RecordDialog,
+  AddEditSampleDialog,
+  AddRecordSampleDialog,
+} from '../components';
 
 const Dialogs = () => {
   return (
@@ -7,6 +12,7 @@ const Dialogs = () => {
       <RecordDialog />
       <NewProjectDialog />
       <AddEditSampleDialog />
+      <AddRecordSampleDialog />
     </>
   );
 };

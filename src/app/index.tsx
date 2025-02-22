@@ -1,22 +1,24 @@
+import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {
   CountProvider,
   GlobalContextProvider,
   ProjectContextProvider,
+  SamplesProvider,
 } from '../context';
-import {} from '../context/globalContext';
-import App from './App';
 import {MainTheme} from '../theme/theme';
-import {NavigationContainer} from '@react-navigation/native';
+import App from './App';
 
 const RootApp = () => {
   return (
     <CountProvider>
       <GlobalContextProvider>
         <ProjectContextProvider>
-          <NavigationContainer theme={MainTheme}>
-            <App />
-          </NavigationContainer>
+          <SamplesProvider>
+            <NavigationContainer theme={MainTheme}>
+              <App />
+            </NavigationContainer>
+          </SamplesProvider>
         </ProjectContextProvider>
       </GlobalContextProvider>
     </CountProvider>

@@ -1,0 +1,3 @@
+export const SAMPLES_ACTION_TYPES = {
+  SET_SAMPLES: 'SET_SAMPLES',
+};
