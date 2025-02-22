@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-import {storage} from '../../services/storage';
+import {projectStorageService} from '../../services/storage';
 import {Dialog} from './Dialog';
 import {useGlobalContext} from '../../context/globalContext';
 import {DialogEnum} from '../../types';
@@ -22,7 +22,10 @@ export const NewProjectDialog = () => {
     try {
       if (!input) return;
 
-      await storage.createProject(input, {bpm, patternLength: 16});
+      await projectStorageService.createProject(input, {
+        bpm,
+        patternLength: 16,
+      });
       navigation.navigate('Sequencer', {id: input});
       handleOnClose();
     } catch (error) {

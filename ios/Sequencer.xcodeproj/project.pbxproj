@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,9 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		412411133CC200B7743D31FB /* libPods-Sequencer-SequencerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22087B7E446B6BF023CB4332 /* libPods-Sequencer-SequencerTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		FF880681F68895004A76A6C5 /* libPods-Sequencer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 805F314A7547BC8F48EEF4BA /* libPods-Sequencer.a */; };
+		A8B05ABCF378271AB525D4E4 /* libPods-Sequencer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DBC28D22D30035EE7E6A1C4A /* libPods-Sequencer.a */; };
+		B45B7CBDA55C8F7B8D1A44AB /* libPods-Sequencer-SequencerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 513620A710756194171CCAEC /* libPods-Sequencer-SequencerTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +31,7 @@
 		00E356EE1AD99517003FC87E /* SequencerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SequencerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SequencerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SequencerTests.m; sourceTree = "<group>"; };
+		0CB13A5FF45FD26D6F40BFF6 /* Pods-Sequencer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer.release.xcconfig"; path = "Target Support Files/Pods-Sequencer/Pods-Sequencer.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Sequencer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sequencer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Sequencer/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Sequencer/AppDelegate.mm; sourceTree = "<group>"; };
@@ -38,20 +39,39 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sequencer/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Sequencer/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Sequencer/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		22087B7E446B6BF023CB4332 /* libPods-Sequencer-SequencerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sequencer-SequencerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2504849F92F4D588F829DD38 /* Pods-Sequencer-SequencerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer-SequencerTests.debug.xcconfig"; path = "Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		579E66EF34F52C17D7FFEFC7 /* Pods-Sequencer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer.release.xcconfig"; path = "Target Support Files/Pods-Sequencer/Pods-Sequencer.release.xcconfig"; sourceTree = "<group>"; };
-		805F314A7547BC8F48EEF4BA /* libPods-Sequencer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sequencer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		513620A710756194171CCAEC /* libPods-Sequencer-SequencerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sequencer-SequencerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Sequencer/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		A8822683CCC49F400015A327 /* Pods-Sequencer-SequencerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer-SequencerTests.release.xcconfig"; path = "Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests.release.xcconfig"; sourceTree = "<group>"; };
+		9DD7D9CCF5BA0492AEABE552 /* Pods-Sequencer-SequencerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer-SequencerTests.debug.xcconfig"; path = "Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A5C8802A868CD224578E5806 /* Pods-Sequencer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer.debug.xcconfig"; path = "Target Support Files/Pods-Sequencer/Pods-Sequencer.debug.xcconfig"; sourceTree = "<group>"; };
 		B5FC5E432CCD14F5008BFF33 /* Sequencer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sequencer-Bridging-Header.h"; sourceTree = "<group>"; };
-		D1FB2330C2317F5C90E1934F /* Pods-Sequencer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer.debug.xcconfig"; path = "Target Support Files/Pods-Sequencer/Pods-Sequencer.debug.xcconfig"; sourceTree = "<group>"; };
+		BA0EF885CF6530605A08E58D /* Pods-Sequencer-SequencerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sequencer-SequencerTests.release.xcconfig"; path = "Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests.release.xcconfig"; sourceTree = "<group>"; };
+		DBC28D22D30035EE7E6A1C4A /* libPods-Sequencer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sequencer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B58BA0172CD4D3110014A608 /* samples */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = samples; sourceTree = "<group>"; };
-		B5FC5E422CCD14E6008BFF33 /* NativeModules */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NativeModules; sourceTree = "<group>"; };
+		B58BA0172CD4D3110014A608 /* samples */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = samples;
+			sourceTree = "<group>";
+		};
+		B5FC5E422CCD14E6008BFF33 /* NativeModules */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = NativeModules;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				412411133CC200B7743D31FB /* libPods-Sequencer-SequencerTests.a in Frameworks */,
+				B45B7CBDA55C8F7B8D1A44AB /* libPods-Sequencer-SequencerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF880681F68895004A76A6C5 /* libPods-Sequencer.a in Frameworks */,
+				A8B05ABCF378271AB525D4E4 /* libPods-Sequencer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,8 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				805F314A7547BC8F48EEF4BA /* libPods-Sequencer.a */,
-				22087B7E446B6BF023CB4332 /* libPods-Sequencer-SequencerTests.a */,
+				DBC28D22D30035EE7E6A1C4A /* libPods-Sequencer.a */,
+				513620A710756194171CCAEC /* libPods-Sequencer-SequencerTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,10 +172,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D1FB2330C2317F5C90E1934F /* Pods-Sequencer.debug.xcconfig */,
-				579E66EF34F52C17D7FFEFC7 /* Pods-Sequencer.release.xcconfig */,
-				2504849F92F4D588F829DD38 /* Pods-Sequencer-SequencerTests.debug.xcconfig */,
-				A8822683CCC49F400015A327 /* Pods-Sequencer-SequencerTests.release.xcconfig */,
+				A5C8802A868CD224578E5806 /* Pods-Sequencer.debug.xcconfig */,
+				0CB13A5FF45FD26D6F40BFF6 /* Pods-Sequencer.release.xcconfig */,
+				9DD7D9CCF5BA0492AEABE552 /* Pods-Sequencer-SequencerTests.debug.xcconfig */,
+				BA0EF885CF6530605A08E58D /* Pods-Sequencer-SequencerTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -167,12 +187,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SequencerTests" */;
 			buildPhases = (
-				3C935C01F44E68DDB071B798 /* [CP] Check Pods Manifest.lock */,
+				1E62253187BA9AEB41C897F9 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				ABC787DDC6C0DDF35BC487A1 /* [CP] Embed Pods Frameworks */,
-				078BCBE4A5DB9719157B407D /* [CP] Copy Pods Resources */,
+				E340E22415816B9BD8A41B32 /* [CP] Embed Pods Frameworks */,
+				79D1F5B2A7C4A24B1558F134 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -188,13 +208,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Sequencer" */;
 			buildPhases = (
-				B60A436AB2D4CBFF96992D4E /* [CP] Check Pods Manifest.lock */,
+				801048264F6844531A2483AD /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				2FD084C660C5B3677DA4DC14 /* [CP] Embed Pods Frameworks */,
-				FD9600EDC03986736D1905DA /* [CP] Copy Pods Resources */,
+				9495A55616ED61CEBCCEF403 /* [CP] Embed Pods Frameworks */,
+				8220585D5E39E027D737E19B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,41 +303,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		078BCBE4A5DB9719157B407D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2FD084C660C5B3677DA4DC14 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3C935C01F44E68DDB071B798 /* [CP] Check Pods Manifest.lock */ = {
+		1E62253187BA9AEB41C897F9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -339,24 +325,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ABC787DDC6C0DDF35BC487A1 /* [CP] Embed Pods Frameworks */ = {
+		79D1F5B2A7C4A24B1558F134 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B60A436AB2D4CBFF96992D4E /* [CP] Check Pods Manifest.lock */ = {
+		801048264F6844531A2483AD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,7 +364,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FD9600EDC03986736D1905DA /* [CP] Copy Pods Resources */ = {
+		8220585D5E39E027D737E19B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -393,6 +379,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9495A55616ED61CEBCCEF403 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer/Pods-Sequencer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E340E22415816B9BD8A41B32 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sequencer-SequencerTests/Pods-Sequencer-SequencerTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -428,7 +448,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2504849F92F4D588F829DD38 /* Pods-Sequencer-SequencerTests.debug.xcconfig */;
+			baseConfigurationReference = 9DD7D9CCF5BA0492AEABE552 /* Pods-Sequencer-SequencerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -455,7 +475,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8822683CCC49F400015A327 /* Pods-Sequencer-SequencerTests.release.xcconfig */;
+			baseConfigurationReference = BA0EF885CF6530605A08E58D /* Pods-Sequencer-SequencerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -479,7 +499,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1FB2330C2317F5C90E1934F /* Pods-Sequencer.debug.xcconfig */;
+			baseConfigurationReference = A5C8802A868CD224578E5806 /* Pods-Sequencer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -510,7 +530,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 579E66EF34F52C17D7FFEFC7 /* Pods-Sequencer.release.xcconfig */;
+			baseConfigurationReference = 0CB13A5FF45FD26D6F40BFF6 /* Pods-Sequencer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -608,7 +628,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -679,7 +702,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

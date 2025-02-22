@@ -1,10 +1,10 @@
 import {useEffect} from 'react';
-import {useGlobalContext} from '../context/globalContext';
-import {SamplerModule} from '../NativeModules';
+import {useProjectContext} from '../context';
 import {useCountContext} from '../context/countContext';
+import {SamplerModule} from '../NativeModules';
 
 function usePlayer() {
-  const {state} = useGlobalContext();
+  const {state} = useProjectContext();
   const {count} = useCountContext();
   const {patterns, samples} = state;
 

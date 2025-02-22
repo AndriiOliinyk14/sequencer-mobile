@@ -10,3 +10,9 @@ export type Sample = {
   url?: string;
   settings: SampleSettings;
 };
+
+export type SampleEntity = {
+  id: string;
+  name: string;
+  path: string;
+};

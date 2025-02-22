@@ -12,6 +12,7 @@ import {useGlobalContext} from '../../context/globalContext';
 import {DialogEnum} from '../../types';
 import {icons} from '../icons';
 import {Dialog} from './Dialog';
+import {useProjectContext} from '../../context';
 
 const list = [
   {key: 'kick', title: 'Kick', icon: icons.kick},
@@ -29,28 +30,37 @@ const settings = {
 };
 
 export const AddEditSampleDialog = () => {
-  const {state, actions} = useGlobalContext();
+  const {
+    state,
+    actions: {closeDialog},
+  } = useGlobalContext();
+
+  const {actions: projectActions, state: projectState} = useProjectContext();
   const {colors} = useTheme();
   const [selectedSample, setSelectedSample] = useState<{
     key: string;
     title: string;
   } | null>(null);
 
-  const samples = state.samples;
+  const samples = projectState.samples;
   const dialogData = state.dialogs.ADD_SAMPLE;
 
   const isNewSample = dialogData?.options?.type === 'ADD_SAMPLE';
 
   const handleAddSample = () => {
     if (selectedSample) {
-      actions.setSample(selectedSample.key, selectedSample.title, settings);
+      projectActions.setSample(
+        selectedSample.key,
+        selectedSample.title,
+        settings,
+      );
       handleClose();
     }
   };
 
   const handleReplaceSample = () => {
     if (selectedSample) {
-      actions.replaceSample(
+      projectActions.replaceSample(
         dialogData.options.key,
         selectedSample.key,
         selectedSample.title,
@@ -68,12 +78,12 @@ export const AddEditSampleDialog = () => {
   };
 
   const handleRemoveSample = () => {
-    actions.removeSample(dialogData?.options?.key);
+    projectActions.removeSample(dialogData?.options?.key);
     handleClose();
   };
 
   const handleClose = () => {
-    actions.closeDialog(DialogEnum.ADD_SAMPLE);
+    closeDialog(DialogEnum.ADD_SAMPLE);
     setSelectedSample(null);
   };
 

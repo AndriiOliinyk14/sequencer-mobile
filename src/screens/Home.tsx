@@ -2,9 +2,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {FC, useEffect, useState} from 'react';
 import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {useGlobalContext} from '../context/globalContext';
-import {storage} from '../services/storage';
+import {projectStorageService} from '../services/storage';
 import {DialogEnum} from '../types';
-import {useTheme} from '@react-navigation/native';
+import {Link, useTheme} from '@react-navigation/native';
 
 export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   navigation,
@@ -15,7 +15,7 @@ export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   const [projects, setProjects] = useState<string[]>([]);
 
   const fetchProjects = async () => {
-    const projectNames = await storage.getProjectNames();
+    const projectNames = await projectStorageService.getProjectNames();
     if (projectNames?.length) {
       setProjects(projectNames.splice(0, 10));
     }
@@ -36,13 +36,17 @@ export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   };
 
   const handleRemoveProject = async id => {
-    await storage.deleteProject(id);
+    await projectStorageService.deleteProject(id);
     fetchProjects();
   };
 
   return (
     <View style={styles.container}>
       <Button onPress={handleOpenNewProjectDialog} title="Create Project" />
+
+      <Link screen="Samples" params={{id: 'jane'}}>
+        Go to Jane's profile
+      </Link>
 
       <View style={{paddingTop: 100}}>
         <Text style={{color: colors.text}}>Recent Projects:</Text>

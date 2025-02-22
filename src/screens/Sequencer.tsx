@@ -2,19 +2,23 @@ import React, {useCallback, useEffect} from 'react';
 import {Button, FlatList, StyleSheet, View} from 'react-native';
 import {Pattern, Transport} from '../components';
 import {Indicator} from '../components/Indicator/Indicator';
+import {useProjectContext} from '../context';
 import {useGlobalContext} from '../context/globalContext';
-import {storage} from '../services/storage';
+import {projectStorageService} from '../services/storage';
 import {DialogEnum} from '../types';
 
 export const Sequencer = ({route, navigation}) => {
-  const {state, actions} = useGlobalContext();
+  const {
+    actions: {openDialog},
+  } = useGlobalContext();
+  const {state, actions} = useProjectContext();
   const {patterns, samples, bpm, patternLength} = state;
 
   const {id} = route.params;
 
   useEffect(() => {
     const fetchData = async () => {
-      const project = await storage.getProject(id);
+      const project = await projectStorageService.getProject(id);
 
       actions.setInitialProject(
         project.patterns,
@@ -32,12 +36,17 @@ export const Sequencer = ({route, navigation}) => {
   }, [id]);
 
   const handleAddSample = () => {
-    actions.openDialog(DialogEnum.ADD_SAMPLE, {type: 'ADD_SAMPLE'});
+    openDialog(DialogEnum.ADD_SAMPLE, {type: 'ADD_SAMPLE'});
   };
 
   const handleOnSave = useCallback(async () => {
     console.log('here');
-    await storage.saveProject(id, {patterns, samples, bpm, patternLength});
+    await projectStorageService.saveProject(id, {
+      patterns,
+      samples,
+      bpm,
+      patternLength,
+    });
   }, [bpm, id, patternLength, patterns, samples]);
 
   useEffect(() => {

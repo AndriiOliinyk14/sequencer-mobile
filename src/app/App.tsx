@@ -1,4 +1,4 @@
-import {useTheme} from '@react-navigation/native';
+import {Link, useTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
@@ -8,6 +8,7 @@ import {usePlayer} from '../hooks/usePlayer';
 import {Home} from '../screens/Home';
 import {Sequencer} from '../screens/Sequencer';
 import Dialogs from './Dialogs';
+import Samples from '../screens/Samples';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,7 @@ function App(): React.JSX.Element {
           }}
           component={Sequencer}
         />
+        <Stack.Screen name="Samples" component={Samples} />
       </Stack.Navigator>
       <Dialogs />
     </SafeAreaView>

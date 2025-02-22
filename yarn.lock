@@ -1579,6 +1579,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.5.tgz#d70fc5870477760033769bbd6625d57e7d7678b2"
   integrity sha512-x2N415pg4ZxIltArOKczPwn7JEYh+1OxQ4+hTnafomnMsqs65HZuEWcX+Ch8c5r8V83DiunuQUf5hWGWlw8hQQ==
 
+"@react-native-documents/picker@^8.2.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-documents/picker/-/picker-10.0.1.tgz#482f03c4eebb43da775e8a0146aae6dc77422196"
+  integrity sha512-DtSNkfO1oqfOCbcYDsu93+X1cnCJtnTtDCetjy4JdDWXiGhtOoH8vBjobiyC+f+lev7YezkB6fhUJFJoO8NxfQ==
+
 "@react-native/assets-registry@0.76.0":
   version "0.76.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.76.0.tgz#5f89935801ab294ee732d47b5efbc05d4b4511bd"
@@ -5806,6 +5811,11 @@ react-native-svg@^15.11.1:
     css-select "^5.1.0"
     css-tree "^1.1.3"
     warn-once "0.1.1"
+
+react-native-uuid@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-uuid/-/react-native-uuid-2.0.3.tgz#f85f8a8d68e52e3f1c18ba0f02ec7776f9d4a0da"
+  integrity sha512-f/YfIS2f5UB+gut7t/9BKGSCYbRA9/74A5R1MDp+FLYsuS+OSWoiM/D8Jko6OJB6Jcu3v6ONuddvZKHdIGpeiw==
 
 react-native@0.76.0:
   version "0.76.0"

@@ -1,3 +1,4 @@
+import {useTheme} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {
   Button,
@@ -6,26 +7,26 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import {useGlobalContext, useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
-import {useGlobalContext} from '../../context/globalContext';
 import {CounterModule} from '../../NativeModules';
 import {DialogEnum} from '../../types';
-import {PlayerState} from '../../types/PlayerStatus';
-import {useTheme} from '@react-navigation/native';
+import {PlayerState} from '../../types/enums/PlayerStatus';
 
 const Transport = () => {
   const {count} = useCountContext();
-  const {actions, state} = useGlobalContext();
+  const {
+    actions: {openDialog},
+  } = useGlobalContext();
+  const {actions, state} = useProjectContext();
   const {colors} = useTheme();
   const {playerStatus, patternLength} = state;
 
-  const buttonTitle = playerStatus === PlayerState.PLAYING ? 'Stop' : 'Start';
+  const isPlaying = playerStatus === PlayerState.PLAYING;
+  const buttonTitle = isPlaying ? 'Stop' : 'Start';
 
   const handlePress = () => {
-    const newState =
-      state.playerStatus === PlayerState.PLAYING
-        ? PlayerState.STOPPED
-        : PlayerState.PLAYING;
+    const newState = isPlaying ? PlayerState.STOPPED : PlayerState.PLAYING;
 
     if (newState === PlayerState.PLAYING) {
       CounterModule.start();
@@ -81,10 +82,7 @@ const Transport = () => {
           32
         </Text>
       </TouchableNativeFeedback>
-      <Button
-        title="REC"
-        onPress={() => actions.openDialog(DialogEnum.RECORD)}
-      />
+      <Button title="REC" onPress={() => openDialog(DialogEnum.RECORD)} />
     </View>
   );
 };

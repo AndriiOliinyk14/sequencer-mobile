@@ -1,6 +1,5 @@
 import {MMKV} from 'react-native-mmkv';
-
-class StorageService {
+class ProjectStorageService {
   private storage: MMKV;
   private id = 'sequencer-test';
 
@@ -80,4 +79,4 @@ class StorageService {
   }
 }
 
-export const storage = new StorageService();
+export const projectStorageService = new ProjectStorageService();

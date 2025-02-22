@@ -2,13 +2,17 @@ import React, {useEffect} from 'react';
 import {Button, StyleSheet, TextInput} from 'react-native';
 
 import {RecorderModule} from '../../NativeModules';
-import {useGlobalContext} from '../../context/globalContext';
+import {useGlobalContext, useProjectContext} from '../../context';
 import {DialogEnum} from '../../types';
 import {Dialog} from './Dialog';
 
 const RecordDialog = () => {
-  const {state, actions} = useGlobalContext();
-  const {samples, dialogs} = state;
+  const {state, actions} = useProjectContext();
+  const {
+    state: {dialogs},
+    actions: {closeDialog},
+  } = useGlobalContext();
+  const {samples} = state;
 
   const [trackName, setTrackName] = React.useState('');
 
@@ -52,7 +56,7 @@ const RecordDialog = () => {
     };
 
     actions.setRecordedSample(trackName, filePath, settings);
-    actions.closeDialog(DialogEnum.RECORD);
+    closeDialog(DialogEnum.RECORD);
   };
 
   const handleOnTextChange = (text: string) => {
@@ -68,7 +72,7 @@ const RecordDialog = () => {
 
   const handleOnClose = () => {
     RecorderModule.stop();
-    actions.closeDialog(DialogEnum.RECORD);
+    closeDialog(DialogEnum.RECORD);
   };
 
   return (
