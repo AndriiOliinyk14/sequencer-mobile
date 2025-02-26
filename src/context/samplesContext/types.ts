@@ -8,7 +8,12 @@ export interface ContextInterface {
   state: InitialState;
   actions: {
     setSample: (sample: SampleEntity) => void;
-    importSample: (name: string, format: string, uri: string) => void;
+    importSample: (
+      name: string,
+      format: string,
+      uri: string,
+      navigate: any,
+    ) => void;
     getAllSamples: () => void;
   };
 }

@@ -1,6 +1,5 @@
 import RNFS, {writeFile} from 'react-native-fs';
 import {SaveAudioInterface} from './fs.types';
-import uuid from 'react-native-uuid';
 
 class FSService {
   private _fs;
@@ -19,10 +18,16 @@ class FSService {
     return this._fs.DocumentDirectoryPath;
   }
 
+  get SamplesDirectoryPath() {
+    return this._samplesFolderPath;
+  }
+
   async saveAudio(data: SaveAudioInterface) {
     try {
       await RNFS.mkdir(this._samplesFolderPath);
-      const filePath = `${this._samplesFolderPath}/${data.id}.${data.format}`;
+
+      const fileName = `${data.id}.${data.format}`;
+      const filePath = `${this._samplesFolderPath}/${fileName}`;
 
       try {
         await writeFile(filePath, data.binaryData, 'base64');
@@ -35,7 +40,7 @@ class FSService {
         console.error('FSService.saveAudio: ', error);
       }
 
-      return filePath;
+      return fileName;
     } catch (error) {
       throw `FSService.uploadAudio ${error}`;
     }

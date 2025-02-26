@@ -1,12 +1,14 @@
+import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-import {projectStorageService} from '../../services/storage';
-import {Dialog} from './Dialog';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import {useGlobalContext} from '../../context/globalContext';
+import {projectStorageService} from '../../services/storage';
 import {DialogEnum} from '../../types';
-import {useNavigation} from '@react-navigation/native';
+import {Dialog} from './Dialog';
+import {TextInput} from '../TextInput';
 
 export const NewProjectDialog = () => {
+  const {colors} = useTheme();
   const navigation = useNavigation<any>();
   const {state, actions} = useGlobalContext();
   const {dialogs} = state;
@@ -55,7 +57,7 @@ export const NewProjectDialog = () => {
       <View style={styles.container}>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
-            <Text>Name: </Text>
+            <Text style={{color: colors.text, fontWeight: 'bold'}}>Name: </Text>
             <TextInput
               placeholder="project name..."
               value={input}
@@ -64,7 +66,9 @@ export const NewProjectDialog = () => {
           </View>
           <Text style={styles.error}>{error}</Text>
           <View style={styles.inputContainer}>
-            <Text>Tempo: </Text>
+            <Text style={{color: colors.text, fontWeight: 'bold'}}>
+              Tempo:{' '}
+            </Text>
             <TextInput
               placeholder="BPM"
               value={String(bpm)}

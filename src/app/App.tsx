@@ -5,9 +5,10 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import {useCount} from '../hooks/useCount';
 import {useInit} from '../hooks/useInit';
 import {usePlayer} from '../hooks/usePlayer';
-import {Home} from '../screens/Home';
+import Home from '../screens/Home';
 import SampleLibrary from '../screens/SampleLibrary/SampleLibrary';
-import {Sequencer} from '../screens/Sequencer';
+import EditSample from '../screens/EditSample/EditSample';
+import Sequencer from '../screens/Sequencer';
 import Dialogs from './Dialogs';
 
 const Stack = createNativeStackNavigator();
@@ -37,7 +38,8 @@ function App(): React.JSX.Element {
           }}
           component={Sequencer}
         />
-        <Stack.Screen name="Samples" component={SampleLibrary} />
+        <Stack.Screen name="Sample Library" component={SampleLibrary} />
+        <Stack.Screen name="Edit Sample" component={EditSample} />
       </Stack.Navigator>
       <Dialogs />
     </SafeAreaView>

@@ -1,13 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
-import {Button, FlatList, StyleSheet, View} from 'react-native';
+import {Button, FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import {Pattern, Transport} from '../components';
 import {Indicator} from '../components/Indicator/Indicator';
 import {useProjectContext} from '../context';
 import {useGlobalContext} from '../context/globalContext';
 import {projectStorageService} from '../services/storage';
-import {DialogEnum} from '../types';
+import {DialogEnum, SamplesScreenTypeEnum} from '../types';
+import {Link} from '@react-navigation/native';
 
-export const Sequencer = ({route, navigation}) => {
+const Sequencer = ({route, navigation}) => {
   const {
     actions: {openDialog},
   } = useGlobalContext();
@@ -35,12 +36,9 @@ export const Sequencer = ({route, navigation}) => {
     };
   }, [id]);
 
-  const handleAddSample = () => {
-    openDialog(DialogEnum.ADD_SAMPLE, {type: 'ADD_SAMPLE'});
-  };
+  console.log(samples, patterns);
 
   const handleOnSave = useCallback(async () => {
-    console.log('here');
     await projectStorageService.saveProject(id, {
       patterns,
       samples,
@@ -75,10 +73,17 @@ export const Sequencer = ({route, navigation}) => {
         }}
       />
 
-      <Button onPress={handleAddSample} title="Add sample" />
+      <Link
+        style={styles.addSample}
+        screen="Sample Library"
+        params={{type: SamplesScreenTypeEnum.ADD_TO_PROJECT}}>
+        Add Sample
+      </Link>
     </View>
   );
 };
+
+export default Sequencer;
 
 const styles = StyleSheet.create({
   container: {
@@ -96,5 +101,8 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: 40,
     flexDirection: 'column',
+  },
+  addSample: {
+    textAlign: 'center',
   },
 });

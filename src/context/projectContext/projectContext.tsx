@@ -32,7 +32,7 @@ const Context = createContext<ContextInterface>({
 });
 
 export const ProjectContextProvider = ({children}: any) => {
-  const path = fsService.MainBundlePath;
+  // const path = fsService.MainBundlePath;
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -47,15 +47,22 @@ export const ProjectContextProvider = ({children}: any) => {
     });
   };
 
-  const setSample = (key: string, title: string, settings: SampleSettings) => {
-    if (state.samples.some((item: any) => item.key === key)) {
+  const setSample = (
+    key: string,
+    title: string,
+    path: string,
+    settings: SampleSettings | undefined = intitialSampleSettings,
+  ) => {
+    console.log(key, path);
+    if (state.samples.some((item: any) => item.title === title)) {
       return;
     }
 
-    SamplerModule.addSample(key, path + `/${key}.wav`, settings, () => {
+    SamplerModule.addSample(key, path, settings, props => {
+      console.log('props', props);
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
-        payload: {key, title, settings},
+        payload: {key, title, path, settings},
       });
     });
   };
@@ -65,15 +72,15 @@ export const ProjectContextProvider = ({children}: any) => {
     filePath: string,
     settings: SampleSettings,
   ) => {
-    const addSample = (data: any) => {
-      actions.setSample(data.key, data.key, {
-        volume: data.volume,
-        pan: data.pan,
-        reverb: data.reverb,
-      });
-    };
-    console.log(filePath);
-    SamplerModule.addSample(title, filePath, settings, addSample);
+    // const addSample = (data: any) => {
+    //   actions.setSample(data.key, data.key, {
+    //     volume: data.volume,
+    //     pan: data.pan,
+    //     reverb: data.reverb,
+    //   });
+    // };
+    // console.log(filePath);
+    // SamplerModule.addSample(title, filePath, settings, addSample);
   };
 
   const replaceSample = (oldKey: string, newKey: string, newTitle: string) => {
@@ -97,12 +104,12 @@ export const ProjectContextProvider = ({children}: any) => {
 
       delete newPatterns[oldKey];
 
-      SamplerModule.addSample(
-        newKey,
-        path + `/${newKey}.wav`,
-        intitialSampleSettings,
-        () => {},
-      );
+      // SamplerModule.addSample(
+      //   newKey,
+      //   path + `/${newKey}.wav`,
+      //   intitialSampleSettings,
+      //   () => {},
+      // );
 
       dispatch({
         type: PROJECT_ACTION_TYPES.REPLACE_SAMPLE,
@@ -175,7 +182,7 @@ export const ProjectContextProvider = ({children}: any) => {
     setPatternLength(patternLength);
 
     samples.forEach(sample => {
-      setSample(sample.key, sample.title!, sample.settings);
+      setSample(sample.key, sample.title!, sample.url!);
     });
 
     CounterModule.setPatternLength(patternLength);
@@ -195,7 +202,7 @@ export const ProjectContextProvider = ({children}: any) => {
     setBpm,
     setPatternLength,
     resetState,
-  };
+  } as any;
 
   return (
     <Context.Provider

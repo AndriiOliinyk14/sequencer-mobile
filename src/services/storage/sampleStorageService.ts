@@ -1,6 +1,6 @@
 import {MMKV} from 'react-native-mmkv';
 import {SampleEntity} from '../../types';
-import uuid from 'react-native-uuid';
+import {fsService} from '../fs';
 
 class SampleStorageService {
   private storage: MMKV;
@@ -12,9 +12,16 @@ class SampleStorageService {
 
   async save(data: SampleEntity) {
     try {
-      const key = uuid.v4();
+      this.storage.set(data.id, JSON.stringify(data));
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      this.storage.set(key, JSON.stringify(data));
+  async update(data: SampleEntity) {
+    try {
+      await this.delete(data.id);
+      this.storage.set(data.id, JSON.stringify(data));
     } catch (error) {
       throw error;
     }
@@ -28,12 +35,15 @@ class SampleStorageService {
     }
   }
 
-  async get(id: string) {
+  async get(id: string): Promise<SampleEntity | undefined> {
     try {
-      const project = this.storage.getString(id);
+      const sample = this.storage.getString(id);
 
-      if (project) {
-        return JSON.parse(project);
+      if (sample) {
+        const parsedData = JSON.parse(sample) as SampleEntity;
+        parsedData.path = `${fsService.SamplesDirectoryPath}/${parsedData.path}`;
+
+        return parsedData;
       }
     } catch (error) {
       throw error;
@@ -54,13 +64,14 @@ class SampleStorageService {
       const allKeys = this.storage.getAllKeys();
       const data: SampleEntity[] = [];
 
-      allKeys.forEach(key => {
-        const sampleData = this.storage.getString(key);
+      for (const key of allKeys) {
+        const sampleData = await this.get(key);
 
         if (sampleData) {
-          data.push(JSON.parse(sampleData));
+          data.push(sampleData);
         }
-      });
+      }
+
       return data;
     } catch (error) {
       throw error;

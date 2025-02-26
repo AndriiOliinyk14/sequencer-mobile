@@ -3,10 +3,10 @@ import React, {FC, useEffect, useState} from 'react';
 import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {useGlobalContext} from '../context/globalContext';
 import {projectStorageService} from '../services/storage';
-import {DialogEnum} from '../types';
+import {DialogEnum, SamplesScreenTypeEnum} from '../types';
 import {Link, useTheme} from '@react-navigation/native';
 
-export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
+const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   navigation,
 }) => {
   const {colors} = useTheme();
@@ -44,7 +44,7 @@ export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
     <View style={styles.container}>
       <Button onPress={handleOpenNewProjectDialog} title="Create Project" />
 
-      <Link screen="Samples" params={{id: 'jane'}}>
+      <Link screen="Sample Library" params={{type: SamplesScreenTypeEnum.DEFAULT}}>
         Samples Library
       </Link>
 
@@ -67,6 +67,8 @@ export const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
     </View>
   );
 };
+
+export default Home;
 
 const styles = StyleSheet.create({
   container: {

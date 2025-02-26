@@ -1,13 +1,14 @@
-import React, {FC, useEffect} from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
-import {Sample} from './parts';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {FC, useEffect} from 'react';
+import {Button, ScrollView, StyleSheet, View} from 'react-native';
 import {useGlobalContext, useSamplesContext} from '../../context';
-import {DialogEnum} from '../../types';
+import {DialogEnum, SamplesScreenTypeEnum} from '../../types';
+import {Sample} from './components';
 
-const SampleLibrary: FC<{navigation: NativeStackNavigationProp<any>}> = ({
-  navigation,
-}) => {
+const SampleLibrary: FC<{
+  navigation: NativeStackNavigationProp<any>;
+  route: any;
+}> = ({navigation, route}) => {
   const {
     actions: {openDialog},
   } = useGlobalContext();
@@ -30,15 +31,15 @@ const SampleLibrary: FC<{navigation: NativeStackNavigationProp<any>}> = ({
     actions.getAllSamples();
   }, []);
 
-  console.log('state', state);
-
   return (
     <View>
-      <FlatList
-        style={styles.samplesContainer}
-        data={state.samples}
-        renderItem={item => <Sample name={item.item.name} />}
-      />
+      <ScrollView>
+        <View style={styles.samplesContainer}>
+          {state.samples.map(item => (
+            <Sample key={item.path} type={route.params.type} {...item} />
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -49,5 +50,11 @@ const styles = StyleSheet.create({
   samplesContainer: {
     paddingHorizontal: 40,
     paddingTop: 40,
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
 });

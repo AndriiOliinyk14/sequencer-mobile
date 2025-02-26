@@ -31,7 +31,12 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
-  const importSample = async (name: string, format: string, uri: string) => {
+  const importSample = async (
+    name: string,
+    format: string,
+    uri: string,
+    navigate: any,
+  ) => {
     try {
       const id = uuid.v4();
       const base64Audio = await RNBlobUtil.fs.readFile(uri, 'base64');
@@ -44,12 +49,12 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
         binaryData: base64Audio,
       });
 
-      console.log(id, name, savedUri);
-
       const sample = new SampleEntity(id, name, savedUri);
+
       await sampleStorageService.save(sample);
 
-      getAllSamples();
+      await getAllSamples();
+      navigate('Edit Sample', {id});
     } catch (error) {
       console.log(error);
     }
