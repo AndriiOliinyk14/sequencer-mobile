@@ -2,10 +2,10 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {FC, useEffect} from 'react';
 import {Button, ScrollView, StyleSheet, View} from 'react-native';
 import {useGlobalContext, useSamplesContext} from '../../context';
-import {DialogEnum, SamplesScreenTypeEnum} from '../../types';
+import {DialogEnum} from '../../types';
 import {Sample} from './components';
 
-const SampleLibrary: FC<{
+const SamplesLibrary: FC<{
   navigation: NativeStackNavigationProp<any>;
   route: any;
 }> = ({navigation, route}) => {
@@ -44,7 +44,7 @@ const SampleLibrary: FC<{
   );
 };
 
-export default SampleLibrary;
+export default SamplesLibrary;
 
 const styles = StyleSheet.create({
   samplesContainer: {

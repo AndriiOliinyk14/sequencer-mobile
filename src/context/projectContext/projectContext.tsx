@@ -1,12 +1,18 @@
 import React, {createContext, useContext, useReducer} from 'react';
 import {CounterModule, SamplerModule} from '../../NativeModules';
 
-import {Pattern, PlayerState, Sample, SampleSettings} from '../../types';
+import {fsService} from '../../services';
+import {
+  Pattern,
+  PlayerState,
+  Project,
+  Sample,
+  SampleSettings,
+} from '../../types';
 import {PROJECT_ACTION_TYPES} from './actionTypes';
 import {initialState} from './initialState';
 import reducer from './reducer';
 import {ContextInterface} from './types';
-import {fsService} from '../../services';
 
 const intitialSampleSettings = {
   volume: 1,
@@ -27,14 +33,12 @@ const Context = createContext<ContextInterface>({
     removeSample: () => {},
     setBpm: () => {},
     setPatternLength: () => {},
-    setInitialProject: () => {},
+    setProject: () => {},
     resetState: () => {},
   },
 });
 
 export const ProjectContextProvider = ({children}: any) => {
-  // const path = fsService.MainBundlePath;
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setPlayerStatus = (status: PlayerState) => {
@@ -163,10 +167,12 @@ export const ProjectContextProvider = ({children}: any) => {
   };
 
   const setBpm = (bpm: number) => {
+    CounterModule.setBpm(bpm);
     dispatch({type: PROJECT_ACTION_TYPES.SET_BPM, payload: bpm});
   };
 
   const setPatternLength = (length: number) => {
+    CounterModule.setPatternLength(length);
     dispatch({type: PROJECT_ACTION_TYPES.SET_PATTERN_LENGTH, payload: length});
   };
 
@@ -178,23 +184,12 @@ export const ProjectContextProvider = ({children}: any) => {
     dispatch({type: PROJECT_ACTION_TYPES.RESET_STATE});
   };
 
-  const setInitialProject = (
-    patterns: Record<string, Pattern>,
-    samples: Sample[],
-    bpm: number,
-    patternLength: number,
-  ) => {
-    console.log({patterns, samples});
-    setPatterns(patterns);
-    setBpm(bpm);
-    setPatternLength(patternLength);
-
-    samples.forEach(sample => {
-      setSample(sample.id, sample.title, sample.path);
+  const setProject = (project: Project) => {
+    project.samples.forEach(sample => {
+      setSample(sample.id, sample.name, sample.path);
     });
 
-    CounterModule.setPatternLength(patternLength);
-    CounterModule.setBpm(bpm);
+    dispatch({type: PROJECT_ACTION_TYPES.SET_PROJECT, payload: project});
   };
 
   const actions = {
@@ -203,7 +198,7 @@ export const ProjectContextProvider = ({children}: any) => {
     setPatterns,
     setSample,
     setRecordedSample,
-    setInitialProject,
+    setProject,
     updateSample,
     replaceSample,
     removeSample,

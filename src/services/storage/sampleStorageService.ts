@@ -19,16 +19,18 @@ class SampleStorageService {
 
   async update(data: SampleEntity) {
     try {
-      await this.delete(data.id);
+      await this.remove(data);
       this.storage.set(data.id, JSON.stringify(data));
     } catch (error) {
       throw error;
     }
   }
 
-  async delete(id: string) {
+  async remove(data: SampleEntity) {
     try {
-      this.storage.delete(id);
+      await this.storage.delete(data.id);
+
+      return true;
     } catch (error) {
       throw error;
     }

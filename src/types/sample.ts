@@ -14,6 +14,5 @@ export class SampleEntity {
 }
 
 export type Sample = SampleEntity & {
-  title: string;
   settings: SampleSettings;
 };

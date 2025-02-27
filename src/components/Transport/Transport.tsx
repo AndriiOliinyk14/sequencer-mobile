@@ -33,7 +33,6 @@ const Transport = () => {
 
   // const handleBpmChange = (value: number) => {
   //   actions.setBpm(value);
-  //   CounterModule.setBpm(value);
   // };
 
   useEffect(() => {
@@ -45,7 +44,6 @@ const Transport = () => {
 
   const handlePatternLengthChange = (value: number) => {
     actions.setPatternLength(value);
-    CounterModule.setPatternLength(value);
   };
 
   return (

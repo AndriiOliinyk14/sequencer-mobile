@@ -1,11 +1,12 @@
 import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import uuid from 'react-native-uuid';
 import {useGlobalContext} from '../../context/globalContext';
 import {projectStorageService} from '../../services/storage';
 import {DialogEnum} from '../../types';
-import {Dialog} from './Dialog';
 import {TextInput} from '../TextInput';
+import {Dialog} from './Dialog';
 
 export const NewProjectDialog = () => {
   const {colors} = useTheme();
@@ -24,11 +25,15 @@ export const NewProjectDialog = () => {
     try {
       if (!input) return;
 
-      await projectStorageService.createProject(input, {
+      const id = uuid.v4();
+
+      await projectStorageService.createProject({
+        id,
+        name: input,
         bpm,
         patternLength: 16,
       });
-      navigation.navigate('Sequencer', {id: input});
+      navigation.navigate('Sequencer', {id, name: input});
       handleOnClose();
     } catch (error) {
       if (typeof error === 'string') {

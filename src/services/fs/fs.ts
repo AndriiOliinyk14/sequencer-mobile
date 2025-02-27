@@ -1,5 +1,5 @@
 import RNFS, {writeFile} from 'react-native-fs';
-import {SaveAudioInterface} from './fs.types';
+import {RemoveAudioInterface, SaveAudioInterface} from './fs.types';
 
 class FSService {
   private _fs;
@@ -26,8 +26,8 @@ class FSService {
     try {
       await RNFS.mkdir(this._samplesFolderPath);
 
-      const fileName = `${data.id}.${data.format}`;
-      const filePath = `${this._samplesFolderPath}/${fileName}`;
+      const nameWithFormat = `${data.id}.${data.format}`;
+      const filePath = `${this._samplesFolderPath}/${nameWithFormat}`;
 
       try {
         await writeFile(filePath, data.binaryData, 'base64');
@@ -40,9 +40,26 @@ class FSService {
         console.error('FSService.saveAudio: ', error);
       }
 
-      return fileName;
+      return nameWithFormat;
     } catch (error) {
       throw `FSService.uploadAudio ${error}`;
+    }
+  }
+
+  async removeAudio(data: RemoveAudioInterface) {
+    try {
+      const filePath = `${this._samplesFolderPath}/${data.path}`;
+
+      console.log(filePath);
+      if (await RNFS.exists(filePath)) {
+        await RNFS.unlink(filePath);
+
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      throw `FSService.removeAudio ${error}`;
     }
   }
 }

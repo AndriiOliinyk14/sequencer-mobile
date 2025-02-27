@@ -15,6 +15,10 @@ export interface ContextInterface {
       uri: string,
       navigate: any,
     ) => void;
+    removeSample: (
+      data: SampleEntity,
+      callback: (params?: any) => void,
+    ) => void;
     getAllSamples: () => void;
   };
 }

@@ -1,23 +1,24 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {FC, useEffect, useState} from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Alert, Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {useGlobalContext} from '../context/globalContext';
 import {projectStorageService} from '../services/storage';
-import {DialogEnum, SamplesScreenTypeEnum} from '../types';
+import {DialogEnum, Project, SamplesScreenTypeEnum} from '../types';
 import {Link, useTheme} from '@react-navigation/native';
 
 const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
   navigation,
 }) => {
   const {colors} = useTheme();
-  const {actions} = useGlobalContext();
+  const {state, actions} = useGlobalContext();
 
-  const [projects, setProjects] = useState<string[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const fetchProjects = async () => {
-    const projectNames = await projectStorageService.getProjectNames();
+    const projectNames = await projectStorageService.getAllProjects();
+
     if (projectNames?.length) {
-      setProjects(projectNames.splice(0, 10));
+      setProjects(projectNames);
     }
   };
 
@@ -31,20 +32,32 @@ const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
     });
   };
 
-  const handleOpenProject = id => {
-    navigation.navigate('Sequencer', {id});
+  const handleOpenProject = (id: string, name: string) => {
+    navigation.navigate('Sequencer', {id, name});
   };
 
   const handleRemoveProject = async id => {
-    await projectStorageService.deleteProject(id);
-    fetchProjects();
+    Alert.alert('Remove Project', 'Do you realy want to remove the project?', [
+      {
+        text: 'OK',
+        onPress: async () => {
+          await projectStorageService.deleteProject(id);
+          fetchProjects();
+        },
+      },
+      {
+        text: 'Cancel',
+      },
+    ]);
   };
 
   return (
     <View style={styles.container}>
       <Button onPress={handleOpenNewProjectDialog} title="Create Project" />
 
-      <Link screen="Sample Library" params={{type: SamplesScreenTypeEnum.DEFAULT}}>
+      <Link
+        screen="Samples Library"
+        params={{type: SamplesScreenTypeEnum.DEFAULT}}>
         Samples Library
       </Link>
 
@@ -54,9 +67,12 @@ const Home: FC<{navigation: NativeStackNavigationProp<any>}> = ({
           data={projects}
           renderItem={({item}) => (
             <View style={styles.buttonsWrapper}>
-              <Button onPress={() => handleOpenProject(item)} title={item} />
               <Button
-                onPress={() => handleRemoveProject(item)}
+                onPress={() => handleOpenProject(item.id, item.name)}
+                title={item.name || ''}
+              />
+              <Button
+                onPress={() => handleRemoveProject(item.id)}
                 title={'Delete'}
                 color={'red'}
               />

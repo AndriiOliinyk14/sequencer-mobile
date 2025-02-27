@@ -1,6 +1,6 @@
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Alert, Button, StyleSheet, Text, View} from 'react-native';
 import {TextInput} from '../../components';
 import {useSamplesContext} from '../../context';
 import {sampleStorageService} from '../../services';
@@ -23,7 +23,6 @@ const EditSample = () => {
   useEffect(() => {
     const fetchSample = async () => {
       const data = await sampleStorageService.get(route.params.id);
-      console.log('data', data);
 
       if (!data) return;
 
@@ -41,6 +40,8 @@ const EditSample = () => {
       const data = {...sample, ...values};
       await sampleStorageService.update(data);
       actions.getAllSamples();
+
+      Alert.alert('Sample was saved successfully');
     } catch (error) {
       console.error(error);
     }
@@ -53,6 +54,7 @@ const EditSample = () => {
       headerRight: () => (
         <Button title="Save" onPress={() => handleOnSave(sample, values)} />
       ),
+      title: `Editing ${sample.name}`,
     });
   }, [navigation, sample, values]);
 
@@ -60,8 +62,27 @@ const EditSample = () => {
     setValues(state => ({...state, ...value}));
   };
 
+  const handleOnRemove = (sample: SampleEntity) => {
+    Alert.alert(
+      'Remove Sample',
+      'Are you realy want to remove this sample? Type "Yes" if you want',
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            actions.removeSample(sample, () => navigation.goBack()),
+        },
+        {text: 'Cancel', onPress: () => {}},
+      ],
+    );
+  };
+
+  if (!sample) {
+    return <>Loading</>;
+  }
+
   return (
-    <View style={styles.rows}>
+    <View style={styles.container}>
       <View style={[styles.row, {borderColor: colors.border}]}>
         <Text style={[styles.name, {color: colors.text}]}>Sample name:</Text>
         <TextInput
@@ -71,6 +92,11 @@ const EditSample = () => {
           onChangeText={text => handleOnInput({name: text})}
         />
       </View>
+      <Button
+        color={'red'}
+        onPress={() => handleOnRemove(sample)}
+        title="Remove Sample"
+      />
     </View>
   );
 };
@@ -78,7 +104,7 @@ const EditSample = () => {
 export default EditSample;
 
 const styles = StyleSheet.create({
-  rows: {
+  container: {
     paddingTop: 24,
   },
   name: {

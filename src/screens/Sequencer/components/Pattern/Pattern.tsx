@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-
-import {useGlobalContext, useProjectContext} from '../../context';
-import {DialogEnum} from '../../types';
-import {icons} from '../icons';
+import {icons} from '../../../../components/icons';
+import {useGlobalContext, useProjectContext} from '../../../../context';
+import {DialogEnum} from '../../../../types';
 import {Step} from './Step';
 
 interface PatternProps {
@@ -27,7 +26,8 @@ const Pattern: FC<PatternProps> = ({id, pattern}) => {
   };
 
   const icon =
-    icons[id as keyof typeof icons] || require('../../assets/icons/snare.png');
+    icons[id as keyof typeof icons] ||
+    require('../../../../assets/icons/snare.png');
 
   const handleEditSample = () => {
     openDialog(DialogEnum.ADD_SAMPLE, {type: 'EDIT_SAMPLE', key: id});

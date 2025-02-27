@@ -1,9 +1,19 @@
-import {Pattern, Sample, SampleSettings} from '../../types';
+import {
+  Pattern,
+  PatternObj,
+  Project,
+  Sample,
+  SampleSettings,
+} from '../../types';
 import {PlayerState} from '../../types/enums/PlayerStatus';
 
 export interface InitialState {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
   playerStatus: PlayerState;
-  patterns: Pattern;
+  patterns: PatternObj;
   samples: Sample[];
   bpm: number;
   patternLength: number;
@@ -31,12 +41,7 @@ export interface ContextInterface {
     removeSample: (key: string) => void;
     setBpm: (bpm: number) => void;
     setPatternLength: (length: number) => void;
-    setInitialProject: (
-      patterns: Record<string, Pattern>,
-      samples: Sample[],
-      bpm: number,
-      patternLength: number,
-    ) => void;
+    setProject: (project: Project) => void;
     resetState: () => void;
   };
 }

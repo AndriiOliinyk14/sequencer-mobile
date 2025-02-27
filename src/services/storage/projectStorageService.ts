@@ -1,32 +1,46 @@
 import {MMKV} from 'react-native-mmkv';
+import {Project} from '../../types';
 class ProjectStorageService {
   private storage: MMKV;
   private id = 'sequencer-test';
+  private projectsKey = 'projects';
 
   constructor() {
     this.storage = new MMKV({id: this.id});
   }
 
-  async createProject(name: string, data: any) {
+  async createProject(
+    data: Pick<Project, 'id' | 'name' | 'bpm' | 'patternLength'>,
+  ) {
     try {
-      const key = `projects.${name}`;
+      const key = `${this.projectsKey}.${data.id}`;
+
+      const project: Project = {
+        ...data,
+        createdAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
+        patterns: {},
+        samples: [],
+      };
 
       if (await this.checkOnExistProject(key)) {
-        throw `Project "${name}" already exist`;
+        throw `Project "${data.name}" already exist`;
       }
 
-      this.storage.set(key, JSON.stringify(data));
+      this.storage.set(key, JSON.stringify(project));
     } catch (error) {
       throw error;
     }
   }
 
-  async saveProject(name: string, data: any) {
+  async saveProject(id: string, data: Partial<Project>) {
     try {
-      const key = `projects.${name}`;
+      const key = `${this.projectsKey}.${id}`;
+
+      data.updatedAt = new Date(Date.now());
 
       if (!(await this.checkOnExistProject(key))) {
-        throw `Project "${name}" doesn't exist`;
+        throw `Project "${data.name}" doesn't exist`;
       }
 
       this.storage.set(key, JSON.stringify(data));
@@ -35,18 +49,18 @@ class ProjectStorageService {
     }
   }
 
-  async deleteProject(name: string) {
+  async deleteProject(id: string) {
     try {
-      const key = `projects.${name}`;
-      this.storage.delete(key);
+      const key = `${this.projectsKey}.${id}`;
+      await this.storage.delete(key);
     } catch (error) {
       throw error;
     }
   }
 
-  async getProject(name: string) {
+  async getProject(id: string): Promise<Project | undefined> {
     try {
-      const key = `projects.${name}`;
+      const key = `${this.projectsKey}.${id}`;
       const project = this.storage.getString(key);
 
       if (project) {
@@ -55,7 +69,7 @@ class ProjectStorageService {
     } catch (error) {}
   }
 
-  async getProjectNames(): Promise<string[] | undefined> {
+  async getProjectIds(): Promise<string[] | undefined> {
     try {
       const allKeys = this.storage.getAllKeys();
 
@@ -71,10 +85,44 @@ class ProjectStorageService {
     } catch (error) {}
   }
 
-  async checkOnExistProject(name: string) {
+  async getAllProjects() {
     try {
-      const allKeys = this.storage.getAllKeys();
-      return allKeys.some(key => key === name);
+      const projectIds = await this.getProjectIds();
+
+      const projects: Project[] = [];
+
+      if (!projectIds) {
+        return [];
+      }
+
+      for (const id of projectIds) {
+        const project = await this.getProject(id);
+
+        if (project) {
+          projects.push(project);
+        }
+      }
+
+      projects.sort((a, b) => {
+        if (a.updatedAt >= b.updatedAt) {
+          return -1;
+        } else if (a.updatedAt <= b.updatedAt) {
+          return 1;
+        } else {
+          0;
+        }
+      });
+
+      return projects;
+    } catch (error) {
+      console.error('ProjectStorageService.getAllProjects', error);
+    }
+  }
+
+  async checkOnExistProject(id: string) {
+    try {
+      const allKeys = await this.storage.getAllKeys();
+      return allKeys.some(key => key === id);
     } catch (error) {}
   }
 }

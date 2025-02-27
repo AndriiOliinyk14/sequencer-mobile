@@ -6,9 +6,9 @@ import {useCount} from '../hooks/useCount';
 import {useInit} from '../hooks/useInit';
 import {usePlayer} from '../hooks/usePlayer';
 import Home from '../screens/Home';
-import SampleLibrary from '../screens/SampleLibrary/SampleLibrary';
+import SamplesLibrary from '../screens/SamplesLibrary/SamplesLibrary';
 import EditSample from '../screens/EditSample/EditSample';
-import Sequencer from '../screens/Sequencer';
+import Sequencer from '../screens/Sequencer/Sequencer';
 import Dialogs from './Dialogs';
 
 const Stack = createNativeStackNavigator();
@@ -29,16 +29,8 @@ function App(): React.JSX.Element {
           component={Home}
           options={{headerShown: false}}
         />
-        <Stack.Screen
-          name="Sequencer"
-          options={({route}: any) => {
-            return {
-              title: route.params?.id,
-            };
-          }}
-          component={Sequencer}
-        />
-        <Stack.Screen name="Sample Library" component={SampleLibrary} />
+        <Stack.Screen name="Sequencer" component={Sequencer} />
+        <Stack.Screen name="Samples Library" component={SamplesLibrary} />
         <Stack.Screen name="Edit Sample" component={EditSample} />
       </Stack.Navigator>
       <Dialogs />

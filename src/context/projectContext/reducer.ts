@@ -23,6 +23,15 @@ const reducer = (state: InitialState, action: any) => {
       return {...state, bpm: action.payload};
     case PROJECT_ACTION_TYPES.SET_PATTERN_LENGTH:
       return {...state, patternLength: action.payload};
+    case PROJECT_ACTION_TYPES.SET_PROJECT:
+      return {
+        ...state,
+        patternLength: action.payload.patternLength,
+        bpm: action.payload.bpm,
+        patterns: action.payload.patterns,
+        name: action.payload.name,
+        id: action.payload.id,
+      };
     case PROJECT_ACTION_TYPES.RESET_STATE:
       return initialState;
     default:

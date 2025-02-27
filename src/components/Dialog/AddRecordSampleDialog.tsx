@@ -54,18 +54,20 @@ const AddRecordSampleDialog = () => {
     <Dialog
       isVisible={dialogs.ADD_RECORD_SAMPLE.visible}
       onClose={handleOnClose}>
-      {!file ? (
-        <Button
-          title="Choice file"
-          onPress={handleOnImportAudio}
-          color="white"
-        />
-      ) : (
-        <View style={styles.file}>
-          <Text style={{color: colors.text}}>{file?.name}</Text>
-          <Button title="Import sample" onPress={handleOnImport} />
-        </View>
-      )}
+      <View style={styles.container}>
+        {!file ? (
+          <Button
+            title="Choice file"
+            onPress={handleOnImportAudio}
+            color="white"
+          />
+        ) : (
+          <View style={styles.file}>
+            <Text style={{color: colors.text}}>File name: {file?.name}</Text>
+            <Button title="Import sample" onPress={handleOnImport} />
+          </View>
+        )}
+      </View>
     </Dialog>
   );
 };
@@ -73,6 +75,7 @@ const AddRecordSampleDialog = () => {
 export {AddRecordSampleDialog};
 
 const styles = StyleSheet.create({
+  container: {},
   file: {
     alignItems: 'center',
   },
