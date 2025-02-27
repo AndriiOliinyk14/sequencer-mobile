@@ -1,12 +1,12 @@
+import {Link} from '@react-navigation/native';
 import React, {useCallback, useEffect} from 'react';
-import {Button, FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, Button, ScrollView, StyleSheet, View} from 'react-native';
 import {Pattern, Transport} from '../components';
 import {Indicator} from '../components/Indicator/Indicator';
 import {useProjectContext} from '../context';
 import {useGlobalContext} from '../context/globalContext';
 import {projectStorageService} from '../services/storage';
-import {DialogEnum, SamplesScreenTypeEnum} from '../types';
-import {Link} from '@react-navigation/native';
+import {PlayerState, SamplesScreenTypeEnum} from '../types';
 
 const Sequencer = ({route, navigation}) => {
   const {
@@ -36,15 +36,26 @@ const Sequencer = ({route, navigation}) => {
     };
   }, [id]);
 
-  console.log(samples, patterns);
+  const handleStopPlaying = () => {
+    actions.setPlayerStatus(PlayerState.STOPPED);
+  };
 
   const handleOnSave = useCallback(async () => {
-    await projectStorageService.saveProject(id, {
-      patterns,
-      samples,
-      bpm,
-      patternLength,
-    });
+    handleStopPlaying();
+
+    try {
+      await projectStorageService.saveProject(id, {
+        patterns,
+        samples,
+        bpm,
+        patternLength,
+      });
+
+      Alert.alert('Project was saved successfully');
+    } catch (error) {
+      Alert.alert('Something went wrong :(');
+      console.error(error);
+    }
   }, [bpm, id, patternLength, patterns, samples]);
 
   useEffect(() => {
@@ -54,31 +65,32 @@ const Sequencer = ({route, navigation}) => {
   }, [handleOnSave, navigation]);
 
   return (
-    <View style={styles.content}>
-      <Transport />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Transport />
 
-      <Indicator />
+        <Indicator />
+      </View>
 
-      <FlatList
-        data={samples}
-        renderItem={({item}) => {
+      <ScrollView style={styles.body}>
+        {samples.map(sample => {
           return (
             <Pattern
-              key={item.key}
-              id={item.key}
-              name={item.title!}
-              pattern={patterns?.[item?.key]}
+              key={sample.id}
+              id={sample.id}
+              name={sample.title!}
+              pattern={patterns?.[sample?.id]}
             />
           );
-        }}
-      />
-
-      <Link
-        style={styles.addSample}
-        screen="Sample Library"
-        params={{type: SamplesScreenTypeEnum.ADD_TO_PROJECT}}>
-        Add Sample
-      </Link>
+        })}
+        <Link
+          style={styles.addSample}
+          screen="Sample Library"
+          params={{type: SamplesScreenTypeEnum.ADD_TO_PROJECT}}
+          onPress={handleStopPlaying}>
+          Add Sample
+        </Link>
+      </ScrollView>
     </View>
   );
 };
@@ -87,12 +99,14 @@ export default Sequencer;
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 10,
     display: 'flex',
-    backgroundColor: '#ffffff',
     height: '100%',
     width: '100%',
     flex: 1,
   },
+  header: {flexGrow: 0},
+  body: {flexGrow: 1},
   buttons: {
     display: 'flex',
     flexDirection: 'row',
@@ -104,5 +118,6 @@ const styles = StyleSheet.create({
   },
   addSample: {
     textAlign: 'center',
+    paddingBottom: 20,
   },
 });

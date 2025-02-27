@@ -16,7 +16,7 @@ export interface ContextInterface {
     setPatterns: (patterns: Record<string, Pattern>) => void;
     setPlayerStatus: (status: PlayerState) => void;
     setSample: (
-      key: string,
+      id: string,
       title: string,
       path: string,
       settings?: SampleSettings,

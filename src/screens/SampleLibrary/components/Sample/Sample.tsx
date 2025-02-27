@@ -22,7 +22,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
   const handleOnEdit = () => {
     navigation.navigate('Edit Sample', {id});
   };
-  console.log(name, id, path);
+
   const handleAddSampleToProject = () => {
     actions.setSample(id, name, path);
     navigation.goBack();

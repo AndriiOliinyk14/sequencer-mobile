@@ -1,11 +1,12 @@
 import React, {createContext, useContext, useReducer} from 'react';
 import {CounterModule, SamplerModule} from '../../NativeModules';
-import {fsService} from '../../services/fs';
+
 import {Pattern, PlayerState, Sample, SampleSettings} from '../../types';
 import {PROJECT_ACTION_TYPES} from './actionTypes';
 import {initialState} from './initialState';
 import reducer from './reducer';
 import {ContextInterface} from './types';
+import {fsService} from '../../services';
 
 const intitialSampleSettings = {
   volume: 1,
@@ -37,6 +38,12 @@ export const ProjectContextProvider = ({children}: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setPlayerStatus = (status: PlayerState) => {
+    if (status === PlayerState.PLAYING) {
+      CounterModule.start();
+    } else {
+      CounterModule.stop();
+    }
+
     dispatch({type: PROJECT_ACTION_TYPES.SET_PLAYER_STATUS, payload: status});
   };
 
@@ -48,21 +55,21 @@ export const ProjectContextProvider = ({children}: any) => {
   };
 
   const setSample = (
-    key: string,
+    id: string,
     title: string,
     path: string,
     settings: SampleSettings | undefined = intitialSampleSettings,
   ) => {
-    console.log(key, path);
+    const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
+
     if (state.samples.some((item: any) => item.title === title)) {
       return;
     }
 
-    SamplerModule.addSample(key, path, settings, props => {
-      console.log('props', props);
+    SamplerModule.addSample(id, absolutePath, settings, props => {
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
-        payload: {key, title, path, settings},
+        payload: {id, title, path, settings},
       });
     });
   };
@@ -140,9 +147,9 @@ export const ProjectContextProvider = ({children}: any) => {
     }
   };
 
-  const updateSample = (key: string, data: Partial<SampleSettings>) => {
+  const updateSample = (id: string, data: Partial<SampleSettings>) => {
     const samples = state.samples.map((sample: Sample) => {
-      if (sample.key === key) {
+      if (sample.id === id) {
         return {...sample, settings: {...sample.settings, ...data}};
       }
 
@@ -177,12 +184,13 @@ export const ProjectContextProvider = ({children}: any) => {
     bpm: number,
     patternLength: number,
   ) => {
+    console.log({patterns, samples});
     setPatterns(patterns);
     setBpm(bpm);
     setPatternLength(patternLength);
 
     samples.forEach(sample => {
-      setSample(sample.key, sample.title!, sample.url!);
+      setSample(sample.id, sample.title, sample.path);
     });
 
     CounterModule.setPatternLength(patternLength);

@@ -28,12 +28,6 @@ const Transport = () => {
   const handlePress = () => {
     const newState = isPlaying ? PlayerState.STOPPED : PlayerState.PLAYING;
 
-    if (newState === PlayerState.PLAYING) {
-      CounterModule.start();
-    } else {
-      CounterModule.stop();
-    }
-
     actions.setPlayerStatus(newState);
   };
 

@@ -24,6 +24,7 @@ const AddRecordSampleDialog = () => {
   const {actions} = useSamplesContext();
 
   const handleOnClose = () => {
+    setFile(undefined);
     closeDialog(DialogEnum.ADD_RECORD_SAMPLE);
   };
 
@@ -46,6 +47,7 @@ const AddRecordSampleDialog = () => {
     if (!file) return;
 
     actions.importSample(file?.name, file?.format, file?.uri, navigate);
+    handleOnClose();
   };
 
   return (

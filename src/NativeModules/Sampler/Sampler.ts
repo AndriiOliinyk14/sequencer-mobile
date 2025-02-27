@@ -3,19 +3,19 @@ import {SampleSettings} from '../../types';
 
 interface SamplerInterface {
   addSample: (
-    name: string,
+    id: string,
     url: string,
     settings: SampleSettings,
     callback: (data: {
-      key: string;
+      id: string;
       volume: number;
       pan: number;
       reverb: number;
     }) => void,
   ) => void;
-  playSample: (name: string) => void;
-  setSampleVolume: (name: string, value: number) => void;
-  setSampleReverb: (name: string, value: number) => void;
+  playSample: (id: string) => void;
+  setSampleVolume: (id: string, value: number) => void;
+  setSampleReverb: (id: string, value: number) => void;
 }
 
 export const SamplerModule = NativeModules.SamplerModule as SamplerInterface;

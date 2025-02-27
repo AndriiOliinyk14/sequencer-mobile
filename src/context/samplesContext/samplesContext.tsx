@@ -1,4 +1,5 @@
 import {createContext, ReactNode, useContext, useReducer} from 'react';
+import {Alert} from 'react-native';
 import RNBlobUtil from 'react-native-blob-util';
 import uuid from 'react-native-uuid';
 import {fsService, sampleStorageService} from '../../services';
@@ -54,6 +55,9 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
       await sampleStorageService.save(sample);
 
       await getAllSamples();
+
+      Alert.alert('Sample was imported');
+
       navigate('Edit Sample', {id});
     } catch (error) {
       console.log(error);

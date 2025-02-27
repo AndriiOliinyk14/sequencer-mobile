@@ -1,6 +1,5 @@
 import {MMKV} from 'react-native-mmkv';
 import {SampleEntity} from '../../types';
-import {fsService} from '../fs';
 
 class SampleStorageService {
   private storage: MMKV;
@@ -41,8 +40,6 @@ class SampleStorageService {
 
       if (sample) {
         const parsedData = JSON.parse(sample) as SampleEntity;
-        parsedData.path = `${fsService.SamplesDirectoryPath}/${parsedData.path}`;
-
         return parsedData;
       }
     } catch (error) {

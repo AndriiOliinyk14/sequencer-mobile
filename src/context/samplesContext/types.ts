@@ -2,6 +2,7 @@ import {SampleEntity} from '../../types';
 
 export interface InitialState {
   samples: SampleEntity[];
+  samplesObj: Record<string, SampleEntity>;
 }
 
 export interface ContextInterface {

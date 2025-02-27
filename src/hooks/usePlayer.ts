@@ -10,8 +10,8 @@ function usePlayer() {
 
   useEffect(() => {
     samples?.forEach(sample => {
-      if (patterns?.[sample.key]?.[count - 1]?.isOn) {
-        SamplerModule.playSample(sample.key);
+      if (patterns?.[sample.id]?.[count - 1]?.isOn) {
+        SamplerModule.playSample(sample.id);
       }
     });
   }, [count]);

@@ -4,13 +4,6 @@ export type SampleSettings = {
   reverb: number;
 };
 
-export type Sample = {
-  key: string;
-  title?: string;
-  url?: string;
-  settings: SampleSettings;
-};
-
 export class SampleEntity {
   constructor(
     public id: string,
@@ -19,3 +12,8 @@ export class SampleEntity {
     public icon?: string,
   ) {}
 }
+
+export type Sample = SampleEntity & {
+  title: string;
+  settings: SampleSettings;
+};

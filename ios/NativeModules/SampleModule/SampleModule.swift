@@ -17,7 +17,7 @@ struct SampleSettings {
 
 
 class SampleModule {
-  var name: String
+  var id: String
   var url: URL
   let file: AVAudioFile
   let engine: AVAudioEngine
@@ -25,9 +25,9 @@ class SampleModule {
   var reverb: AVAudioUnitReverb
   var audioBuffer: AVAudioPCMBuffer
   
-  init(_ engine: AVAudioEngine, _ name: String, _ url: URL, settings: SampleSettings){
+  init(_ engine: AVAudioEngine, _ id: String, _ url: URL, settings: SampleSettings){
     self.engine = engine
-    self.name = name
+    self.id = id
     self.url = url
     self.player = AVAudioPlayerNode()
     self.reverb = AVAudioUnitReverb()

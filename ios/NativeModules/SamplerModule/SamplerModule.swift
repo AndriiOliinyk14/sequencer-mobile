@@ -33,11 +33,11 @@ class SamplerModule: NSObject {
   
   @objc
   func getSamplesNames() -> [String] {
-    self.samples.map({$0.name})
+    self.samples.map({$0.id})
   }
   
   
-  @objc func addSample(_ name: String, url: String, settings: [String: Float], callback: RCTResponseSenderBlock) {
+  @objc func addSample(_ id: String, url: String, settings: [String: Float], callback: RCTResponseSenderBlock) {
     guard let fileURL = URL(string: url) else {
       print("Invalid URL string")
       return
@@ -48,7 +48,7 @@ class SamplerModule: NSObject {
     let reverb = settings["reverb"] ?? 0.0
     
     let settings = SampleSettings(volume: volume, pan: pan, reverb: reverb)
-    let sample = SampleModule(self.engine, name, fileURL, settings: settings)
+    let sample = SampleModule(self.engine, id, fileURL, settings: settings)
     
     samples.append(sample)
     
@@ -57,31 +57,31 @@ class SamplerModule: NSObject {
       try! engine.start()
     }
     
-    callback([["key": name, "volume": volume, "pan": pan, "reverb": reverb]])
+    callback([["id": id, "volume": volume, "pan": pan, "reverb": reverb]])
   }
   
   
-  @objc func playSample(_ name: String) {
-    if let sample = samples.first(where: { $0.name == name }) {
+  @objc func playSample(_ id: String) {
+    if let sample = samples.first(where: { $0.id == id }) {
       sample.play()
     } else {
-      print("Sample not found: \(name)")
+      print("Sample not found: \(id)")
     }
   }
   
-  @objc func setSampleVolume (_ name: String, value: Float) {
-    if let sample = samples.first(where: { $0.name == name }) {
+  @objc func setSampleVolume (_ id: String, value: Float) {
+    if let sample = samples.first(where: { $0.id == id }) {
       sample.setVolume(value)
     } else {
-      print("Sample not found: \(name)")
+      print("Sample not found: \(id)")
     }
   }
   
-  @objc func setSampleReverb (_ name: String, value: Float) {
-    if let sample = samples.first(where: { $0.name == name }) {
+  @objc func setSampleReverb (_ id: String, value: Float) {
+    if let sample = samples.first(where: { $0.id == id }) {
       sample.setReverb(value)
     } else {
-      print("Sample not found: \(name)")
+      print("Sample not found: \(id)")
     }
   }
   //
