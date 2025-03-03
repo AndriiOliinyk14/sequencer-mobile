@@ -7,17 +7,13 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {useGlobalContext, useProjectContext} from '../../context';
+import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
 import {CounterModule} from '../../NativeModules';
-import {DialogEnum} from '../../types';
 import {PlayerState} from '../../types/enums/PlayerStatus';
 
 const Transport = () => {
   const {count} = useCountContext();
-  const {
-    actions: {openDialog},
-  } = useGlobalContext();
   const {actions, state} = useProjectContext();
   const {colors} = useTheme();
   const {playerStatus, patternLength} = state;
@@ -74,7 +70,6 @@ const Transport = () => {
           32
         </Text>
       </TouchableNativeFeedback>
-      <Button title="REC" onPress={() => openDialog(DialogEnum.RECORD)} />
     </View>
   );
 };

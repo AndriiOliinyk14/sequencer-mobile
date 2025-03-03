@@ -64,7 +64,6 @@ class SampleModule {
     player.pan = pan
   }
   
-  
   func setReverb(_ reverb: Float){
     self.reverb.wetDryMix = reverb * 100
   }

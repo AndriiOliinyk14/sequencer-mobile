@@ -5,9 +5,10 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import {useCount} from '../hooks/useCount';
 import {useInit} from '../hooks/useInit';
 import {usePlayer} from '../hooks/usePlayer';
-import Home from '../screens/Home';
-import SamplesLibrary from '../screens/SamplesLibrary/SamplesLibrary';
 import EditSample from '../screens/EditSample/EditSample';
+import Home from '../screens/Home';
+import Record from '../screens/Record/Record';
+import SamplesLibrary from '../screens/SamplesLibrary/SamplesLibrary';
 import Sequencer from '../screens/Sequencer/Sequencer';
 import Dialogs from './Dialogs';
 
@@ -32,6 +33,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Sequencer" component={Sequencer} />
         <Stack.Screen name="Samples Library" component={SamplesLibrary} />
         <Stack.Screen name="Edit Sample" component={EditSample} />
+        <Stack.Screen name="Record" component={Record} />
       </Stack.Navigator>
       <Dialogs />
     </SafeAreaView>

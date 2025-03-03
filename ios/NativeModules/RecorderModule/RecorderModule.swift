@@ -13,12 +13,14 @@ import AVFAudio
 class RecorderModule :NSObject{
   let engine: AVAudioEngine
   var audioRecorder: AVAudioRecorder?
+  let audioFormat: String
   var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
   var recordingURL: URL?
   
   override init(){
     self.engine = AudioEngineModule.shared._engine
     let audioSession = AVAudioSession.sharedInstance()
+    self.audioFormat = "wav"
     
     do {
       try audioSession.setCategory(.playback, mode: .default)
@@ -33,9 +35,20 @@ class RecorderModule :NSObject{
   func record(_ name: String){
     let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     let fileURL = documentsPath.appendingPathComponent("\(name).wav")
-    self.recordingURL = fileURL
     
-
+    
+    if FileManager.default.fileExists(atPath: fileURL.path) {
+      do {
+          try FileManager.default.removeItem(at: fileURL)
+          print("File removed")
+      } catch {
+          print("Error removing file: \(error)")
+      }
+      
+    }
+  
+    
+    self.recordingURL = fileURL
     
     let settings:[String : Any] = [
       AVFormatIDKey: kAudioFormatLinearPCM,
@@ -66,7 +79,7 @@ class RecorderModule :NSObject{
     recorder.stop()
     
     if let fileURL = recordingURL {
-      callback([fileURL.relativePath])
+      callback([["path": fileURL.relativePath, "format": self.audioFormat]])
     }
   }
   
@@ -97,5 +110,23 @@ class RecorderModule :NSObject{
     
     player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts) //
     player.play()
+  }
+  
+  @objc
+  func cleanup(){
+    guard let fileURL = recordingURL else {
+      print("No recording to play")
+      return
+    }
+    
+    if FileManager.default.fileExists(atPath: fileURL.path) {
+      do {
+          try FileManager.default.removeItem(at: fileURL)
+          print("File removed")
+      } catch {
+          print("Error removing file: \(error)")
+      }
+      
+    }
   }
 }

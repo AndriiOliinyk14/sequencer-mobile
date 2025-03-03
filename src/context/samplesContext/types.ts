@@ -13,7 +13,7 @@ export interface ContextInterface {
       name: string,
       format: string,
       uri: string,
-      navigate: any,
+      callback: (params?: any) => void,
     ) => void;
     removeSample: (
       data: SampleEntity,

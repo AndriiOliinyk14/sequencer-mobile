@@ -1,9 +1,10 @@
-import {Button, Image, StyleSheet, Text, View} from 'react-native';
-import React, {FC} from 'react';
 import {useNavigation, useTheme} from '@react-navigation/native';
+import React, {FC} from 'react';
+import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {icons} from '../../../../components/icons';
+import {useProjectContext} from '../../../../context';
+import {SamplerModule} from '../../../../NativeModules';
 import {SampleEntity, SamplesScreenTypeEnum} from '../../../../types';
-import {useGlobalContext, useProjectContext} from '../../../../context';
 
 interface SampleInterface extends SampleEntity {
   type: SamplesScreenTypeEnum;
@@ -16,8 +17,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
     goBack(): void;
   }>();
 
-  const {} = useGlobalContext();
-  const {actions} = useProjectContext();
+  const {state, actions} = useProjectContext();
 
   const handleOnEdit = () => {
     navigation.navigate('Edit Sample', {id});
@@ -28,8 +28,16 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
     navigation.goBack();
   };
 
+  const onPlay = async () => {
+    try {
+      await SamplerModule.playSample(id);
+    } catch (error) {}
+  };
+
   return (
-    <View style={[styles.root, {borderColor: colors.border}]}>
+    <Pressable
+      style={[styles.root, {borderColor: colors.border}]}
+      onPress={onPlay}>
       <Image style={styles.icon} source={icons['hi-hat']} />
       <Text style={[styles.name, {color: colors.text}]}>{name}</Text>
       <View style={styles.buttons}>
@@ -42,7 +50,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
           <Button title="Add to project" onPress={handleAddSampleToProject} />
         )}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

@@ -43,6 +43,11 @@ class SamplerModule: NSObject {
       return
     }
     
+    if (samples.first(where: {$0.id == id}) != nil) {
+      callback(["Sample already exists"])
+      return
+    }
+    
     let volume = settings["volume"] ?? 1.0
     let pan = settings["pan"] ?? 0.0
     let reverb = settings["reverb"] ?? 0.0

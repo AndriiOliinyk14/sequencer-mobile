@@ -4,7 +4,11 @@ import {InitialState} from './types';
 const reducer = (state: InitialState, action: {type: string; payload: any}) => {
   switch (action.type) {
     case SAMPLES_ACTION_TYPES.SET_SAMPLES:
-      return {...state, samples: action.payload};
+      return {
+        ...state,
+        samples: action.payload.data,
+        samplesObj: action.payload.dataObj,
+      };
     default:
       return state;
   }

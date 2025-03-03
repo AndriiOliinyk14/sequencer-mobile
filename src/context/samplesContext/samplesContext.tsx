@@ -2,8 +2,9 @@ import {createContext, ReactNode, useContext, useReducer} from 'react';
 import {Alert} from 'react-native';
 import RNBlobUtil from 'react-native-blob-util';
 import uuid from 'react-native-uuid';
+import {SamplerModule} from '../../NativeModules';
 import {fsService, sampleStorageService} from '../../services';
-import {SampleEntity, SamplesScreenTypeEnum} from '../../types';
+import {SampleEntity} from '../../types';
 import {SAMPLES_ACTION_TYPES} from './actionsTypes';
 import {initialState} from './inititalState';
 import reducer from './reducer';
@@ -27,7 +28,17 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
   const getAllSamples = async () => {
     try {
       const data = await sampleStorageService.getAll();
-      dispatch({type: SAMPLES_ACTION_TYPES.SET_SAMPLES, payload: data});
+      const dataObj = data?.reduce(
+        (acc, item) => ({...acc, [item.id]: item}),
+        {},
+      );
+
+      dispatch({
+        type: SAMPLES_ACTION_TYPES.SET_SAMPLES,
+        payload: {data, dataObj},
+      });
+
+      await addAllSamples();
     } catch (error) {
       console.error('SamplesProvider.getAllSamples: ', error);
     }
@@ -37,7 +48,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     name: string,
     format: string,
     uri: string,
-    navigate: any,
+    callback: any,
   ) => {
     try {
       const id = uuid.v4();
@@ -56,7 +67,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
       await sampleStorageService.save(sample);
 
       await getAllSamples();
-      navigate('Edit Sample', {id});
+      callback(id);
     } catch (error) {
       console.error('SamplesProvider.importSample: ', error);
     }
@@ -77,7 +88,38 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
-  const actions = {setSample, importSample, removeSample, getAllSamples};
+  const addAllSamples = async () => {
+    try {
+      const samples = state.samples;
+
+      for (const sample of samples) {
+        const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
+
+        try {
+          await SamplerModule.addSample(
+            sample.id,
+            absolutePath,
+            {
+              volume: 1,
+              pan: 0,
+              reverb: 0,
+            },
+            () => {},
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {}
+  };
+
+  const actions = {
+    setSample,
+    importSample,
+    removeSample,
+    getAllSamples,
+    addAllSamples,
+  };
   return (
     <Context.Provider value={{state, actions}}>{children}</Context.Provider>
   );

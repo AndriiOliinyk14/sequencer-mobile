@@ -6,12 +6,16 @@ interface SamplerInterface {
     id: string,
     url: string,
     settings: SampleSettings,
-    callback: (data: {
-      id: string;
-      volume: number;
-      pan: number;
-      reverb: number;
-    }) => void,
+    callback: (
+      data:
+        | {
+            id: string;
+            volume: number;
+            pan: number;
+            reverb: number;
+          }
+        | string,
+    ) => void,
   ) => void;
   playSample: (id: string) => void;
   setSampleVolume: (id: string, value: number) => void;

@@ -1,6 +1,15 @@
-import {DefaultTheme} from '@react-navigation/native';
+import {DefaultTheme, Theme} from '@react-navigation/native';
 
-const MainTheme = {
+type Colors = Theme['colors'] & {
+  disabled: string;
+  disabledText: string;
+};
+
+export interface MainThemeInterface extends Theme {
+  colors: Colors;
+}
+
+const MainTheme: MainThemeInterface = {
   ...DefaultTheme,
   dark: true,
   colors: {
@@ -11,6 +20,8 @@ const MainTheme = {
     card: '#1A0730', // Dark purple panels
     border: '#FF0099', // Hot pink accents
     notification: '#FFCC00', // Neon yellow for alerts
+    disabled: '#494949',
+    disabledText: '#d0d0d0',
   },
 };
 

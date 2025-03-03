@@ -1,9 +1,12 @@
 import {NativeModules} from 'react-native';
 
 interface RecorderInterface {
-  record: (name: string) => void;
+  record: (id: string) => void;
   play: () => void;
-  stop: (callback?: (data: string) => void) => void;
+  cleanup: () => void;
+  stop: (
+    callback?: ({path, format}: {path: string; format: string}) => void,
+  ) => void;
 }
 
 export const RecorderModule = NativeModules.RecorderModule as RecorderInterface;

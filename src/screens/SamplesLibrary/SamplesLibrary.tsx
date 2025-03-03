@@ -22,7 +22,9 @@ const SamplesLibrary: FC<{
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button title="Add sample" onPress={handleOpenNewSample} />
+        <>
+          <Button title="Add" onPress={handleOpenNewSample} />
+        </>
       ),
     });
   }, [navigation]);

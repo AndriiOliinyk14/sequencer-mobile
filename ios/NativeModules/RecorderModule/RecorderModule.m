@@ -13,5 +13,6 @@
 RCT_EXTERN_METHOD(record:(NSString *)name)
 RCT_EXTERN_METHOD(stop:(RCTResponseSenderBlock *) callback)
 RCT_EXTERN_METHOD(play)
+RCT_EXTERN_METHOD(cleanup)
 
 @end
