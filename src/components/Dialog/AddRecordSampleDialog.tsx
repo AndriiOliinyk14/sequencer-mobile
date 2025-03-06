@@ -5,7 +5,7 @@ import {DialogEnum} from '../../types';
 import {Dialog} from './Dialog';
 
 import {pick, types} from '@react-native-documents/picker';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import {Button} from '../Button';
 
 const AddRecordSampleDialog = () => {
@@ -48,7 +48,9 @@ const AddRecordSampleDialog = () => {
     if (!file) return;
 
     actions.importSample(file?.name, file?.format, file?.uri, id =>
-      navigation.navigate('Samples Library'),
+      navigation.navigate('Samples Library', {
+        type: dialogs.ADD_RECORD_SAMPLE?.options?.type,
+      }),
     );
 
     handleOnClose();

@@ -10,7 +10,7 @@
 
 @interface RCT_EXTERN_MODULE(RecorderModule, NSObject)
 
-RCT_EXTERN_METHOD(record:(NSString *)name)
+RCT_EXTERN_METHOD(record:(NSString *)name resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter)
 RCT_EXTERN_METHOD(stop:(RCTResponseSenderBlock *) callback)
 RCT_EXTERN_METHOD(play)
 RCT_EXTERN_METHOD(cleanup)

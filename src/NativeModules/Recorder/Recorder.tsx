@@ -1,7 +1,7 @@
 import {NativeModules} from 'react-native';
 
 interface RecorderInterface {
-  record: (id: string) => void;
+  record: (id: string) => Promise<string>;
   play: () => void;
   cleanup: () => void;
   stop: (

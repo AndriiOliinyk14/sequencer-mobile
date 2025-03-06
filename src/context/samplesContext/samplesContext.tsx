@@ -92,6 +92,8 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     try {
       const samples = state.samples;
 
+      console.log('samples', samples);
+
       for (const sample of samples) {
         const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
 

@@ -2,10 +2,9 @@ import {useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
-import {Button} from '../../components';
+import {Button, PlayButton, RecButton} from '../../components';
 import {useSamplesContext} from '../../context';
 import {RecorderModule} from '../../NativeModules';
-import {SamplesScreenTypeEnum} from '../../types';
 
 const Record = ({navigation, route}) => {
   const {colors} = useTheme();
@@ -22,6 +21,10 @@ const Record = ({navigation, route}) => {
     isReadyToPlay: false,
   });
 
+  const [playingState, setPlayingState] = useState({isPlaying: false});
+
+  const [recordDuration, setRecordDuration] = useState<number>(0);
+
   const [file, setFile] = useState<{
     path: string;
     format: string;
@@ -30,14 +33,43 @@ const Record = ({navigation, route}) => {
     format: '',
   });
 
-  const handleOnRecord = () => {
+  useEffect(() => {
+    let interval: any = null;
+
+    if (recordState.isRecording) {
+      setRecordDuration(0);
+
+      interval = setInterval(() => {
+        setRecordDuration(prev => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+      setRecordDuration(0);
+    }
+
+    return () => clearInterval(interval);
+  }, [recordState.isRecording]);
+
+  useEffect(() => {
+    if (!file) return;
+
+    () => {
+      RecorderModule.cleanup();
+    };
+  }, [file]);
+
+  const handleOnStartRecord = async () => {
     if (!trackId) return;
 
-    RecorderModule.record(trackId);
-    setRecordState(prev => ({
-      ...prev,
-      isRecording: true,
-    }));
+    try {
+      await RecorderModule.record(trackId);
+      setRecordState(prev => ({
+        ...prev,
+        isRecording: true,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOnStopRecording = () => {
@@ -58,6 +90,12 @@ const Record = ({navigation, route}) => {
 
   const handleOnPlay = () => {
     RecorderModule.play();
+    setPlayingState(prev => ({...prev, isPlaying: true}));
+  };
+
+  const handleOnStop = () => {
+    RecorderModule.play();
+    setPlayingState(prev => ({...prev, isPlaying: true}));
   };
 
   const handleOnImport = () => {
@@ -65,26 +103,34 @@ const Record = ({navigation, route}) => {
 
     actions.importSample(trackId, file?.format, file.path, () => {
       RecorderModule.cleanup();
-      navigation.navigate('Samples Library', {
-        type: route?.params?.type ?? SamplesScreenTypeEnum.DEFAULT,
-      });
+      navigation.goBack();
     });
+  };
+
+  const handleOnPressRec = (isRecording: boolean) => {
+    isRecording ? handleOnStopRecording() : handleOnStartRecord();
+  };
+
+  const handleOnPressPlay = (isPlaying: boolean) => {
+    handleOnPlay();
   };
 
   return (
     <View style={styles.container}>
       <Text style={{color: colors.primary}}>Recording ID: {trackId}</Text>
+      <Text style={[styles.duration, {color: colors.text}]}>
+        {`Record duration: ${recordDuration} sec`}
+      </Text>
       <View style={styles.controlButtons}>
-        <Button
-          onPress={() =>
-            recordState.isRecording ? handleOnStopRecording() : handleOnRecord()
-          }>
-          {recordState.isRecording ? 'Stop' : 'REC'}
-        </Button>
-
-        <Button onPress={handleOnPlay} disabled={!recordState.isReadyToPlay}>
-          Listen
-        </Button>
+        <RecButton
+          isActive={recordState.isRecording}
+          onPress={() => handleOnPressRec(recordState.isRecording)}
+        />
+        <PlayButton
+          onPress={handleOnPlay}
+          isActive={false} // disabled={!recordState.isReadyToPlay}
+          disabled={!recordState.isReadyToPlay}
+        />
       </View>
       {file?.path && (
         <Button onPress={handleOnImport}>Import sample to library</Button>
@@ -101,6 +147,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     gap: 20,
   },
+  duration: {},
   controlButtons: {
     display: 'flex',
     flexDirection: 'row',

@@ -32,21 +32,21 @@ class RecorderModule :NSObject{
   }
   
   @objc
-  func record(_ name: String){
+  func record(_ name: String, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     let fileURL = documentsPath.appendingPathComponent("\(name).wav")
     
     
     if FileManager.default.fileExists(atPath: fileURL.path) {
       do {
-          try FileManager.default.removeItem(at: fileURL)
-          print("File removed")
+        try FileManager.default.removeItem(at: fileURL)
+        print("File removed")
       } catch {
-          print("Error removing file: \(error)")
+        print("Error removing file: \(error)")
       }
       
     }
-  
+    
     
     self.recordingURL = fileURL
     
@@ -57,20 +57,21 @@ class RecorderModule :NSObject{
       AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
     ]
     
-    do{
+    do {
       try audioSession.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
       try audioSession.setActive(true)
       
       audioRecorder = try AVAudioRecorder(url: fileURL, settings:settings)
       audioRecorder?.prepareToRecord()
       audioRecorder?.record()
+      resolver(["status":"OK"])
     } catch {
-      print(error)
+      rejecter("RECORD_ERROR", "Failed to start recording", error)
     }
   }
   
   @objc
-  func stop(_ callback: RCTResponseSenderBlock) {
+  func stop(_ callback: RCTResponseSenderBlock) {    
     guard let recorder = audioRecorder, recorder.isRecording else {
       print("No active recording")
       return
@@ -115,16 +116,16 @@ class RecorderModule :NSObject{
   @objc
   func cleanup(){
     guard let fileURL = recordingURL else {
-      print("No recording to play")
+      print("No file to remove")
       return
     }
     
     if FileManager.default.fileExists(atPath: fileURL.path) {
       do {
-          try FileManager.default.removeItem(at: fileURL)
-          print("File removed")
+        try FileManager.default.removeItem(at: fileURL)
+        print("File removed")
       } catch {
-          print("Error removing file: \(error)")
+        print("Error removing file: \(error)")
       }
       
     }

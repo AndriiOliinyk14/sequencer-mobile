@@ -52,6 +52,7 @@ class SampleModule {
   }
   
   func play(){
+    self.player.stop()
     self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
     self.player.play();
   }

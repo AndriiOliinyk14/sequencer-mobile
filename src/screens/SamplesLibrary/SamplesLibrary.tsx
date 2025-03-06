@@ -16,7 +16,7 @@ const SamplesLibrary: FC<{
   const {actions, state} = useSamplesContext();
 
   const handleOpenNewSample = () => {
-    openDialog(DialogEnum.ADD_RECORD_SAMPLE);
+    openDialog(DialogEnum.ADD_RECORD_SAMPLE, {type: route?.params?.type});
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const SamplesLibrary: FC<{
       <ScrollView>
         <View style={styles.samplesContainer}>
           {state.samples.map(item => (
-            <Sample key={item.path} type={route.params.type} {...item} />
+            <Sample key={item.path} type={route?.params?.type} {...item} />
           ))}
         </View>
       </ScrollView>
