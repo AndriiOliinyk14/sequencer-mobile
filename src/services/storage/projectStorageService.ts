@@ -20,7 +20,8 @@ class ProjectStorageService {
         createdAt: new Date(Date.now()),
         updatedAt: new Date(Date.now()),
         patterns: {},
-        samples: [],
+        samples: {},
+        sampleIds: [],
       };
 
       if (await this.checkOnExistProject(key)) {

@@ -1,10 +1,10 @@
 import {useEffect} from 'react';
-import {useCountContext} from '../context/countContext';
-import {counterEmitter, CounterModule} from '../NativeModules';
+import {useCountContext} from '../../context/countContext';
+import {counterEmitter, CounterModule} from '../../NativeModules';
 
 const COUNTER_LISTENER_TYPE = 'TimerUpdate';
 
-function useCount() {
+function useCountListener() {
   const {setCount} = useCountContext();
 
   useEffect(() => {
@@ -19,4 +19,4 @@ function useCount() {
   }, [setCount]);
 }
 
-export {useCount};
+export {useCountListener};

@@ -5,7 +5,7 @@ import {DialogEnum} from '../../types';
 import {Dialog} from './Dialog';
 
 import {pick, types} from '@react-native-documents/picker';
-import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {Button} from '../Button';
 
 const AddRecordSampleDialog = () => {

@@ -14,7 +14,8 @@ export interface InitialState {
   updatedAt: Date;
   playerStatus: PlayerState;
   patterns: PatternObj;
-  samples: Sample[];
+  sampleIds: Sample['id'][];
+  samples: Record<string, Sample>;
   bpm: number;
   patternLength: number;
 }
@@ -36,9 +37,9 @@ export interface ContextInterface {
       filePath: string,
       settings: SampleSettings,
     ) => void;
-    updateSample: (key: string, data: Partial<SampleSettings>) => void;
     replaceSample: (oldKey: string, newKey: string, newTitle: string) => void;
     removeSample: (key: string) => void;
+    updateSampleSettings: (id: string, data: Record<string, number>) => void;
     setBpm: (bpm: number) => void;
     setPatternLength: (length: number) => void;
     setProject: (project: Project) => void;

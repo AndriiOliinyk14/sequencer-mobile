@@ -8,7 +8,8 @@ const initialState: InitialState = {
   updatedAt: new Date(),
   playerStatus: PlayerState.STOPPED,
   patterns: {},
-  samples: [],
+  sampleIds: [],
+  samples: {},
   bpm: 128,
   patternLength: 16,
 };

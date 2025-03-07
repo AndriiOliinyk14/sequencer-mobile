@@ -2,11 +2,12 @@ import {useTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {useCount} from '../hooks/useCount';
+import {useListener} from '../hooks';
 import {useInit} from '../hooks/useInit';
 import {usePlayer} from '../hooks/usePlayer';
 import EditSample from '../screens/EditSample/EditSample';
 import Home from '../screens/Home';
+import Mixer from '../screens/Mixer/Mixer';
 import Record from '../screens/Record/Record';
 import SamplesLibrary from '../screens/SamplesLibrary/SamplesLibrary';
 import Sequencer from '../screens/Sequencer/Sequencer';
@@ -15,7 +16,7 @@ import Dialogs from './Dialogs';
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
-  useCount();
+  useListener();
   useInit();
   usePlayer();
 
@@ -34,6 +35,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Samples Library" component={SamplesLibrary} />
         <Stack.Screen name="Edit Sample" component={EditSample} />
         <Stack.Screen name="Record" component={Record} />
+        <Stack.Screen name="Mixer" component={Mixer} />
       </Stack.Navigator>
       <Dialogs />
     </SafeAreaView>

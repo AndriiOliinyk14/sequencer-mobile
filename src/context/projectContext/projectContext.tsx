@@ -2,20 +2,14 @@ import React, {createContext, useContext, useReducer} from 'react';
 import {CounterModule, SamplerModule} from '../../NativeModules';
 
 import {fsService} from '../../services';
-import {
-  Pattern,
-  PlayerState,
-  Project,
-  Sample,
-  SampleSettings,
-} from '../../types';
+import {Pattern, PlayerState, Project, SampleSettings} from '../../types';
 import {PROJECT_ACTION_TYPES} from './actionTypes';
 import {initialState} from './initialState';
 import reducer from './reducer';
 import {ContextInterface} from './types';
 
 const intitialSampleSettings = {
-  volume: 1,
+  volume: 0.8,
   pan: 0,
   reverb: 0,
 };
@@ -28,7 +22,7 @@ const Context = createContext<ContextInterface>({
     setPatterns: () => {},
     setSample: () => {},
     setRecordedSample: () => {},
-    updateSample: () => {},
+    updateSampleSettings: () => {},
     replaceSample: () => {},
     removeSample: () => {},
     setBpm: () => {},
@@ -60,20 +54,20 @@ export const ProjectContextProvider = ({children}: any) => {
 
   const setSample = (
     id: string,
-    title: string,
+    name: string,
     path: string,
     settings: SampleSettings | undefined = intitialSampleSettings,
   ) => {
     const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
 
-    if (state.samples.some((item: any) => item.title === title)) {
+    if (state.sampleIds.some((itemId: any) => itemId === id)) {
       return;
     }
 
     SamplerModule.addSample(id, absolutePath, settings, props => {
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
-        payload: {id, title, path, settings},
+        payload: {id, name, path, settings},
       });
     });
   };
@@ -151,18 +145,25 @@ export const ProjectContextProvider = ({children}: any) => {
     }
   };
 
-  const updateSample = (id: string, data: Partial<SampleSettings>) => {
-    const samples = state.samples.map((sample: Sample) => {
-      if (sample.id === id) {
-        return {...sample, settings: {...sample.settings, ...data}};
-      }
+  const updateSampleSettings = (id: string, data: Record<string, number>) => {
+    const sample = state.samples[id];
 
-      return sample;
-    });
+    if (!sample) {
+      console.log('Sample is not found', id, sample);
+      return;
+    }
+
+    const updatedSample = {
+      ...sample,
+      settings: {
+        ...sample.settings,
+        ...data,
+      },
+    };
 
     dispatch({
       type: PROJECT_ACTION_TYPES.UPDATE_SAMPLE,
-      payload: samples,
+      payload: updatedSample,
     });
   };
 
@@ -185,8 +186,9 @@ export const ProjectContextProvider = ({children}: any) => {
   };
 
   const setProject = (project: Project) => {
-    project.samples.forEach(sample => {
-      setSample(sample.id, sample.name, sample.path);
+    project.sampleIds.forEach((id: string) => {
+      const sample = project.samples[id];
+      setSample(sample.id, sample.name, sample.path, sample.settings);
     });
 
     dispatch({type: PROJECT_ACTION_TYPES.SET_PROJECT, payload: project});
@@ -197,15 +199,15 @@ export const ProjectContextProvider = ({children}: any) => {
     updatePattern,
     setPatterns,
     setSample,
+    updateSampleSettings,
     setRecordedSample,
     setProject,
-    updateSample,
     replaceSample,
     removeSample,
     setBpm,
     setPatternLength,
     resetState,
-  } as any;
+  } as ContextInterface['actions'];
 
   return (
     <Context.Provider

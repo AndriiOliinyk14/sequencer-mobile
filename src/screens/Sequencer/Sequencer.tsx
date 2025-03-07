@@ -14,7 +14,7 @@ const Sequencer = ({route, navigation}) => {
     actions: {openDialog},
   } = useGlobalContext();
   const {state, actions} = useProjectContext();
-  const {patterns, samples, bpm, patternLength} = state;
+  const {patterns, samples, sampleIds, bpm, patternLength} = state;
 
   const {id} = route.params;
 
@@ -23,7 +23,6 @@ const Sequencer = ({route, navigation}) => {
       const project = await projectStorageService.getProject(id);
 
       if (!project) return;
-
       actions.setProject(project);
     };
 
@@ -34,19 +33,23 @@ const Sequencer = ({route, navigation}) => {
     };
   }, [id]);
 
+  console.log('sampleIds', JSON.stringify(sampleIds));
+  console.log('samples', JSON.stringify(samples));
+
   const handleStopPlaying = () => {
     actions.setPlayerStatus(PlayerState.STOPPED);
   };
 
   const handleOnSave = useCallback(async () => {
     handleStopPlaying();
-
+    console.log(JSON.stringify({sampleIds, samples}));
     try {
       await projectStorageService.saveProject(id, {
         name: state.name,
         id: state.id,
         createdAt: state.createdAt,
         patterns,
+        sampleIds,
         samples,
         bpm,
         patternLength,
@@ -62,6 +65,7 @@ const Sequencer = ({route, navigation}) => {
     id,
     patternLength,
     patterns,
+    sampleIds,
     samples,
     state.createdAt,
     state.id,
@@ -84,13 +88,15 @@ const Sequencer = ({route, navigation}) => {
       </View>
 
       <ScrollView style={styles.body}>
-        {samples.map(sample => {
+        {sampleIds.map(id => {
+          const sample = samples[id];
+
           return (
             <Pattern
               key={sample.id}
               id={sample.id}
               name={sample.name}
-              pattern={patterns?.[sample?.id]}
+              pattern={patterns?.[id]}
             />
           );
         })}

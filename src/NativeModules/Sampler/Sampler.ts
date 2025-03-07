@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 import {SampleSettings} from '../../types';
 
 interface SamplerInterface {
@@ -22,4 +22,5 @@ interface SamplerInterface {
   setSampleReverb: (id: string, value: number) => void;
 }
 
+export const samplerEmitter = new NativeEventEmitter(NativeModules.SamplerModule);
 export const SamplerModule = NativeModules.SamplerModule as SamplerInterface;

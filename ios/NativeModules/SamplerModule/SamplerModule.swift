@@ -10,16 +10,25 @@ import Foundation
 import AVFAudio
 import React
 
+enum SamplerEvents: String {
+  case VolumeUpdate = "VolumeUpdate"
+}
+
 @objc(SamplerModule)
-class SamplerModule: NSObject {
+class SamplerModule: RCTEventEmitter {
   var samples: [SampleModule] = []
   var recorder: RecorderModule
   var engine: AVAudioEngine
   
   override init (){
+    
     engine = AudioEngineModule.shared._engine
     recorder = RecorderModule()
     let audioSession = AVAudioSession.sharedInstance()
+    
+    
+    super.init()
+    
     
     do {
       try audioSession.setCategory(.playback, mode: .default)
@@ -29,6 +38,12 @@ class SamplerModule: NSObject {
     } catch {
       return
     }
+    
+    
+  }
+  
+  override func supportedEvents() -> [String]! {
+    return [SamplerEvents.VolumeUpdate.rawValue]
   }
   
   @objc
@@ -37,7 +52,7 @@ class SamplerModule: NSObject {
   }
   
   
-  @objc func addSample(_ id: String, url: String, settings: [String: Float], callback: RCTResponseSenderBlock) {
+  @objc func addSample(_ id: String, url: String, settings: [String: NSNumber], callback: RCTResponseSenderBlock) {
     guard let fileURL = URL(string: url) else {
       print("Invalid URL string")
       return
@@ -52,7 +67,7 @@ class SamplerModule: NSObject {
     let pan = settings["pan"] ?? 0.0
     let reverb = settings["reverb"] ?? 0.0
     
-    let settings = SampleSettings(volume: volume, pan: pan, reverb: reverb)
+    let settings = SampleSettings(volume: Float(truncating: volume), pan: Float(truncating: pan), reverb: Float(truncating: reverb))
     let sample = SampleModule(self.engine, id, fileURL, settings: settings)
     
     samples.append(sample)
@@ -77,6 +92,8 @@ class SamplerModule: NSObject {
   @objc func setSampleVolume (_ id: String, value: Float) {
     if let sample = samples.first(where: { $0.id == id }) {
       sample.setVolume(value)
+      
+      self.sendEvent(withName: SamplerEvents.VolumeUpdate.rawValue, body: ["value": value, "id": id])
     } else {
       print("Sample not found: \(id)")
     }

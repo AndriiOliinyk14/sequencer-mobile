@@ -6,12 +6,12 @@ import {SamplerModule} from '../NativeModules';
 function usePlayer() {
   const {state} = useProjectContext();
   const {count} = useCountContext();
-  const {patterns, samples} = state;
+  const {patterns, sampleIds} = state;
 
   useEffect(() => {
-    samples?.forEach(sample => {
-      if (patterns?.[sample.id]?.[count - 1]?.isOn) {
-        SamplerModule.playSample(sample.id);
+    sampleIds?.forEach(id => {
+      if (patterns?.[id]?.[count - 1]?.isOn) {
+        SamplerModule.playSample(id);
       }
     });
   }, [count]);

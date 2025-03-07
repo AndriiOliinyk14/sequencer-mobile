@@ -1,6 +1,6 @@
 import {useTheme} from '@react-navigation/native';
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {Animated, Easing, Pressable, StyleSheet, View} from 'react-native';
+import React, {FC, useRef, useState} from 'react';
+import {Animated, Pressable, StyleSheet, View} from 'react-native';
 import {MainThemeInterface} from '../../theme/theme';
 
 interface PlayButtonInterface {
@@ -14,35 +14,6 @@ const PlayButton: FC<PlayButtonInterface> = ({isActive, onPress, disabled}) => {
 
   const {colors} = useTheme() as MainThemeInterface;
   const opacity = useRef(new Animated.Value(1)).current; // Persist opacity across renders
-  const animation = useRef<any>(null);
-
-  useEffect(() => {
-    if (isActive) {
-      animation.current = Animated.loop(
-        Animated.sequence([
-          Animated.timing(opacity, {
-            toValue: 0.4,
-            duration: 500,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 500,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-        ]),
-      );
-
-      animation.current.start();
-    } else {
-      animation.current?.stop();
-      opacity.setValue(1);
-    }
-
-    return () => opacity.stopAnimation();
-  }, [isActive]);
 
   const handleOnPressIn = () => setPresed(true);
   const handleOnPressOut = () => setPresed(false);
@@ -53,7 +24,11 @@ const PlayButton: FC<PlayButtonInterface> = ({isActive, onPress, disabled}) => {
       style={[
         styles.container,
         {
-          borderColor: disabled ? colors.disabled : colors.notification,
+          borderColor: disabled
+            ? colors.disabled
+            : isActive
+            ? colors.red
+            : colors.notification,
           backgroundColor: isPresed ? colors.text : 'transparent',
         },
       ]}
@@ -61,20 +36,34 @@ const PlayButton: FC<PlayButtonInterface> = ({isActive, onPress, disabled}) => {
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}>
       {isActive ? (
-        <View style={styles.pause}>
+        <>
           <View
             style={[
-              styles.pauseColumn,
-              {backgroundColor: disabled ? colors.disabled : colors.primary},
+              styles.rectangle,
+              {
+                backgroundColor: disabled
+                  ? colors.disabled
+                  : isActive
+                  ? colors.red
+                  : colors.notification,
+              },
             ]}
           />
-          <View
-            style={[
-              styles.pauseColumn,
-              {backgroundColor: disabled ? colors.disabled : colors.primary},
-            ]}
-          />
-        </View>
+          {/* <View style={styles.pause}>
+            <View
+              style={[
+                styles.pauseColumn,
+                {backgroundColor: disabled ? colors.disabled : colors.primary},
+              ]}
+            />
+            <View
+              style={[
+                styles.pauseColumn,
+                {backgroundColor: disabled ? colors.disabled : colors.primary},
+              ]}
+            />
+          </View> */}
+        </>
       ) : (
         <Animated.View
           style={[
@@ -98,15 +87,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 6,
     borderRadius: 4,
-    paddingLeft: 20,
   },
   triangle: {
     width: 0,
     height: 0,
     borderWidth: 10,
+    marginRight: -9,
+    marginLeft: 3,
     borderStyle: 'solid',
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
@@ -119,5 +109,13 @@ const styles = StyleSheet.create({
   pauseColumn: {
     width: 4,
     height: 20,
+  },
+  rectangle: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 14,
+    height: 14,
+    marginVertical: 3,
   },
 });

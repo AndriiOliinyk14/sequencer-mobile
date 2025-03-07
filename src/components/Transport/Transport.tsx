@@ -1,16 +1,12 @@
-import {useTheme} from '@react-navigation/native';
+import {Link, useTheme} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
 import {CounterModule} from '../../NativeModules';
 import {PlayerState} from '../../types/enums/PlayerStatus';
+import {PlayButton} from '../PlayButton';
+import {Button} from '../Button';
 
 const Transport = () => {
   const {count} = useCountContext();
@@ -19,7 +15,6 @@ const Transport = () => {
   const {playerStatus, patternLength} = state;
 
   const isPlaying = playerStatus === PlayerState.PLAYING;
-  const buttonTitle = isPlaying ? 'Stop' : 'Start';
 
   const handlePress = () => {
     const newState = isPlaying ? PlayerState.STOPPED : PlayerState.PLAYING;
@@ -45,7 +40,7 @@ const Transport = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.count}>{count}</Text>
-      <Button title={buttonTitle} onPress={handlePress} />
+      <PlayButton isActive={isPlaying} onPress={handlePress} />
       <TouchableNativeFeedback
         disabled={patternLength === 16}
         onPress={() => handlePatternLengthChange(16)}>
@@ -70,6 +65,7 @@ const Transport = () => {
           32
         </Text>
       </TouchableNativeFeedback>
+      <Link screen={'Mixer'}>Mixer</Link>
     </View>
   );
 };
@@ -89,7 +85,8 @@ const styles = StyleSheet.create({
     width: 50,
     textAlign: 'center',
     padding: 10,
-    fontSize: 20,
+    paddingVertical: 8,
+    fontSize: 14,
     backgroundColor: 'lightgrey',
     borderRadius: 5,
   },

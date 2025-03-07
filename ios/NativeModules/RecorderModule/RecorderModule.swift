@@ -10,7 +10,7 @@ import AVFAudio
 
 
 @objc(RecorderModule)
-class RecorderModule :NSObject{
+class RecorderModule:NSObject {
   let engine: AVAudioEngine
   var audioRecorder: AVAudioRecorder?
   let audioFormat: String
@@ -18,6 +18,7 @@ class RecorderModule :NSObject{
   var recordingURL: URL?
   
   override init(){
+    
     self.engine = AudioEngineModule.shared._engine
     let audioSession = AVAudioSession.sharedInstance()
     self.audioFormat = "wav"
@@ -29,6 +30,8 @@ class RecorderModule :NSObject{
     } catch {
       
     }
+  
+    super.init()
   }
   
   @objc
