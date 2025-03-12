@@ -6,7 +6,6 @@ import {useCountContext} from '../../context/countContext';
 import {CounterModule} from '../../NativeModules';
 import {PlayerState} from '../../types/enums/PlayerStatus';
 import {PlayButton} from '../PlayButton';
-import {Button} from '../Button';
 
 const Transport = () => {
   const {count} = useCountContext();

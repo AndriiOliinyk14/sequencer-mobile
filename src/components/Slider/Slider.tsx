@@ -1,14 +1,20 @@
-import {GestureResponderEvent, StyleSheet, Text, View} from 'react-native';
-import React, {FC, useState} from 'react';
 import {useTheme} from '@react-navigation/native';
+import React, {FC, useState} from 'react';
+import {GestureResponderEvent, StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
+import {useThrottle} from '../../hooks';
 
 interface SliderInterface {
   value: number;
   onChange: (value: number) => void;
+  direction?: 'horizontal' | 'vertical';
 }
 
-const Slider: FC<SliderInterface> = ({value, onChange}) => {
+const Slider: FC<SliderInterface> = ({
+  value,
+  onChange,
+  direction = 'horizontal',
+}) => {
   const {colors} = useTheme();
 
   const [step, setStep] = useState(1);
@@ -18,6 +24,10 @@ const Slider: FC<SliderInterface> = ({value, onChange}) => {
     height: number;
     top: number;
   }>({bottom: 0, height: 0, top: 0});
+
+  const onChangeHandler = useThrottle((newValue: number) => {
+    onChange(newValue);
+  }, 300);
 
   const handleSetPositionY = (locationY: number) => {
     const height = sliderDimensions.height;
@@ -29,14 +39,14 @@ const Slider: FC<SliderInterface> = ({value, onChange}) => {
       const roundedResult = Math.round(result);
 
       if (roundedResult >= 100) {
-        onChange(100);
+        onChangeHandler(100);
       }
       if (roundedResult <= 0) {
-        onChange(0);
+        onChangeHandler(0);
       }
 
       if (Math.abs(roundedResult - value) >= step) {
-        onChange(roundedResult);
+        onChangeHandler(roundedResult);
       }
     }
   };

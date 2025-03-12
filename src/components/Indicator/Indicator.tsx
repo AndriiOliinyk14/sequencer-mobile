@@ -1,13 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
-import {useGlobalContext} from '../../context/globalContext';
 
 const Indicator = () => {
   const {count} = useCountContext();
   const {
     state: {patternLength},
-  } = useGlobalContext();
+  } = useProjectContext();
 
   return (
     <View style={styles.container}>

@@ -4,7 +4,6 @@ import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {useListener} from '../hooks';
 import {useInit} from '../hooks/useInit';
-import {usePlayer} from '../hooks/usePlayer';
 import EditSample from '../screens/EditSample/EditSample';
 import Home from '../screens/Home';
 import Mixer from '../screens/Mixer/Mixer';
@@ -18,7 +17,6 @@ const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
   useListener();
   useInit();
-  usePlayer();
 
   const {colors} = useTheme();
 

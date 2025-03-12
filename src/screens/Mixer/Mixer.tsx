@@ -1,9 +1,9 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 import React from 'react';
+import {Transport} from '../../components';
 import {useProjectContext} from '../../context';
 import ChannelStrip from './components/ChannelStrip/ChannelStrip';
-import {Transport} from '../../components';
 
 const Mixer = () => {
   const {

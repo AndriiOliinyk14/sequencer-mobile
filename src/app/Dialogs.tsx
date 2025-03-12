@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-  NewProjectDialog,
-  RecordDialog,
-  AddRecordSampleDialog,
-} from '../components';
+import {AddRecordSampleDialog, NewProjectDialog} from '../components';
 
 const Dialogs = () => {
   return (
     <>
-      <RecordDialog />
       <NewProjectDialog />
       <AddRecordSampleDialog />
     </>
