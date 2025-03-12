@@ -15,7 +15,6 @@ struct SampleSettings {
   var reverb: Float
 }
 
-
 class SampleModule {
   var id: String
   var url: URL
@@ -57,14 +56,31 @@ class SampleModule {
     self.engine.detach(self.reverb)
   }
   
+  func preloadAudio() {
+    DispatchQueue.global(qos: .default).async {
+      // Preload the audio buffer ahead of time
+      self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
+    }
+  }
+  
   func play(){
-    self.player.stop()
-    self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
-    self.player.play();
+    
+    if self.player.isPlaying {
+      self.player.stop()
+    }
+    
+    self.preloadAudio()
+    
+    DispatchQueue.main.async {
+      self.player.play()
+    }
+    
   }
   
   func setVolume(_ volume: Float){
-    player.volume = volume
+    DispatchQueue.main.async {
+      self.player.volume = volume
+    }
   }
   
   func setPan(_ pan: Float){

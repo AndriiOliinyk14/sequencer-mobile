@@ -5,10 +5,10 @@ import {Transport} from '../../components';
 import {Indicator} from '../../components/Indicator/Indicator';
 import {useProjectContext} from '../../context';
 import {useGlobalContext} from '../../context/globalContext';
+import {useDestroyProjectSamples} from '../../hooks';
 import {projectStorageService} from '../../services/storage';
 import {PlayerState, SamplesScreenTypeEnum} from '../../types';
 import {Pattern} from './components';
-import {useDestroyProjectSamples} from '../../hooks';
 
 const Sequencer = ({route, navigation}) => {
   const {
@@ -28,17 +28,13 @@ const Sequencer = ({route, navigation}) => {
     };
 
     fetchData();
-
-    return () => {
-      return actions.resetState();
-    };
   }, [id]);
 
   useDestroyProjectSamples();
 
-  const handleStopPlaying = () => {
+  const handleStopPlaying = useCallback(() => {
     actions.setPlayerStatus(PlayerState.STOPPED);
-  };
+  }, [actions]);
 
   const handleOnSave = useCallback(async () => {
     handleStopPlaying();

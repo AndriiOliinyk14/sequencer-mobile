@@ -1,9 +1,8 @@
 import {Link, useTheme} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
 import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
-import {CounterModule} from '../../NativeModules';
 import {PlayerState} from '../../types/enums/PlayerStatus';
 import {PlayButton} from '../PlayButton';
 
@@ -24,13 +23,6 @@ const Transport = () => {
   // const handleBpmChange = (value: number) => {
   //   actions.setBpm(value);
   // };
-
-  useEffect(() => {
-    return () => {
-      CounterModule.stop();
-      actions.setPlayerStatus(PlayerState.STOPPED);
-    };
-  }, []);
 
   const handlePatternLengthChange = (value: number) => {
     actions.setPatternLength(value);
