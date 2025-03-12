@@ -8,6 +8,7 @@ import {useGlobalContext} from '../../context/globalContext';
 import {projectStorageService} from '../../services/storage';
 import {PlayerState, SamplesScreenTypeEnum} from '../../types';
 import {Pattern} from './components';
+import {useDestroyProjectSamples} from '../../hooks';
 
 const Sequencer = ({route, navigation}) => {
   const {
@@ -33,8 +34,7 @@ const Sequencer = ({route, navigation}) => {
     };
   }, [id]);
 
-  console.log('sampleIds', JSON.stringify(sampleIds));
-  console.log('samples', JSON.stringify(samples));
+  useDestroyProjectSamples();
 
   const handleStopPlaying = () => {
     actions.setPlayerStatus(PlayerState.STOPPED);
@@ -42,7 +42,7 @@ const Sequencer = ({route, navigation}) => {
 
   const handleOnSave = useCallback(async () => {
     handleStopPlaying();
-    console.log(JSON.stringify({sampleIds, samples}));
+
     try {
       await projectStorageService.saveProject(id, {
         name: state.name,
@@ -62,6 +62,7 @@ const Sequencer = ({route, navigation}) => {
     }
   }, [
     bpm,
+    handleStopPlaying,
     id,
     patternLength,
     patterns,

@@ -28,7 +28,16 @@ const reducer = (state: InitialState, action: any) => {
     case PROJECT_ACTION_TYPES.UPDATE_SAMPLE:
       return {
         ...state,
-        samples: {...state.samples, [action.payload.id]: action.payload},
+        samples: {
+          ...state.samples,
+          [action.payload.id]: {
+            ...state.samples[action.payload.id],
+            settings: {
+              ...state.samples[action.payload.id].settings,
+              ...action.payload.settings,
+            },
+          },
+        },
       };
 
     case PROJECT_ACTION_TYPES.SET_BPM:

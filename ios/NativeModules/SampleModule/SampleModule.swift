@@ -51,6 +51,12 @@ class SampleModule {
     player.prepare(withFrameCount: AVAudioFrameCount(file.length))
   }
   
+  func destroy(){
+    self.player.stop()
+    self.engine.detach(self.player)
+    self.engine.detach(self.reverb)
+  }
+  
   func play(){
     self.player.stop()
     self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)

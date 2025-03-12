@@ -2,6 +2,7 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {FC} from 'react';
 import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {icons} from '../../../../components/icons';
+import {DEFAULT_SAMPLE_SETTINGS} from '../../../../const';
 import {useProjectContext} from '../../../../context';
 import {SamplerModule} from '../../../../NativeModules';
 import {SampleEntity, SamplesScreenTypeEnum} from '../../../../types';
@@ -24,7 +25,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
   };
 
   const handleAddSampleToProject = () => {
-    actions.setSample(id, name, path);
+    actions.setSample(id, name, path, DEFAULT_SAMPLE_SETTINGS);
     navigation.goBack();
   };
 

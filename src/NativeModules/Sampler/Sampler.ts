@@ -17,6 +17,7 @@ interface SamplerInterface {
         | string,
     ) => void,
   ) => void;
+  destroySample: (id: string) => void;
   playSample: (id: string) => void;
   setSampleVolume: (id: string, value: number) => void;
   setSampleReverb: (id: string, value: number) => void;

@@ -63,10 +63,10 @@ class SamplerModule: RCTEventEmitter {
       return
     }
     
-    let volume = settings["volume"] ?? 1.0
-    let pan = settings["pan"] ?? 0.0
-    let reverb = settings["reverb"] ?? 0.0
-    
+    let volume = settings["volume"]!
+    let pan = settings["pan"]!
+    let reverb = settings["reverb"]!
+
     let settings = SampleSettings(volume: Float(truncating: volume), pan: Float(truncating: pan), reverb: Float(truncating: reverb))
     let sample = SampleModule(self.engine, id, fileURL, settings: settings)
     
@@ -78,6 +78,13 @@ class SamplerModule: RCTEventEmitter {
     }
     
     callback([["id": id, "volume": volume, "pan": pan, "reverb": reverb]])
+  }
+  
+  @objc func destroySample(_ id: String) {
+    if let index = samples.firstIndex(where:{ $0.id == id}) {
+      samples[index].destroy()
+      samples.remove(at: index)
+    }
   }
   
   

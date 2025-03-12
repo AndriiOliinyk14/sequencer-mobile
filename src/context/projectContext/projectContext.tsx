@@ -1,18 +1,13 @@
 import React, {createContext, useContext, useReducer} from 'react';
 import {CounterModule, SamplerModule} from '../../NativeModules';
 
+import {DEFAULT_SAMPLE_SETTINGS} from '../../const';
 import {fsService} from '../../services';
 import {Pattern, PlayerState, Project, SampleSettings} from '../../types';
 import {PROJECT_ACTION_TYPES} from './actionTypes';
 import {initialState} from './initialState';
 import reducer from './reducer';
 import {ContextInterface} from './types';
-
-const intitialSampleSettings = {
-  volume: 0.8,
-  pan: 0,
-  reverb: 0,
-};
 
 const Context = createContext<ContextInterface>({
   state: initialState,
@@ -56,7 +51,7 @@ export const ProjectContextProvider = ({children}: any) => {
     id: string,
     name: string,
     path: string,
-    settings: SampleSettings | undefined = intitialSampleSettings,
+    settings: SampleSettings,
   ) => {
     const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
 
@@ -146,24 +141,9 @@ export const ProjectContextProvider = ({children}: any) => {
   };
 
   const updateSampleSettings = (id: string, data: Record<string, number>) => {
-    const sample = state.samples[id];
-
-    if (!sample) {
-      console.log('Sample is not found', id, sample);
-      return;
-    }
-
-    const updatedSample = {
-      ...sample,
-      settings: {
-        ...sample.settings,
-        ...data,
-      },
-    };
-
     dispatch({
       type: PROJECT_ACTION_TYPES.UPDATE_SAMPLE,
-      payload: updatedSample,
+      payload: {id, settings: data},
     });
   };
 
@@ -188,7 +168,13 @@ export const ProjectContextProvider = ({children}: any) => {
   const setProject = (project: Project) => {
     project.sampleIds.forEach((id: string) => {
       const sample = project.samples[id];
-      setSample(sample.id, sample.name, sample.path, sample.settings);
+
+      setSample(
+        sample.id,
+        sample.name,
+        sample.path,
+        sample?.settings ?? DEFAULT_SAMPLE_SETTINGS,
+      );
     });
 
     dispatch({type: PROJECT_ACTION_TYPES.SET_PROJECT, payload: project});
