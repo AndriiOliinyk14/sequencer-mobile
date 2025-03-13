@@ -10,8 +10,10 @@ import Foundation
 import AVFAudio
 import React
 
-enum SamplerEvents: String {
+enum SamplerEvents: String, CaseIterable {
   case VolumeUpdate = "VolumeUpdate"
+  case PanUpdate = "PanUpdate"
+  case ReverbUpdate = "ReverbUpdate"
 }
 
 @objc(SamplerModule)
@@ -43,7 +45,7 @@ class SamplerModule: RCTEventEmitter {
   }
   
   override func supportedEvents() -> [String]! {
-    return [SamplerEvents.VolumeUpdate.rawValue]
+    return SamplerEvents.allCases.map { $0.rawValue }
   }
   
   @objc
@@ -66,7 +68,7 @@ class SamplerModule: RCTEventEmitter {
     let volume = settings["volume"]!
     let pan = settings["pan"]!
     let reverb = settings["reverb"]!
-
+    
     let settings = SampleSettings(volume: Float(truncating: volume), pan: Float(truncating: pan), reverb: Float(truncating: reverb))
     let sample = SampleModule(self.engine, id, fileURL, settings: settings)
     
@@ -106,9 +108,21 @@ class SamplerModule: RCTEventEmitter {
     }
   }
   
+  @objc func setSamplePan (_ id: String, value: Float) {
+    if let sample = samples.first(where: { $0.id == id }) {
+      sample.setPan(value)
+      
+      self.sendEvent(withName: SamplerEvents.PanUpdate.rawValue, body: ["value": value, "id": id])
+    } else {
+      print("Sample not found: \(id)")
+    }
+  }
+  
   @objc func setSampleReverb (_ id: String, value: Float) {
     if let sample = samples.first(where: { $0.id == id }) {
       sample.setReverb(value)
+      
+      self.sendEvent(withName: SamplerEvents.ReverbUpdate.rawValue, body: ["value": value, "id": id])
     } else {
       print("Sample not found: \(id)")
     }

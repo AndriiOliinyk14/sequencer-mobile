@@ -31,13 +31,15 @@ class SampleModule {
     self.player = AVAudioPlayerNode()
     self.reverb = AVAudioUnitReverb()
     
+    self.reverb.loadFactoryPreset(.largeHall)
+    
     self.file = try! AVAudioFile(forReading: url)
     
     self.audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
     
     try! file.read(into: audioBuffer)
     
-    reverb.wetDryMix = settings.reverb
+    reverb.wetDryMix = settings.reverb * 100
     player.volume = settings.volume
     player.pan = settings.pan
     
@@ -64,7 +66,6 @@ class SampleModule {
   }
   
   func play(){
-    
     if self.player.isPlaying {
       self.player.stop()
     }
@@ -84,10 +85,14 @@ class SampleModule {
   }
   
   func setPan(_ pan: Float){
-    player.pan = pan
+    DispatchQueue.main.async {
+      self.player.pan = pan
+    }
   }
   
   func setReverb(_ reverb: Float){
-    self.reverb.wetDryMix = reverb * 100
+    DispatchQueue.main.async{
+      self.reverb.wetDryMix = reverb * 100
+    }
   }
 }

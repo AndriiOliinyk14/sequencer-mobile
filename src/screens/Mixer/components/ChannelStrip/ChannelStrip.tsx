@@ -1,48 +1,54 @@
-import React, {FC, useEffect, useState} from 'react';
+import {useTheme} from '@react-navigation/native';
+import React, {FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Slider} from '../../../../components';
+import {SamplerModule} from '../../../../NativeModules';
 import {Sample} from '../../../../types';
-import {useTheme} from '@react-navigation/native';
-import {samplerEmitter, SamplerModule} from '../../../../NativeModules';
 
 interface ChannelStripInterface {
   data: Sample;
 }
 
-enum SamplerEvents {
-  VolumeUpdate = 'VolumeUpdate',
-}
-
 const ChannelStrip: FC<ChannelStripInterface> = ({data}) => {
-  const [volume, setVolume] = useState(data.settings.volume);
   const {colors} = useTheme();
-
-  useEffect(() => {
-    samplerEmitter.addListener(SamplerEvents.VolumeUpdate, ({id, value}) => {
-      //add ID to this because we are controlling all fader like one
-      if (id === data.id) {
-        setVolume(value);
-      }
-    });
-
-    return () => {
-      samplerEmitter.removeAllListeners(SamplerEvents.VolumeUpdate);
-    };
-  }, []);
 
   const handleOnVolumeChange = (value: number) => {
     const volume = value / 100;
-    console.log(data.id, volume);
-    // setVolume(volume);
     SamplerModule.setSampleVolume(data.id, volume);
   };
+
+  const handleOnPanChange = (value: number) => {
+    const pan = value / 50 - 1;
+    SamplerModule.setSamplePan(data.id, pan);
+  };
+
+  const handleOnReverbChange = (value: number) => {
+    const reverb = value / 100;
+    SamplerModule.setSampleReverb(data.id, reverb);
+  };
+
+  console.log(data.settings);
 
   return (
     <View style={[styles.container, {borderColor: colors.border}]}>
       <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
         {data.name}
       </Text>
-      <Slider value={volume * 100} onChange={handleOnVolumeChange} />
+      <Slider
+        value={data.settings.reverb * 100}
+        onChange={handleOnReverbChange}
+        onDoubleTouch={() => handleOnReverbChange(0)}
+      />
+      <Slider
+        value={(data.settings.pan + 1) * 50}
+        onChange={handleOnPanChange}
+        onDoubleTouch={() => handleOnPanChange(50)}
+      />
+      <Slider
+        value={data.settings.volume * 100}
+        onChange={handleOnVolumeChange}
+        onDoubleTouch={() => handleOnVolumeChange(80)}
+      />
     </View>
   );
 };

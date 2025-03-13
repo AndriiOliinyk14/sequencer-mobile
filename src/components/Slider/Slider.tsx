@@ -2,20 +2,22 @@ import {useTheme} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {GestureResponderEvent, StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
-import {useThrottle} from '../../hooks';
-
+import {useDoubleTouch, useThrottle} from '../../hooks';
 interface SliderInterface {
   value: number;
   onChange: (value: number) => void;
+  onDoubleTouch?: () => void;
   direction?: 'horizontal' | 'vertical';
 }
 
 const Slider: FC<SliderInterface> = ({
   value,
   onChange,
+  onDoubleTouch,
   direction = 'horizontal',
 }) => {
   const {colors} = useTheme();
+  const {handleDoubleTouch} = useDoubleTouch();
 
   const [step, setStep] = useState(1);
 
@@ -36,7 +38,8 @@ const Slider: FC<SliderInterface> = ({
 
     if (locationY <= height && locationY >= 0) {
       const result = 100 - locationY / heightOnePercent;
-      const roundedResult = Math.round(result);
+      const formatedResult = Number(result.toFixed(2));
+      const roundedResult = Math.round(formatedResult);
 
       if (roundedResult >= 100) {
         onChangeHandler(100);
@@ -56,6 +59,12 @@ const Slider: FC<SliderInterface> = ({
   };
   const handleOnTouchMove = (e: GestureResponderEvent) => {
     handleSetPositionY(e.nativeEvent.locationY);
+  };
+
+  const handleOnDoubleTouch = () => {
+    if (onDoubleTouch) {
+      handleDoubleTouch(onDoubleTouch);
+    }
   };
 
   const railPositionY = ((sliderDimensions.bottom - 4) / 100) * value;
@@ -107,6 +116,7 @@ const Slider: FC<SliderInterface> = ({
           }}
           onTouchStart={handleOnTouchStart}
           onTouchMove={handleOnTouchMove}
+          onTouchEnd={handleOnDoubleTouch}
         />
       </View>
     </View>

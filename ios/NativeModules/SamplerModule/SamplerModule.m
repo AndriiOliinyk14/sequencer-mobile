@@ -14,6 +14,7 @@ RCT_EXTERN_METHOD(addSample:(NSString *)id url:(NSString *)url settings:(NSDicti
 RCT_EXTERN_METHOD(destroySample:(NSString *)id)
 RCT_EXTERN_METHOD(playSample:(NSString *)id)
 RCT_EXTERN_METHOD(setSampleVolume:(NSString *)id value:(float *)value)
+RCT_EXTERN_METHOD(setSamplePan:(NSString *)id value:(float *)value)
 RCT_EXTERN_METHOD(setSampleReverb:(NSString *)id value:(float *)value)
 
 @end
