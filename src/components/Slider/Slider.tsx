@@ -67,13 +67,17 @@ const Slider: FC<SliderInterface> = ({
     }
   };
 
-  const railPositionY = ((sliderDimensions.bottom - 4) / 100) * value;
+  const thumbPositionY = ((sliderDimensions.bottom - 4) / 100) * value;
 
   const stepsCount = 10;
 
   return (
     <View style={styles.container}>
-      <View style={[styles.sliderContainer]}>
+      <View
+        style={[styles.sliderContainer]}
+        onTouchStart={handleOnTouchStart}
+        onTouchMove={handleOnTouchMove}
+        onTouchEnd={handleOnDoubleTouch}>
         <View style={styles.stepsContainer}>
           {Array(stepsCount)
             .fill(null)
@@ -90,9 +94,9 @@ const Slider: FC<SliderInterface> = ({
         </View>
         <View
           style={[
-            styles.rail,
+            styles.thumb,
             {
-              bottom: railPositionY,
+              bottom: thumbPositionY,
               backgroundColor: colors.text,
               borderColor: colors.text,
             },
@@ -105,7 +109,10 @@ const Slider: FC<SliderInterface> = ({
           ]}
         />
         <View
-          style={[styles.slider, {borderColor: colors.primary}]}
+          style={[
+            styles.slider,
+            {borderColor: colors.primary, backgroundColor: colors.primary},
+          ]}
           onLayout={evt => {
             const {height, y} = evt.nativeEvent.layout;
             setSliderDimensions({
@@ -114,9 +121,6 @@ const Slider: FC<SliderInterface> = ({
               bottom: y + height,
             });
           }}
-          onTouchStart={handleOnTouchStart}
-          onTouchMove={handleOnTouchMove}
-          onTouchEnd={handleOnDoubleTouch}
         />
       </View>
     </View>
@@ -135,25 +139,27 @@ const styles = StyleSheet.create({
     height: 140,
     width: 20,
   },
-  rail: {
+  thumb: {
     position: 'absolute',
-    left: -10,
+    left: -3,
     marginBottom: -4,
-    width: 30,
+    width: 10,
     height: 10,
     zIndex: 1,
     borderWidth: 1,
+    borderRadius: 100,
   },
   slider: {
     height: '100%',
-    width: 10,
+    width: 4,
     borderWidth: 1,
   },
   sliderFill: {
     bottom: 0,
     position: 'absolute',
     height: '100%',
-    width: 10,
+    width: 4,
+    zIndex: 1,
   },
 
   stepsContainer: {
@@ -163,9 +169,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  step: {
-    // zIndex: 199,
-  },
+  step: {},
   stepIndicator: {
     width: 10,
     height: 1,

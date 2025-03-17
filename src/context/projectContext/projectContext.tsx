@@ -59,7 +59,7 @@ export const ProjectContextProvider = ({children}: any) => {
       return;
     }
 
-    SamplerModule.addSample(id, absolutePath, settings, props => {
+    SamplerModule.addSample(id, absolutePath, settings, () => {
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
         payload: {id, name, path, settings},

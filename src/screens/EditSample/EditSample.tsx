@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Button, StyleSheet, Text, View} from 'react-native';
 import {TextInput} from '../../components';
 import {useSamplesContext} from '../../context';
+import {audioTrimmerModule} from '../../NativeModules/AudioTrimmer/AudioTrimmer';
 import {sampleStorageService} from '../../services';
 import {SampleEntity} from '../../types';
 
@@ -15,10 +16,7 @@ const EditSample = () => {
   const [sample, setSample] = useState<SampleEntity>();
   const [values, setValues] = useState<{name: string}>({name: ''});
 
-  const {
-    actions,
-    state: {samples},
-  } = useSamplesContext();
+  const {actions} = useSamplesContext();
 
   useEffect(() => {
     const fetchSample = async () => {
@@ -31,6 +29,12 @@ const EditSample = () => {
     };
     fetchSample();
   }, []);
+
+  const handleTrimAudio = async () => {
+    if (sample?.path) {
+      await audioTrimmerModule.trim(sample?.path, 1, 1);
+    }
+  };
 
   const handleOnSave = async (
     sample: SampleEntity,
@@ -92,6 +96,7 @@ const EditSample = () => {
           onChangeText={text => handleOnInput({name: text})}
         />
       </View>
+      <Button onPress={handleTrimAudio} title="Trim Sample" />
       <Button
         color={'red'}
         onPress={() => handleOnRemove(sample)}

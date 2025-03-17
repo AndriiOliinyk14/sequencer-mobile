@@ -23,24 +23,18 @@ class SamplerModule: RCTEventEmitter {
   var engine: AVAudioEngine
   
   override init (){
-    
     engine = AudioEngineModule.shared._engine
     recorder = RecorderModule()
     let audioSession = AVAudioSession.sharedInstance()
     
-    
     super.init()
-    
     
     do {
       try audioSession.setCategory(.playback, mode: .default)
       try audioSession.setActive(true)
-      
-      
     } catch {
       return
     }
-    
     
   }
   
@@ -127,5 +121,4 @@ class SamplerModule: RCTEventEmitter {
       print("Sample not found: \(id)")
     }
   }
-  //
 }
