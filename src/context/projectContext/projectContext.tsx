@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useReducer} from 'react';
-import {CounterModule, SamplerModule} from '../../NativeModules';
+import {counterModule, samplerModule} from '../../NativeModules';
 
 import {DEFAULT_SAMPLE_SETTINGS} from '../../const';
 import {fsService} from '../../services';
@@ -32,9 +32,9 @@ export const ProjectContextProvider = ({children}: any) => {
 
   const setPlayerStatus = (status: PlayerState) => {
     if (status === PlayerState.PLAYING) {
-      CounterModule.start();
+      counterModule.start();
     } else {
-      CounterModule.stop();
+      counterModule.stop();
     }
 
     dispatch({type: PROJECT_ACTION_TYPES.SET_PLAYER_STATUS, payload: status});
@@ -47,7 +47,7 @@ export const ProjectContextProvider = ({children}: any) => {
     });
   };
 
-  const setSample = (
+  const setSample = async (
     id: string,
     name: string,
     path: string,
@@ -59,12 +59,14 @@ export const ProjectContextProvider = ({children}: any) => {
       return;
     }
 
-    SamplerModule.addSample(id, absolutePath, settings, () => {
+    const response = await samplerModule.addSample(id, absolutePath, settings);
+
+    if (response?.id) {
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
         payload: {id, name, path, settings},
       });
-    });
+    }
   };
 
   const setRecordedSample = (
@@ -148,12 +150,12 @@ export const ProjectContextProvider = ({children}: any) => {
   };
 
   const setBpm = (bpm: number) => {
-    CounterModule.setBpm(bpm);
+    counterModule.setBpm(bpm);
     dispatch({type: PROJECT_ACTION_TYPES.SET_BPM, payload: bpm});
   };
 
   const setPatternLength = (length: number) => {
-    CounterModule.setPatternLength(length);
+    counterModule.setPatternLength(length);
     dispatch({type: PROJECT_ACTION_TYPES.SET_PATTERN_LENGTH, payload: length});
   };
 

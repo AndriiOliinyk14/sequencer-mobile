@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {Button, PlayButton, RecButton} from '../../components';
 import {useSamplesContext} from '../../context';
-import {RecorderModule} from '../../NativeModules';
+import {recorderModule} from '../../NativeModules';
 
 const Record = ({navigation, route}) => {
   const {colors} = useTheme();
@@ -54,7 +54,7 @@ const Record = ({navigation, route}) => {
     if (!file) return;
 
     () => {
-      RecorderModule.cleanup();
+      recorderModule.cleanup();
     };
   }, [file]);
 
@@ -62,7 +62,7 @@ const Record = ({navigation, route}) => {
     if (!trackId) return;
 
     try {
-      await RecorderModule.record(trackId);
+      await recorderModule.record(trackId);
       setRecordState(prev => ({
         ...prev,
         isRecording: true,
@@ -72,29 +72,27 @@ const Record = ({navigation, route}) => {
     }
   };
 
-  const handleOnStopRecording = () => {
-    RecorderModule.stop(data => {
-      if (!data) {
-        return;
-      }
+  const handleOnStopRecording = async () => {
+    const response = await recorderModule.stopRecording();
 
-      setFile(data);
+    if (response?.path) {
+      setFile(response);
 
       setRecordState(prev => ({
         ...prev,
         isRecording: false,
         isReadyToPlay: true,
       }));
-    });
+    }
   };
 
   const handleOnPlay = () => {
-    RecorderModule.play();
+    // recorderModule.play();
     setPlayingState(prev => ({...prev, isPlaying: true}));
   };
 
   const handleOnStop = () => {
-    RecorderModule.play();
+    recorderModule.stopRecording();
     setPlayingState(prev => ({...prev, isPlaying: true}));
   };
 
@@ -102,7 +100,7 @@ const Record = ({navigation, route}) => {
     if (!file) return;
 
     actions.importSample(trackId, file?.format, file.path, () => {
-      RecorderModule.cleanup();
+      recorderModule.cleanup();
       navigation.goBack();
     });
   };

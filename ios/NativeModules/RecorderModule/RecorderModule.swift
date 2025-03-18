@@ -30,7 +30,7 @@ class RecorderModule:NSObject {
     } catch {
       
     }
-  
+    
     super.init()
   }
   
@@ -74,7 +74,7 @@ class RecorderModule:NSObject {
   }
   
   @objc
-  func stop(_ callback: RCTResponseSenderBlock) {    
+  func stop(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
     guard let recorder = audioRecorder, recorder.isRecording else {
       print("No active recording")
       return
@@ -82,38 +82,13 @@ class RecorderModule:NSObject {
     
     recorder.stop()
     
-    if let fileURL = recordingURL {
-      callback([["path": fileURL.relativePath, "format": self.audioFormat]])
-    }
-  }
-  
-  @objc
-  func play() {
+    
     guard let fileURL = recordingURL else {
-      print("No recording to play")
+      rejecter("Error", "File URL not set", nil)
       return
     }
     
-    guard FileManager.default.fileExists(atPath: fileURL.path) else {
-      print("File does not exist at path: \(fileURL.path)")
-      return
-    }
-    
-    let player = AVAudioPlayerNode()
-    let file = try! AVAudioFile(forReading: fileURL)
-    
-    let audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
-    
-    try! file.read(into: audioBuffer)
-    
-    self.engine.attach(player)
-    
-    self.engine.connect(player, to: engine.mainMixerNode, format: file.processingFormat)
-    
-    player.prepare(withFrameCount: AVAudioFrameCount(file.length))
-    
-    player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts) //
-    player.play()
+    resolver(["path": fileURL.relativePath, "format": self.audioFormat])
   }
   
   @objc

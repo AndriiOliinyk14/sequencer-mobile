@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {useCountContext, useProjectContext} from '../context';
-import {CounterModule, SamplerModule} from '../NativeModules';
+import {counterModule, samplerModule} from '../NativeModules';
 import {PlayerState} from '../types';
 
 const useDestroyProjectSamples = () => {
@@ -16,12 +16,14 @@ const useDestroyProjectSamples = () => {
   useEffect(() => {
     return () => {
       sampleIdsRef.current.forEach(id => {
-        SamplerModule.destroySample(id);
+        samplerModule.destroySample(id);
       });
+
       actions.resetState();
       setCount(0);
+
       actions.setPlayerStatus(PlayerState.STOPPED);
-      CounterModule.stop();
+      counterModule.stop();
     };
   }, []);
 };

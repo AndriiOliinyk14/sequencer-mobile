@@ -1,12 +1,43 @@
 import {NativeModules} from 'react-native';
 
-interface RecorderInterface {
+interface RecorderModuleInterface {
   record: (id: string) => Promise<string>;
-  play: () => void;
   cleanup: () => void;
-  stop: (
-    callback?: ({path, format}: {path: string; format: string}) => void,
-  ) => void;
+  stop: () => Promise<{path: string; format: string}>;
 }
 
-export const RecorderModule = NativeModules.RecorderModule as RecorderInterface;
+class RecorderModule {
+  private recorder: RecorderModuleInterface;
+
+  constructor() {
+    this.recorder = NativeModules.RecorderModule;
+  }
+
+  async record(id: string) {
+    try {
+      return await this.recorder.record(id);
+    } catch (error) {
+      console.log('RecorderModule.record', error);
+    }
+  }
+
+  async stopRecording() {
+    try {
+      return await this.recorder.stop();
+    } catch (error) {
+      console.log('RecorderModule.stopRecording', error);
+    }
+  }
+
+  async cleanup() {
+    try {
+      await this.recorder.cleanup();
+    } catch (error) {
+      console.log('RecorderModule.cleanup', error);
+    }
+  }
+}
+
+const recorderModule = new RecorderModule();
+
+export {recorderModule};

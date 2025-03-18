@@ -1,11 +1,7 @@
 import {useEffect} from 'react';
 import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
-import {
-  counterEmitter,
-  CounterModule,
-  SamplerModule,
-} from '../../NativeModules';
+import {counterEmitter, samplerModule} from '../../NativeModules';
 import {CountEvents} from '../../types';
 
 function useCountListener() {
@@ -18,21 +14,21 @@ function useCountListener() {
   useEffect(() => {
     sampleIds?.forEach(id => {
       if (patterns?.[id]?.[count - 1]?.isOn) {
-        SamplerModule.playSample(id);
+        samplerModule.playSample(id);
       }
     });
   }, [count]);
 
   useEffect(() => {
-    counterEmitter.addListener(CountEvents.TimerUpdate, data => {
-      setCount(data.count);
-    });
-  }, [setCount]);
+    const subscription = counterEmitter.addListener(
+      CountEvents.TimerUpdate,
+      data => {
+        setCount(data.count);
+      },
+    );
 
-  useEffect(() => {
     return () => {
-      counterEmitter.removeAllListeners(CountEvents.TimerUpdate);
-      CounterModule.stop();
+      subscription.remove(); // Properly remove listener
     };
   }, []);
 }

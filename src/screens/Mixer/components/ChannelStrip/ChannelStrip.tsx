@@ -1,33 +1,31 @@
 import {useTheme} from '@react-navigation/native';
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Slider} from '../../../../components';
-import {SamplerModule} from '../../../../NativeModules';
+import {samplerModule} from '../../../../NativeModules';
 import {Sample} from '../../../../types';
 
 interface ChannelStripInterface {
   data: Sample;
 }
 
-const ChannelStrip: FC<ChannelStripInterface> = ({data}) => {
+const ChannelStrip: FC<ChannelStripInterface> = memo(({data}) => {
   const {colors} = useTheme();
 
   const handleOnVolumeChange = (value: number) => {
     const volume = value / 100;
-    SamplerModule.setSampleVolume(data.id, volume);
+    samplerModule.setSampleVolume(data.id, volume);
   };
 
   const handleOnPanChange = (value: number) => {
     const pan = value / 50 - 1;
-    SamplerModule.setSamplePan(data.id, pan);
+    samplerModule.setSamplePan(data.id, pan);
   };
 
   const handleOnReverbChange = (value: number) => {
     const reverb = value / 100;
-    SamplerModule.setSampleReverb(data.id, reverb);
+    samplerModule.setSampleReverb(data.id, reverb);
   };
-
-  console.log(data.settings);
 
   return (
     <View style={[styles.container, {borderColor: colors.border}]}>
@@ -51,7 +49,7 @@ const ChannelStrip: FC<ChannelStripInterface> = ({data}) => {
       />
     </View>
   );
-};
+});
 
 export default ChannelStrip;
 

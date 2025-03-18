@@ -10,7 +10,12 @@
 
 @interface RCT_EXTERN_MODULE(SamplerModule, NSObject)
 
-RCT_EXTERN_METHOD(addSample:(NSString *)id url:(NSString *)url settings:(NSDictionary)settings callback: (RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(addSample:(NSString *)id
+                  url:(NSString *)url
+                  settings:(NSDictionary)settings
+                  resolver:(RCTPromiseResolveBlock)resolver
+                  rejecter:(RCTPromiseRejectBlock)rejecter)
+
 RCT_EXTERN_METHOD(destroySample:(NSString *)id)
 RCT_EXTERN_METHOD(playSample:(NSString *)id)
 RCT_EXTERN_METHOD(setSampleVolume:(NSString *)id value:(float *)value)

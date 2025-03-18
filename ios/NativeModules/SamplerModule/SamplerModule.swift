@@ -48,14 +48,14 @@ class SamplerModule: RCTEventEmitter {
   }
   
   
-  @objc func addSample(_ id: String, url: String, settings: [String: NSNumber], callback: RCTResponseSenderBlock) {
+  @objc func addSample(_ id: String, url: String, settings: [String: NSNumber],  resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     guard let fileURL = URL(string: url) else {
       print("Invalid URL string")
       return
     }
     
     if (samples.first(where: {$0.id == id}) != nil) {
-      callback(["Sample already exists"])
+      rejecter("ERROR", "Sample already exist", nil)
       return
     }
     
@@ -73,7 +73,9 @@ class SamplerModule: RCTEventEmitter {
       try! engine.start()
     }
     
-    callback([["id": id, "volume": volume, "pan": pan, "reverb": reverb]])
+    DispatchQueue.main.async {
+      resolver([["id": id, "volume": volume, "pan": pan, "reverb": reverb]])
+    }
   }
   
   @objc func destroySample(_ id: String) {
@@ -96,7 +98,7 @@ class SamplerModule: RCTEventEmitter {
     if let sample = samples.first(where: { $0.id == id }) {
       sample.setVolume(value)
       
-      self.sendEvent(withName: SamplerEvents.VolumeUpdate.rawValue, body: ["value": value, "id": id])
+     self.sendEvent(withName: SamplerEvents.VolumeUpdate.rawValue, body: ["value": value, "id": id])
     } else {
       print("Sample not found: \(id)")
     }

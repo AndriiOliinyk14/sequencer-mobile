@@ -1,11 +1,11 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import React from 'react';
+import React, {memo} from 'react';
 import {Transport} from '../../components';
 import {useProjectContext} from '../../context';
 import ChannelStrip from './components/ChannelStrip/ChannelStrip';
 
-const Mixer = () => {
+const Mixer = memo(() => {
   const {
     state: {samples, sampleIds},
   } = useProjectContext();
@@ -23,7 +23,7 @@ const Mixer = () => {
       </ScrollView>
     </View>
   );
-};
+});
 
 export default Mixer;
 
