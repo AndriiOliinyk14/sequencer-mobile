@@ -13,7 +13,6 @@ import React
 @objc(AudioTrimmerModule)
 class AudioTrimmerModule: NSObject {
   let engine: AVAudioEngine
-  var audioRecorder: AVAudioRecorder?
   let audioFormat: String
   var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
   var trimmedURL: URL?
@@ -79,41 +78,12 @@ class AudioTrimmerModule: NSObject {
         case .cancelled:
           rejecter("EXPORT_ERROR", "Export cancelled", nil)
         default:
-          rejecter("EXPORT_ERROR", exporter?.error)
+          rejecter("EXPORT_ERROR", "Unknown export error", nil)
         }
       }
     } catch {
       rejecter("TRIM_ERROR", "Failed to trim audio", error)
     }
-  }
-  
-  @objc
-  func play() {
-    guard let fileURL = trimmedURL else {
-      print("No recording to play")
-      return
-    }
-    
-    guard FileManager.default.fileExists(atPath: fileURL.path) else {
-      print("File does not exist at path: \(fileURL.path)")
-      return
-    }
-    
-    let player = AVAudioPlayerNode()
-    let file = try! AVAudioFile(forReading: fileURL)
-    
-    let audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
-    
-    try! file.read(into: audioBuffer)
-    
-    self.engine.attach(player)
-    
-    self.engine.connect(player, to: engine.mainMixerNode, format: file.processingFormat)
-    
-    player.prepare(withFrameCount: AVAudioFrameCount(file.length))
-    
-    player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts) //
-    player.play()
   }
   
   @objc
@@ -132,6 +102,10 @@ class AudioTrimmerModule: NSObject {
       }
       
     }
+  }
+  
+  deinit {
+    self.cleanup()
   }
   
 }

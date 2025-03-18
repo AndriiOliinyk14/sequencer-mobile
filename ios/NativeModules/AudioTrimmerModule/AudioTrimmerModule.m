@@ -15,7 +15,6 @@ RCT_EXTERN_METHOD(trim:(NSString *)filePath
                   endTime:(double)endTime
                   resolver:(RCTPromiseResolveBlock)resolver
                   rejecter:(RCTPromiseRejectBlock)rejecter)
-RCT_EXTERN_METHOD(play)
 RCT_EXTERN_METHOD(cleanup)
 
 @end

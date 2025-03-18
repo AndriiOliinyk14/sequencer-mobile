@@ -6,6 +6,7 @@ import {useSamplesContext} from '../../context';
 import {audioTrimmerModule} from '../../NativeModules/AudioTrimmer/AudioTrimmer';
 import {sampleStorageService} from '../../services';
 import {SampleEntity} from '../../types';
+import {playerModule} from '../../NativeModules/Player/Player';
 
 const EditSample = () => {
   const {colors} = useTheme();
@@ -15,6 +16,11 @@ const EditSample = () => {
 
   const [sample, setSample] = useState<SampleEntity>();
   const [values, setValues] = useState<{name: string}>({name: ''});
+
+  const [inAudio, setInAudio] = useState('');
+  const [outAudio, setOutAudio] = useState('');
+
+  const [trimmedFile, setTrimmedFile] = useState<any>();
 
   const {actions} = useSamplesContext();
 
@@ -30,10 +36,22 @@ const EditSample = () => {
     fetchSample();
   }, []);
 
+  //Test functionnality
   const handleTrimAudio = async () => {
     if (sample?.path) {
-      await audioTrimmerModule.trim(sample?.path, 1, 1);
+      const response = await audioTrimmerModule.trim(
+        sample?.path,
+        Number(inAudio),
+        Number(outAudio),
+      );
+      setTrimmedFile(response);
     }
+  };
+
+  const handleOnPlayTrimmed = async () => {
+    if (!trimmedFile) return;
+    console.log(trimmedFile);
+    await playerModule.play(trimmedFile.path);
   };
 
   const handleOnSave = async (
@@ -87,6 +105,23 @@ const EditSample = () => {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        value={String(inAudio)}
+        onChangeText={value => setInAudio(value)}
+      />
+      <TextInput
+        value={String(outAudio)}
+        onChangeText={value => setOutAudio(value)}
+      />
+      {trimmedFile && (
+        <Text style={{color: colors.text}}>{trimmedFile.duration}</Text>
+      )}
+      <Button
+        title="Play trimmed"
+        disabled={!trimmedFile}
+        onPress={handleOnPlayTrimmed}
+      />
+
       <View style={[styles.row, {borderColor: colors.border}]}>
         <Text style={[styles.name, {color: colors.text}]}>Sample name:</Text>
         <TextInput

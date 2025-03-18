@@ -11,11 +11,13 @@ interface AudioTrimmerModuleInterface {
   cleanup(): void;
 }
 
-const audioTrimmer =
-  NativeModules.AudioTrimmerModule as AudioTrimmerModuleInterface;
-
 class AudioTrimmerModule {
-  constructor() {}
+  private audioTrimmer: AudioTrimmerModuleInterface;
+
+  constructor() {
+    this.audioTrimmer =
+      NativeModules.AudioTrimmerModule as AudioTrimmerModuleInterface;
+  }
 
   async trim(
     filePath: string,
@@ -24,23 +26,14 @@ class AudioTrimmerModule {
   ): Promise<{path: string; duration: number} | undefined> {
     try {
       const absolutePath = `${fsService.SamplesDirectoryPath}/${filePath}`;
-      const response = await audioTrimmer.trim(
+      const response = await this.audioTrimmer.trim(
         absolutePath,
         startTime,
         endTime,
       );
-
       return response;
     } catch (error) {
       console.error('AudioTrimmerModule.trim: ', error);
-    }
-  }
-
-  async play() {
-    try {
-      await audioTrimmer.play();
-    } catch (error) {
-      console.error('AudioTrimmerModule.play ', error);
     }
   }
 }
