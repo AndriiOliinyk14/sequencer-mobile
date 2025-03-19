@@ -27,13 +27,14 @@ class AudioEngineModule {
       _engine.attach(_mixerNode)
       _engine.connect(_mixerNode, to: _engine.mainMixerNode, format: nil)
       
-      do {
-        _engine.prepare()
-        try _engine.start()
-        print("_engine.isRunning", _engine.isRunning)
-      } catch {
-        print(error)
-      }
+      
+      _engine.prepare()
+      
+      try _engine.start()
+      
+      print("_engine.isRunning", _engine.isRunning)
+      
+      
       
     } catch {
       print("AudioEngineModule initialization error: \(error)")

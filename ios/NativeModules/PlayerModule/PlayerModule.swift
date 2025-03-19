@@ -40,7 +40,6 @@ class PlayerModule:NSObject{
   func play(_ url:String){
     print("url",url)
     let fileURL = URL(fileURLWithPath: url)
-    print("fileURL",fileURL)
     
     guard FileManager.default.fileExists(atPath: fileURL.path) else {
       print("File does not exist at path: \(fileURL.path)")

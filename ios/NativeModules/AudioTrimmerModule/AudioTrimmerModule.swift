@@ -82,6 +82,7 @@ class AudioTrimmerModule: NSObject {
         }
       }
     } catch {
+      print("AudioTrimmerModule: trim went wrong: ", error)
       rejecter("TRIM_ERROR", "Failed to trim audio", error)
     }
   }
@@ -98,7 +99,8 @@ class AudioTrimmerModule: NSObject {
         try FileManager.default.removeItem(at: fileURL)
         print("File removed")
       } catch {
-        print("Error removing file: \(error)")
+        
+        print("AudioTrimmerModule: cleanup went wrong: ", error)
       }
       
     }

@@ -14,13 +14,15 @@ const Mixer = memo(() => {
     <View style={styles.container}>
       <Transport />
 
-      <ScrollView horizontal contentContainerStyle={styles.channelStips}>
-        {sampleIds.map(id => {
-          const sample = samples[id];
+      <View>
+        <ScrollView horizontal contentContainerStyle={styles.channelStips}>
+          {sampleIds.map(id => {
+            const sample = samples[id];
 
-          return <ChannelStrip key={`strip_${sample.id}`} data={sample} />;
-        })}
-      </ScrollView>
+            return <ChannelStrip key={`strip_${sample.id}`} data={sample} />;
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 });
@@ -29,15 +31,14 @@ export default Mixer;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
-    gap: 10,
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingBottom: 40,
+    height: '100%',
   },
   channelStips: {
     paddingHorizontal: 20,
-    display: 'flex',
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'space-between',
     gap: 10,
   },
 });

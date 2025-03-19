@@ -58,24 +58,15 @@ class SampleModule {
     self.engine.detach(self.reverb)
   }
   
-  func preloadAudio() {
-    DispatchQueue.global(qos: .default).async {
-      // Preload the audio buffer ahead of time
-      self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
-    }
-  }
-  
   func play(){
     if self.player.isPlaying {
       self.player.stop()
     }
     
-    self.preloadAudio()
-    
     DispatchQueue.main.async {
+      self.player.scheduleBuffer(self.audioBuffer, at: nil, options: .interrupts)
       self.player.play()
     }
-    
   }
   
   func setVolume(_ volume: Float){

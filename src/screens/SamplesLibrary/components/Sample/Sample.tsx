@@ -4,8 +4,9 @@ import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {icons} from '../../../../components/icons';
 import {DEFAULT_SAMPLE_SETTINGS} from '../../../../const';
 import {useProjectContext} from '../../../../context';
-import {SamplerModule} from '../../../../NativeModules';
+import {playerModule} from '../../../../NativeModules';
 import {SampleEntity, SamplesScreenTypeEnum} from '../../../../types';
+import {fsService} from '../../../../services';
 
 interface SampleInterface extends SampleEntity {
   type: SamplesScreenTypeEnum;
@@ -31,7 +32,8 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
 
   const onPlay = async () => {
     try {
-      await SamplerModule.playSample(id);
+      const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
+      await playerModule.play(absolutePath);
     } catch (error) {}
   };
 

@@ -32,16 +32,26 @@ const ChannelStrip: FC<ChannelStripInterface> = memo(({data}) => {
       <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
         {data.name}
       </Text>
+
+      <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
+        Reverb
+      </Text>
       <Slider
         value={data.settings.reverb * 100}
         onChange={handleOnReverbChange}
         onDoubleTouch={() => handleOnReverbChange(0)}
       />
+      <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
+        Pan
+      </Text>
       <Slider
         value={(data.settings.pan + 1) * 50}
         onChange={handleOnPanChange}
         onDoubleTouch={() => handleOnPanChange(50)}
       />
+      <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
+        Volume
+      </Text>
       <Slider
         value={data.settings.volume * 100}
         onChange={handleOnVolumeChange}
@@ -58,7 +68,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 20,
     width: 100,
-    gap: 12,
+    gap: 24,
   },
   name: {
     fontSize: 10,
