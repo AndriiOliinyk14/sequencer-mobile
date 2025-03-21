@@ -4,6 +4,7 @@ import {icons} from '../../../../components/icons';
 import {useGlobalContext, useProjectContext} from '../../../../context';
 import {DialogEnum} from '../../../../types';
 import {Step} from './Step';
+import {Card} from '../../../../components';
 
 interface PatternProps {
   name: string;
@@ -34,29 +35,31 @@ const Pattern: FC<PatternProps> = ({id, pattern}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.instrument} onPress={handleEditSample}>
-        <Image style={styles.instrumentImg} source={icon} />
-      </TouchableOpacity>
-      <View style={styles.steps}>
-        {Array.from({length: patternLength}).map((_, index) => (
-          <View
-            style={[
-              styles.stepsGroup,
-              (index + 1) % 4 === 0 && styles.everyFourthStep,
-            ]}
-            key={`${id}_${index}`}>
-            <Step
-              isActive={pattern?.[index]?.isOn}
-              onPress={() => {
-                const value = !pattern?.[index]?.isOn;
-                handleOnPress(index, {isOn: value});
-              }}
-            />
-          </View>
-        ))}
+    <Card>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.instrument} onPress={handleEditSample}>
+          <Image style={styles.instrumentImg} source={icon} />
+        </TouchableOpacity>
+        <View style={styles.steps}>
+          {Array.from({length: patternLength}).map((_, index) => (
+            <View
+              style={[
+                styles.stepsGroup,
+                (index + 1) % 4 === 0 && styles.everyFourthStep,
+              ]}
+              key={`${id}_${index}`}>
+              <Step
+                isActive={pattern?.[index]?.isOn}
+                onPress={() => {
+                  const value = !pattern?.[index]?.isOn;
+                  handleOnPress(index, {isOn: value});
+                }}
+              />
+            </View>
+          ))}
+        </View>
       </View>
-    </View>
+    </Card>
   );
 };
 
@@ -64,12 +67,10 @@ export {Pattern};
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     gap: 6,
-    marginBottom: 10,
   },
   instrument: {
     display: 'flex',

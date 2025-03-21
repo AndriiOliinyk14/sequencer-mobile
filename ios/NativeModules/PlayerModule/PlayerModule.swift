@@ -15,6 +15,7 @@ class PlayerModule:NSObject{
   var player:AVAudioPlayerNode
   var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
   var audioFormat: String
+  var audioBuffer: AVAudioPCMBuffer?
   
   override init(){
     self.engine = AudioEngineModule.shared._engine
@@ -37,39 +38,57 @@ class PlayerModule:NSObject{
   }
   
   @objc
-  func play(_ url:String){
-    print("url",url)
+  func load(_ url:String, resolver:RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock){
     let fileURL = URL(fileURLWithPath: url)
+    
     
     guard FileManager.default.fileExists(atPath: fileURL.path) else {
       print("File does not exist at path: \(fileURL.path)")
+      rejecter("ERROR", "PlayerModule.load: File does not exist at path", nil)
       return
     }
     
     let file = try! AVAudioFile(forReading: fileURL)
-    let audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
-    try! file.read(into: audioBuffer)
+    self.audioBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))!
+    try! file.read(into: self.audioBuffer!)
     
     self.engine.connect(player, to: engine.mainMixerNode, format: file.processingFormat)
     self.player.prepare(withFrameCount: AVAudioFrameCount(file.length))
-    self.player.scheduleBuffer(audioBuffer, at: nil, options: .interrupts)
-    self.player.play()
+    
+    
+    let properties: [String: Any] = [
+      "duration": Double(file.length) / file.processingFormat.sampleRate,
+    ]
+    
+    resolver(properties)
+  }
+  
+  @objc
+  func play(){
+    
+    if let buffer = self.audioBuffer {
+      // Ensure that the player is not already playing
+      if self.player.isPlaying {
+        self.player.stop()
+      }
+      
+      // Schedule the buffer
+      self.player.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: self.stop)
+      
+      // Start playing the audio
+      self.player.play()
+      
+    }
   }
   
   @objc
   func stop(){
-    player.stop()
+    DispatchQueue.main.async {
+      if self.player.isPlaying {
+        self.player.stop()
+      }
+    }
   }
-  
-  //  @objc
-  //  func getCurrentPosition() -> TimeInterval? {
-  //    guard let nodeTime = player.lastRenderTime,
-  //          let playerTime = player.playerTime(forNodeTime: nodeTime) else {
-  //      return nil
-  //    }
-  //
-  //    return TimeInterval(playerTime.sampleTime) / playerTime.sampleRate
-  //  }
   
   @objc
   func cleanup(){

@@ -25,9 +25,8 @@ class AudioTrimmerModule {
     endTime: number,
   ): Promise<{path: string; duration: number} | undefined> {
     try {
-      const absolutePath = `${fsService.SamplesDirectoryPath}/${filePath}`;
       const response = await this.audioTrimmer.trim(
-        absolutePath,
+        filePath,
         startTime,
         endTime,
       );

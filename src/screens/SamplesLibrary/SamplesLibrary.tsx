@@ -50,13 +50,10 @@ export default SamplesLibrary;
 
 const styles = StyleSheet.create({
   samplesContainer: {
-    paddingHorizontal: 40,
-    paddingTop: 40,
+    paddingTop: 20,
     display: 'flex',
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
     justifyContent: 'space-between',
+    gap: 10,
   },
 });

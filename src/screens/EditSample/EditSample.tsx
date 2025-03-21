@@ -1,12 +1,10 @@
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, StyleSheet, Text, View} from 'react-native';
-import {TextInput} from '../../components';
+import {Card, Player, TextInput} from '../../components';
 import {useSamplesContext} from '../../context';
-import {audioTrimmerModule} from '../../NativeModules/AudioTrimmer/AudioTrimmer';
-import {sampleStorageService} from '../../services';
+import {fsService, sampleStorageService} from '../../services';
 import {SampleEntity} from '../../types';
-import {playerModule} from '../../NativeModules/Player/Player';
 
 const EditSample = () => {
   const {colors} = useTheme();
@@ -15,43 +13,29 @@ const EditSample = () => {
   const route = useRoute<{key: string; params: {id: string}; name: string}>();
 
   const [sample, setSample] = useState<SampleEntity>();
+  const [trimmedPath, setTrimmedPath] = useState<string | null>(null);
   const [values, setValues] = useState<{name: string}>({name: ''});
-
-  const [inAudio, setInAudio] = useState('');
-  const [outAudio, setOutAudio] = useState('');
-
-  const [trimmedFile, setTrimmedFile] = useState<any>();
 
   const {actions} = useSamplesContext();
 
+  const fetchSample = async () => {
+    const data = await sampleStorageService.get(route.params.id);
+
+    if (!data) return;
+
+    setValues({name: data.name});
+    setSample(data);
+  };
+
   useEffect(() => {
-    const fetchSample = async () => {
-      const data = await sampleStorageService.get(route.params.id);
-
-      if (!data) return;
-
-      setValues({name: data.name});
-      setSample(data);
-    };
     fetchSample();
   }, []);
 
-  //Test functionnality
-  const handleTrimAudio = async () => {
-    if (sample?.path) {
-      const response = await audioTrimmerModule.trim(
-        sample?.path,
-        Number(inAudio),
-        Number(outAudio),
-      );
-      setTrimmedFile(response);
+  const handleOnSaveTrimmed = async () => {
+    if (sample && trimmedPath) {
+      await actions.updateSample(sample?.id, sample?.name, trimmedPath);
+      await fetchSample();
     }
-  };
-
-  const handleOnPlayTrimmed = async () => {
-    if (!trimmedFile) return;
-    console.log(trimmedFile);
-    await playerModule.play(trimmedFile.path);
   };
 
   const handleOnSave = async (
@@ -59,7 +43,10 @@ const EditSample = () => {
     values: Partial<SampleEntity>,
   ) => {
     try {
+      await handleOnSaveTrimmed();
+
       const data = {...sample, ...values};
+      console.log('data: ', data);
       await sampleStorageService.update(data);
       actions.getAllSamples();
 
@@ -73,9 +60,6 @@ const EditSample = () => {
     if (!sample) return;
 
     navigation.setOptions({
-      headerRight: () => (
-        <Button title="Save" onPress={() => handleOnSave(sample, values)} />
-      ),
       title: `Editing ${sample.name}`,
     });
   }, [navigation, sample, values]);
@@ -103,40 +87,30 @@ const EditSample = () => {
     return <>Loading</>;
   }
 
+  const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
+
   return (
     <View style={styles.container}>
-      <TextInput
-        value={String(inAudio)}
-        onChangeText={value => setInAudio(value)}
-      />
-      <TextInput
-        value={String(outAudio)}
-        onChangeText={value => setOutAudio(value)}
-      />
-      {trimmedFile && (
-        <Text style={{color: colors.text}}>{trimmedFile.duration}</Text>
-      )}
-      <Button
-        title="Play trimmed"
-        disabled={!trimmedFile}
-        onPress={handleOnPlayTrimmed}
-      />
-
-      <View style={[styles.row, {borderColor: colors.border}]}>
-        <Text style={[styles.name, {color: colors.text}]}>Sample name:</Text>
-        <TextInput
-          style={{backgroundColor: colors.card}}
-          placeholder="Enter sample name"
-          value={values.name}
-          onChangeText={text => handleOnInput({name: text})}
+      <View>
+        <Player path={absolutePath} onTrim={data => setTrimmedPath(data)} />
+        <Card>
+          <TextInput
+            label="Sample name:"
+            style={{backgroundColor: colors.card}}
+            placeholder="Enter sample name"
+            value={values.name}
+            onChangeText={text => handleOnInput({name: text})}
+          />
+        </Card>
+      </View>
+      <View style={styles.bottom}>
+        <Button title="Save" onPress={() => handleOnSave(sample, values)} />
+        <Button
+          color={'red'}
+          onPress={() => handleOnRemove(sample)}
+          title="Remove Sample"
         />
       </View>
-      <Button onPress={handleTrimAudio} title="Trim Sample" />
-      <Button
-        color={'red'}
-        onPress={() => handleOnRemove(sample)}
-        title="Remove Sample"
-      />
     </View>
   );
 };
@@ -146,6 +120,9 @@ export default EditSample;
 const styles = StyleSheet.create({
   container: {
     paddingTop: 24,
+    display: 'flex',
+    justifyContent: 'space-between',
+    height: '100%',
   },
   name: {
     fontWeight: 'bold',
@@ -158,5 +135,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  bottom: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 40,
+    justifyContent: 'center',
   },
 });

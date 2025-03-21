@@ -47,10 +47,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
   },
-  content: {
-    paddingTop: 40,
-    flexDirection: 'column',
-  },
 });
 
 export default App;

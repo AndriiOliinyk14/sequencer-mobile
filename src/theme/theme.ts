@@ -4,6 +4,7 @@ type Colors = Theme['colors'] & {
   disabled: string;
   disabledText: string;
   red: string;
+  white: string;
 };
 
 export interface MainThemeInterface extends Theme {
@@ -24,6 +25,7 @@ const MainTheme = {
     disabled: '#494949',
     disabledText: '#d0d0d0',
     red: '#f22424',
+    white: '#ffffff',
   },
 } as MainThemeInterface;
 

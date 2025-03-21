@@ -2,7 +2,6 @@ import {createContext, ReactNode, useContext, useReducer} from 'react';
 import {Alert} from 'react-native';
 import RNBlobUtil from 'react-native-blob-util';
 import uuid from 'react-native-uuid';
-import {SamplerModule} from '../../NativeModules';
 import {fsService, sampleStorageService} from '../../services';
 import {SampleEntity} from '../../types';
 import {SAMPLES_ACTION_TYPES} from './actionsTypes';
@@ -17,6 +16,7 @@ const Context = createContext<ContextInterface>({
     importSample: () => {},
     removeSample: () => {},
     getAllSamples: () => {},
+    updateSample: () => {},
   },
 });
 
@@ -38,7 +38,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
         payload: {data, dataObj},
       });
 
-      await addAllSamples();
+      // await addAllSamples();
     } catch (error) {
       console.error('SamplesProvider.getAllSamples: ', error);
     }
@@ -73,6 +73,28 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
+  const updateSample = async (id: string, name: string, uri: string) => {
+    try {
+      const base64Audio = await RNBlobUtil.fs.readFile(uri, 'base64');
+      base64Audio.replace('base64Audio', '');
+
+      const savedUri = await fsService.saveAudio({
+        id,
+        name,
+        format: 'wav',
+        binaryData: base64Audio,
+      });
+
+      const sample = new SampleEntity(id, name, savedUri);
+
+      await sampleStorageService.save(sample);
+      console.log('SAmple was updated');
+      await getAllSamples();
+    } catch (error) {
+      console.error('SamplesProvider.importSample: ', error);
+    }
+  };
+
   const removeSample = async (data: SampleEntity, callback: any) => {
     try {
       if (await fsService.removeAudio(data)) {
@@ -91,8 +113,6 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
   const addAllSamples = async () => {
     try {
       const samples = state.samples;
-
-      console.log('samples', samples);
 
       for (const sample of samples) {
         const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
@@ -121,6 +141,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     removeSample,
     getAllSamples,
     addAllSamples,
+    updateSample,
   };
   return (
     <Context.Provider value={{state, actions}}>{children}</Context.Provider>

@@ -1,9 +1,11 @@
 import {NativeModules} from 'react-native';
 
 interface PlayerModuleInterface {
-  play: (url: string) => void;
+  load: (url: string) => any;
+  play: () => void;
   stop: () => void;
   cleanup: () => void;
+  getCurrentPosition: () => void;
 }
 
 class PlayerModule {
@@ -13,9 +15,17 @@ class PlayerModule {
     this.player = NativeModules.PlayerModule as PlayerModuleInterface;
   }
 
-  play(url: string) {
+  async load(url: string) {
     try {
-      this.player.play(url);
+      return await this.player.load(url);
+    } catch (error) {
+      console.log('PlayerModule.play', error);
+    }
+  }
+
+  play() {
+    try {
+      this.player.play();
     } catch (error) {
       console.log('PlayerModule.play', error);
     }

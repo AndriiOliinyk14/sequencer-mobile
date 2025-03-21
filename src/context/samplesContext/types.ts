@@ -15,6 +15,7 @@ export interface ContextInterface {
       uri: string,
       callback: (params?: any) => void,
     ) => void;
+    updateSample: (id: string, name: string, uri: string) => void;
     removeSample: (
       data: SampleEntity,
       callback: (params?: any) => void,

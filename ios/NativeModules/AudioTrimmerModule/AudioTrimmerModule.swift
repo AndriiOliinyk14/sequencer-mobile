@@ -1,7 +1,7 @@
 
 //
 //  AudioTrimmerModule.swift
-//  Sequencer
+//  Sequencer 
 //
 //  Created by Andrii Oliinyk on 14.03.2025.
 //

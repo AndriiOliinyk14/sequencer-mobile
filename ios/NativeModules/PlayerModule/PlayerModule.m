@@ -10,9 +10,12 @@
 
 @interface RCT_EXTERN_MODULE(PlayerModule, NSObject)
 
-RCT_EXTERN_METHOD(play:(NSString *)url)
+RCT_EXTERN_METHOD(load:(NSString *)url
+                  resolver:(RCTPromiseResolveBlock)resolver
+                  rejecter:(RCTPromiseRejectBlock)rejecter
+                  )
+RCT_EXTERN_METHOD(play)
 RCT_EXTERN_METHOD(stop)
-//RCT_EXTERN_METHOD(getCurrentPosition:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(cleanup)
 
 @end
