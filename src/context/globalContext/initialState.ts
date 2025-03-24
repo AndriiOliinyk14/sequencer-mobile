@@ -7,13 +7,10 @@ const initialState = {
   bpm: 128,
   patternLength: 16,
   dialogs: {
-    [DialogEnum.RECORD]: {
+    [DialogEnum.ICONS_LIBRARY]: {
       visible: false,
     },
     [DialogEnum.NEW_PROJECT]: {
-      visible: false,
-    },
-    [DialogEnum.ADD_SAMPLE]: {
       visible: false,
     },
     [DialogEnum.ADD_RECORD_SAMPLE]: {

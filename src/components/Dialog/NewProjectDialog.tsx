@@ -1,4 +1,4 @@
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
@@ -9,7 +9,6 @@ import {TextInput} from '../TextInput';
 import {Dialog} from './Dialog';
 
 export const NewProjectDialog = () => {
-  const {colors} = useTheme();
   const navigation = useNavigation<any>();
   const {state, actions} = useGlobalContext();
   const {dialogs} = state;
@@ -62,19 +61,17 @@ export const NewProjectDialog = () => {
       <View style={styles.container}>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
-            <Text style={{color: colors.text, fontWeight: 'bold'}}>Name: </Text>
             <TextInput
-              placeholder="project name..."
+              label="Project Name"
+              placeholder="Project 1"
               value={input}
               onChangeText={handleNameOnChange}
             />
           </View>
           <Text style={styles.error}>{error}</Text>
           <View style={styles.inputContainer}>
-            <Text style={{color: colors.text, fontWeight: 'bold'}}>
-              Tempo:{' '}
-            </Text>
             <TextInput
+              label="Tempo"
               placeholder="BPM"
               value={String(bpm)}
               keyboardType="number-pad"

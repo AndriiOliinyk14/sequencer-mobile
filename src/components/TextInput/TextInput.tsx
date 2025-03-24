@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   input: {
+    flexGrow: 1,
     paddingTop: 20,
     paddingBottom: 4,
     backgroundColor: 'transparent',
