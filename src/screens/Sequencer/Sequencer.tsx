@@ -84,19 +84,21 @@ const Sequencer = ({route, navigation}) => {
         <Indicator />
       </View>
 
-      <ScrollView style={styles.body}>
-        {sampleIds.map(id => {
-          const sample = samples[id];
-
-          return (
-            <Pattern
-              key={sample.id}
-              id={sample.id}
-              name={sample.name}
-              pattern={patterns?.[id]}
-            />
-          );
-        })}
+      <ScrollView>
+        <View style={styles.body}>
+          {sampleIds.map(id => {
+            const sample = samples[id];
+            return (
+              <Pattern
+                key={sample.id}
+                id={sample.id}
+                name={sample.name}
+                pattern={patterns?.[id]}
+                icon={sample.icon}
+              />
+            );
+          })}
+        </View>
         <Link
           style={styles.addSample}
           screen="Samples Library"
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {flexGrow: 0},
-  body: {flexGrow: 1},
+  body: {gap: 10},
   buttons: {
     display: 'flex',
     flexDirection: 'row',
@@ -132,6 +134,6 @@ const styles = StyleSheet.create({
   },
   addSample: {
     textAlign: 'center',
-    paddingBottom: 20,
+    paddingVertical: 20,
   },
 });

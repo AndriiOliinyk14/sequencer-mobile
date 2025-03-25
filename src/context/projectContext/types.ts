@@ -30,6 +30,7 @@ export interface ContextInterface {
       id: string,
       title: string,
       path: string,
+      icon: string | undefined,
       settings?: SampleSettings,
     ) => void;
     setRecordedSample: (

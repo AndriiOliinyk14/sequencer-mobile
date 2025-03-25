@@ -12,6 +12,7 @@ export interface ContextInterface {
     importSample: (
       name: string,
       format: string,
+      icon: string,
       uri: string,
       callback: (params?: any) => void,
     ) => void;

@@ -3,10 +3,9 @@ import {
   Waveform,
 } from '@simform_solutions/react-native-audio-waveform';
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useTheme, useThrottle} from '../../hooks';
 import {audioTrimmerModule, playerModule} from '../../NativeModules';
-import {Card} from '../Card';
 import {PlayButton} from '../PlayButton';
 import {TextInput} from '../TextInput';
 
@@ -30,8 +29,6 @@ const Player: FC<PlayerInterface> = ({path, onTrim}) => {
   const {colors} = useTheme();
 
   const ref = useRef<IWaveformRef>(null);
-
-  console.log('path: ', path);
 
   const handleLoadAudio = async (path: string) => {
     const response = await playerModule.load(path);
@@ -109,7 +106,7 @@ const Player: FC<PlayerInterface> = ({path, onTrim}) => {
   };
 
   return (
-    <Card>
+    <>
       <View style={styles.waveform}>
         <View
           style={[
@@ -154,7 +151,7 @@ const Player: FC<PlayerInterface> = ({path, onTrim}) => {
       <View style={{width: 60}}>
         <PlayButton isActive={isPlaying} onPress={handleOnPlay} />
       </View>
-    </Card>
+    </>
   );
 };
 

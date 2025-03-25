@@ -5,6 +5,7 @@ import uuid from 'react-native-uuid';
 import {Button, PlayButton, RecButton} from '../../components';
 import {useSamplesContext} from '../../context';
 import {recorderModule} from '../../NativeModules';
+import {icons, iconsList} from '../../components/icons';
 
 const Record = ({navigation, route}) => {
   const {colors} = useTheme();
@@ -87,7 +88,6 @@ const Record = ({navigation, route}) => {
   };
 
   const handleOnPlay = () => {
-    // recorderModule.play();
     setPlayingState(prev => ({...prev, isPlaying: true}));
   };
 
@@ -99,10 +99,16 @@ const Record = ({navigation, route}) => {
   const handleOnImport = () => {
     if (!file) return;
 
-    actions.importSample(trackId, file?.format, file.path, () => {
-      recorderModule.cleanup();
-      navigation.goBack();
-    });
+    actions.importSample(
+      trackId,
+      file?.format,
+      icons.mic.uri,
+      file.path,
+      () => {
+        recorderModule.cleanup();
+        navigation.goBack();
+      },
+    );
   };
 
   const handleOnPressRec = (isRecording: boolean) => {

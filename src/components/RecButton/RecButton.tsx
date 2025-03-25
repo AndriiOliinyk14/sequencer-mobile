@@ -1,7 +1,6 @@
-import {useTheme} from '@react-navigation/native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Easing, Pressable, StyleSheet} from 'react-native';
-import {MainThemeInterface} from '../../theme/theme';
+import {useTheme} from '../../hooks';
 
 interface RecButtonInterface {
   isActive: boolean;
@@ -11,7 +10,7 @@ interface RecButtonInterface {
 const RecButton: FC<RecButtonInterface> = ({isActive, onPress}) => {
   const [isPresed, setPresed] = useState(false);
 
-  const {colors} = useTheme() as MainThemeInterface;
+  const {colors} = useTheme();
   const opacity = useRef(new Animated.Value(1)).current; // Persist opacity across renders
   const animation = useRef<any>(null);
 
@@ -52,7 +51,7 @@ const RecButton: FC<RecButtonInterface> = ({isActive, onPress}) => {
       style={[
         styles.container,
         {
-          borderColor: colors.red,
+          borderColor: colors.error,
           backgroundColor: isPresed ? colors.notification : 'transparent',
         },
       ]}
@@ -62,8 +61,8 @@ const RecButton: FC<RecButtonInterface> = ({isActive, onPress}) => {
         style={[
           styles.circle,
           {
-            backgroundColor: colors.red,
-            borderColor: colors.red,
+            backgroundColor: colors.error,
+            borderColor: colors.error,
             opacity: opacity,
           },
         ]}

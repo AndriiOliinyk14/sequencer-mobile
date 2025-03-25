@@ -16,28 +16,43 @@ export const NewProjectDialog = () => {
   const dialogInfo = dialogs.NEW_PROJECT;
 
   const [input, setInput] = useState('');
-  const [bpm, setBPM] = useState(120);
+  const [bpm, setBPM] = useState('120');
 
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleOnSave = async () => {
     try {
-      if (!input) return;
+      if (!input) {
+        setErrors(prev => ({
+          ...prev,
+          projectName: 'Please, enter project name',
+        }));
+
+        return;
+      }
+
+      if (Number.isNaN(Number(bpm))) {
+        setErrors(prev => ({
+          ...prev,
+          bpm: 'Please, enter correct bpm',
+        }));
+
+        return;
+      }
 
       const id = uuid.v4();
 
       await projectStorageService.createProject({
         id,
         name: input,
-        bpm,
+        bpm: Number(bpm),
         patternLength: 16,
       });
+
       navigation.navigate('Sequencer', {id, name: input});
       handleOnClose();
     } catch (error) {
-      if (typeof error === 'string') {
-        setError(error as string);
-      }
+      console.log(error);
     }
   };
 
@@ -47,17 +62,19 @@ export const NewProjectDialog = () => {
   };
 
   const handleNameOnChange = (value: string) => {
-    setError(null);
+    setErrors({});
     setInput(value);
   };
 
   const handleBPMOnChange = (value: string) => {
-    const numberValue = parseInt(value, 10);
-    setBPM(numberValue);
+    setBPM(value);
   };
 
   return (
-    <Dialog isVisible={dialogs.NEW_PROJECT.visible} onClose={handleOnClose}>
+    <Dialog
+      isVisible={dialogs.NEW_PROJECT.visible}
+      onClose={handleOnClose}
+      title="Create Project">
       <View style={styles.container}>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
@@ -68,7 +85,7 @@ export const NewProjectDialog = () => {
               onChangeText={handleNameOnChange}
             />
           </View>
-          <Text style={styles.error}>{error}</Text>
+          <Text style={styles.error}>{errors?.projectName}</Text>
           <View style={styles.inputContainer}>
             <TextInput
               label="Tempo"
@@ -78,8 +95,9 @@ export const NewProjectDialog = () => {
               onChangeText={handleBPMOnChange}
             />
           </View>
+          <Text style={styles.error}>{errors?.bpm}</Text>
         </View>
-        <Button title="Create project" onPress={handleOnSave} />
+        <Button title="Create" onPress={handleOnSave} />
       </View>
     </Dialog>
   );

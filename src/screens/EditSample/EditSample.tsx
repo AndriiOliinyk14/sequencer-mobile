@@ -1,10 +1,10 @@
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Alert, Button, StyleSheet, Text, View} from 'react-native';
+import {Alert, Button, Image, StyleSheet, Text, View} from 'react-native';
 import {Card, Player, TextInput} from '../../components';
-import {useSamplesContext} from '../../context';
+import {useGlobalContext, useSamplesContext} from '../../context';
 import {fsService, sampleStorageService} from '../../services';
-import {SampleEntity} from '../../types';
+import {DialogEnum, SampleEntity} from '../../types';
 
 const EditSample = () => {
   const {colors} = useTheme();
@@ -17,6 +17,9 @@ const EditSample = () => {
   const [values, setValues] = useState<{name: string}>({name: ''});
 
   const {actions} = useSamplesContext();
+  const {
+    actions: {openDialog},
+  } = useGlobalContext();
 
   const fetchSample = async () => {
     const data = await sampleStorageService.get(route.params.id);
@@ -30,6 +33,18 @@ const EditSample = () => {
   useEffect(() => {
     fetchSample();
   }, []);
+
+  const handleOnChangeIcon = (id: string) => {
+    setSample(prev => {
+      if (prev && id) {
+        return {...prev, icon: id};
+      }
+    });
+  };
+
+  const handleOpenLibraryDialog = () => {
+    openDialog(DialogEnum.ICONS_LIBRARY, {onChange: handleOnChangeIcon});
+  };
 
   const handleOnSaveTrimmed = async () => {
     if (sample && trimmedPath) {
@@ -91,11 +106,23 @@ const EditSample = () => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Player path={absolutePath} onTrim={data => setTrimmedPath(data)} />
+      <View style={styles.content}>
+        <Card>
+          <Player path={absolutePath} onTrim={data => setTrimmedPath(data)} />
+        </Card>
+        <Card style={styles.row}>
+          <Text style={{color: colors.text}}>Icon: </Text>
+          {sample?.icon && (
+            <Image style={styles.icon} source={sample.icon as any} />
+          )}
+          <Button
+            title={sample.icon ? 'Change icon' : 'Add icon'}
+            onPress={handleOpenLibraryDialog}
+          />
+        </Card>
         <Card>
           <TextInput
-            label="Sample name:"
+            label="Sample name"
             style={{backgroundColor: colors.card}}
             placeholder="Enter sample name"
             value={values.name}
@@ -124,8 +151,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: '100%',
   },
+  content: {
+    gap: 10,
+  },
   name: {
     fontWeight: 'bold',
+  },
+  icon: {
+    width: 30,
+    height: 30,
   },
   row: {
     borderWidth: 1,

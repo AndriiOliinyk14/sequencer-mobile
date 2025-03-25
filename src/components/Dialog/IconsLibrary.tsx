@@ -1,26 +1,40 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useGlobalContext} from '../../context';
+import {DialogEnum} from '../../types';
 import {Card} from '../Card';
-import {icons} from '../icons';
+import {iconsList} from '../icons';
 import {Dialog} from './Dialog';
 
 const IconsLibrary = () => {
   const {
+    actions: {closeDialog},
     state: {dialogs},
   } = useGlobalContext();
 
-  const iconsList = useMemo(() => {
-    return Object.values(icons);
-  }, []);
+  const iconsLibraryInfo = dialogs.ICONS_LIBRARY;
+
+  const handleOnClose = () => {
+    closeDialog(DialogEnum.ICONS_LIBRARY);
+  };
+
+  const handleOnPress = (id: string) => {
+    iconsLibraryInfo.options.onChange(id);
+    handleOnClose();
+  };
 
   return (
-    <Dialog isVisible={dialogs.ICONS_LIBRARY.visible} title="Icons Library">
+    <Dialog
+      isVisible={iconsLibraryInfo.visible}
+      title="Icons Library"
+      onClose={handleOnClose}>
       <View style={styles.root}>
         <Card style={styles.content}>
           {iconsList.map(icon => (
-            <TouchableOpacity style={styles.iconButton}>
-              <Image style={styles.icon} source={icon as any} />
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => handleOnPress(icon.uri)}>
+              <Image style={styles.icon} source={icon.uri} />
             </TouchableOpacity>
           ))}
         </Card>

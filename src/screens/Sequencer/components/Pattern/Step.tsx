@@ -1,6 +1,6 @@
-import {StyleSheet, TouchableHighlight, View} from 'react-native';
 import React, {FC} from 'react';
-import {useTheme} from '@react-navigation/native';
+import {StyleSheet, TouchableHighlight, View} from 'react-native';
+import {useTheme} from '../../../../hooks';
 
 interface PatternProps {
   isActive: boolean;
@@ -13,13 +13,12 @@ const Step: FC<PatternProps> = ({isActive, onPress}) => {
     <TouchableHighlight
       style={[
         styles.step,
-        isActive
-          ? {backgroundColor: colors.primary}
-          : {backgroundColor: colors.border},
+        {borderColor: colors.primary},
+        isActive ? {backgroundColor: colors.primary} : {},
       ]}
       underlayColor={colors.primary}
       onPress={onPress}>
-      <View style={[styles.step, isActive && styles.activeStep]} />
+      <></>
     </TouchableHighlight>
   );
 };
@@ -29,10 +28,7 @@ export {Step};
 const styles = StyleSheet.create({
   step: {
     flex: 1,
+    borderWidth: 1,
     borderRadius: 4,
-    // backgroundColor: '#9B7EBD',
-  },
-  activeStep: {
-    // backgroundColor: '#3B1E54',
   },
 });

@@ -51,6 +51,7 @@ export const ProjectContextProvider = ({children}: any) => {
     id: string,
     name: string,
     path: string,
+    icon: string | undefined,
     settings: SampleSettings,
   ) => {
     const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
@@ -64,7 +65,7 @@ export const ProjectContextProvider = ({children}: any) => {
     if (response?.id) {
       dispatch({
         type: PROJECT_ACTION_TYPES.SET_SAMPLE,
-        payload: {id, name, path, settings},
+        payload: {id, name, path, icon, settings},
       });
     }
   };
@@ -175,6 +176,7 @@ export const ProjectContextProvider = ({children}: any) => {
         sample.id,
         sample.name,
         sample.path,
+        sample.icon,
         sample?.settings ?? DEFAULT_SAMPLE_SETTINGS,
       );
     });

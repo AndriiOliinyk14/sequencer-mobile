@@ -23,12 +23,9 @@ const PlayButton: FC<PlayButtonInterface> = ({isActive, onPress, disabled}) => {
       onPress={onPress}
       style={[
         styles.container,
+        // eslint-disable-next-line react-native/no-inline-styles
         {
-          borderColor: disabled
-            ? colors.disabled
-            : isActive
-            ? colors.red
-            : colors.notification,
+          borderColor: disabled ? colors.disabled : colors.success,
           backgroundColor: isPresed ? colors.text : 'transparent',
         },
       ]}
@@ -36,40 +33,20 @@ const PlayButton: FC<PlayButtonInterface> = ({isActive, onPress, disabled}) => {
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}>
       {isActive ? (
-        <>
-          <View
-            style={[
-              styles.rectangle,
-              {
-                backgroundColor: disabled
-                  ? colors.disabled
-                  : isActive
-                  ? colors.red
-                  : colors.notification,
-              },
-            ]}
-          />
-          {/* <View style={styles.pause}>
-            <View
-              style={[
-                styles.pauseColumn,
-                {backgroundColor: disabled ? colors.disabled : colors.primary},
-              ]}
-            />
-            <View
-              style={[
-                styles.pauseColumn,
-                {backgroundColor: disabled ? colors.disabled : colors.primary},
-              ]}
-            />
-          </View> */}
-        </>
+        <View
+          style={[
+            styles.rectangle,
+            {
+              backgroundColor: disabled ? colors.disabled : colors.success,
+            },
+          ]}
+        />
       ) : (
         <Animated.View
           style={[
             styles.triangle,
             {
-              borderLeftColor: disabled ? colors.disabled : colors.notification,
+              borderLeftColor: disabled ? colors.disabled : colors.success,
               opacity: opacity,
             },
           ]}
@@ -87,14 +64,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
     borderRadius: 4,
   },
   triangle: {
     width: 0,
     height: 0,
-    borderWidth: 10,
+    borderWidth: 8,
     marginRight: -9,
     marginLeft: 3,
     borderStyle: 'solid',
@@ -106,16 +83,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 2,
   },
-  pauseColumn: {
-    width: 4,
-    height: 20,
-  },
   rectangle: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 14,
-    height: 14,
+    width: 10,
+    height: 10,
     marginVertical: 3,
   },
 });

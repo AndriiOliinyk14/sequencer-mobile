@@ -2,7 +2,6 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {FC} from 'react';
 import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Card} from '../../../../components';
-import {icons} from '../../../../components/icons';
 import {DEFAULT_SAMPLE_SETTINGS} from '../../../../const';
 import {useProjectContext} from '../../../../context';
 import {playerModule} from '../../../../NativeModules';
@@ -13,7 +12,7 @@ interface SampleInterface extends SampleEntity {
   type: SamplesScreenTypeEnum;
 }
 
-const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
+const Sample: FC<SampleInterface> = ({name, id, path, type, icon}) => {
   const {colors} = useTheme();
   const navigation = useNavigation<{
     navigate(name: string, args: {id: string}): unknown;
@@ -27,7 +26,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
   };
 
   const handleAddSampleToProject = () => {
-    actions.setSample(id, name, path, DEFAULT_SAMPLE_SETTINGS);
+    actions.setSample(id, name, path, icon, DEFAULT_SAMPLE_SETTINGS);
     navigation.goBack();
   };
 
@@ -41,7 +40,7 @@ const Sample: FC<SampleInterface> = ({name, id, path, type}) => {
     <Card>
       <Pressable style={[styles.root, {borderColor: colors.border}]}>
         <View style={styles.top}>
-          <Image style={styles.icon} source={icons['hi-hat']} />
+          <Image style={styles.icon} source={icon as any} />
           <View>
             <Text style={[styles.name, {color: colors.text}]}>
               Name: {name}
@@ -82,10 +81,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    gap: 14,
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     objectFit: 'contain',
   },
   name: {fontSize: 14},

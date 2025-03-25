@@ -2,8 +2,10 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
+import {useTheme} from '../../hooks';
 
 const Indicator = () => {
+  const {colors} = useTheme();
   const {count} = useCountContext();
   const {
     state: {patternLength},
@@ -18,8 +20,9 @@ const Indicator = () => {
             key={index}
             style={[
               styles.indicator,
-              count - 1 === index && styles.activeIndicator,
+              count - 1 === index && {backgroundColor: colors.primary},
               (index + 1) % 4 === 0 && styles.everyFourthStep,
+              {borderColor: colors.card},
             ]}
           />
         ))}
@@ -42,7 +45,6 @@ const styles = StyleSheet.create({
   instrument: {
     width: 40,
     height: 20,
-    // backgroundColor: 'red',
   },
   indicators: {
     display: 'flex',
@@ -57,11 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 20,
     borderWidth: 1,
-    borderColor: '#9B7EBD',
-  },
-  activeIndicator: {
-    borderWidth: 1,
-    backgroundColor: '#3B1E54',
   },
   everyFourthStep: {
     marginRight: 6,

@@ -1,18 +1,17 @@
 import React, {FC} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {icons} from '../../../../components/icons';
-import {useGlobalContext, useProjectContext} from '../../../../context';
-import {DialogEnum} from '../../../../types';
-import {Step} from './Step';
+import {Image, StyleSheet, View} from 'react-native';
 import {Card} from '../../../../components';
+import {useGlobalContext, useProjectContext} from '../../../../context';
+import {Step} from './Step';
 
 interface PatternProps {
   name: string;
   id: string;
   pattern: {isOn: boolean}[];
+  icon?: string;
 }
 
-const Pattern: FC<PatternProps> = ({id, pattern}) => {
+const Pattern: FC<PatternProps> = ({id, pattern, icon}) => {
   const {
     actions: {openDialog},
   } = useGlobalContext();
@@ -26,20 +25,16 @@ const Pattern: FC<PatternProps> = ({id, pattern}) => {
     updatePattern(id, newPattern as any);
   };
 
-  const icon =
-    icons[id as keyof typeof icons] ||
-    require('../../../../assets/icons/snare.png');
-
   const handleEditSample = () => {
-    openDialog(DialogEnum.ADD_SAMPLE, {type: 'EDIT_SAMPLE', key: id});
+    // openDialog(DialogEnum.ADD_SAMPLE, {type: 'EDIT_SAMPLE', key: id});
   };
 
   return (
     <Card>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.instrument} onPress={handleEditSample}>
-          <Image style={styles.instrumentImg} source={icon} />
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.instrument} onPress={handleEditSample}> */}
+        <Image style={styles.instrumentIcon} source={icon as any} />
+        {/* </TouchableOpacity> */}
         <View style={styles.steps}>
           {Array.from({length: patternLength}).map((_, index) => (
             <View
@@ -77,10 +72,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  instrumentImg: {
-    width: 40,
+  instrumentIcon: {
+    width: 30,
     height: 30,
-    objectFit: 'contain',
   },
   steps: {
     flexGrow: 1,

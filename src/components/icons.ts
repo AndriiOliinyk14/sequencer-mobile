@@ -1,11 +1,15 @@
 const icons = {
-  kick: require('../assets/icons/kick.png'),
-  snare: require('../assets/icons/snare.png'),
-  claps: require('../assets/icons/claps.png'),
-  crash: require('../assets/icons/crash.png'),
-  hiHat: require('../assets/icons/hi-hat.png'),
-  openHiHat: require('../assets/icons/open-hi-hat.png'),
-  // openHiHat: require('../assets/icons/open-hi-hat.png'),
+  kick: {id: 'kick', uri: require('../assets/icons/kick.png')},
+  snare: {id: 'snare', uri: require('../assets/icons/snare.png')},
+  claps: {id: 'claps', uri: require('../assets/icons/claps.png')},
+  crash: {id: 'crash', uri: require('../assets/icons/crash.png')},
+  hiHat: {id: 'hiHat', uri: require('../assets/icons/hi-hat.png')},
+  openHiHat: {
+    id: 'openHiHat',
+    uri: require('../assets/icons/open-hi-hat.png'),
+  },
+  mic: {id: 'mic', uri: require('../assets/icons/mic.png')},
 };
 
-export {icons};
+const iconsList = Object.values(icons);
+export {iconsList, icons};

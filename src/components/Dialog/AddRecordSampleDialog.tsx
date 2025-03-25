@@ -64,7 +64,8 @@ const AddRecordSampleDialog = () => {
   return (
     <Dialog
       isVisible={dialogs.ADD_RECORD_SAMPLE.visible}
-      onClose={handleOnClose}>
+      onClose={handleOnClose}
+      title="Add sample">
       <View style={styles.container}>
         {!file ? (
           <View style={styles.buttons}>

@@ -47,6 +47,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
   const importSample = async (
     name: string,
     format: string,
+    icon: string,
     uri: string,
     callback: any,
   ) => {
