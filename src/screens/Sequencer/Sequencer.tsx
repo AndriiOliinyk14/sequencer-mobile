@@ -19,15 +19,15 @@ const Sequencer = ({route, navigation}) => {
 
   const {id} = route.params;
 
+  const fetchProjectData = async () => {
+    const project = await projectStorageService.getProject(id);
+
+    if (!project) return;
+    actions.setProject(project);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const project = await projectStorageService.getProject(id);
-
-      if (!project) return;
-      actions.setProject(project);
-    };
-
-    fetchData();
+    fetchProjectData();
   }, [id]);
 
   useDestroyProjectSamples();

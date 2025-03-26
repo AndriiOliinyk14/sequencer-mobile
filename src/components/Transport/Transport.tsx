@@ -1,12 +1,18 @@
-import {Link, useTheme} from '@react-navigation/native';
+import {Link} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import {useProjectContext} from '../../context';
+import {useGlobalContext, useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
 import {PlayerState} from '../../types/enums/PlayerStatus';
 import {PlayButton} from '../PlayButton';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {useTheme} from '../../hooks';
+import {DialogEnum} from '../../types';
 
 const Transport = () => {
+  const {
+    actions: {openDialog},
+  } = useGlobalContext();
   const {count} = useCountContext();
   const {actions, state} = useProjectContext();
   const {colors} = useTheme();
@@ -28,11 +34,16 @@ const Transport = () => {
     actions.setPatternLength(value);
   };
 
+  const handleOpenProjectSettings = () => {
+    actions.setPlayerStatus(PlayerState.STOPPED);
+    openDialog(DialogEnum.PROJECT_SETTINGS);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.count}>{count}</Text>
       <PlayButton isActive={isPlaying} onPress={handlePress} />
-      <TouchableNativeFeedback
+      <Text style={[styles.count, {color: colors.primary}]}>{count}</Text>
+      {/* <TouchableNativeFeedback
         disabled={patternLength === 16}
         onPress={() => handlePatternLengthChange(16)}>
         <Text
@@ -55,8 +66,14 @@ const Transport = () => {
           ]}>
           32
         </Text>
-      </TouchableNativeFeedback>
-      <Link screen={'Mixer'}>Mixer</Link>
+      </TouchableNativeFeedback> */}
+      <Icon
+        name="gear"
+        size={24}
+        color={colors.primary}
+        onPress={handleOpenProjectSettings}
+      />
+      {/* <Link screen={'Mixer'}>Mixer</Link> */}
     </View>
   );
 };
@@ -67,18 +84,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+    gap: 40,
   },
   content: {
     paddingTop: 40,
   },
   count: {
     width: 50,
-    textAlign: 'center',
+    textAlign: 'left',
     padding: 10,
     paddingVertical: 8,
-    fontSize: 14,
-    backgroundColor: 'lightgrey',
+    fontSize: 20,
+    fontWeight: 700,
     borderRadius: 5,
   },
   patternLength: {

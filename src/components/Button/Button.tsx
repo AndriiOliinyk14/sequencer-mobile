@@ -20,15 +20,18 @@ const Button: FC<Button> = ({children, onPress, color, disabled}) => {
       style={[
         styles.container,
         {
-          backgroundColor: disabled ? colors.disabled : colors.card,
+          backgroundColor: disabled ? colors.disabled : colors.secondary,
           borderColor: color ?? disabled ? colors.disabledText : colors.text,
         },
       ]}>
       {typeof children === 'string' ? (
         <Text
-          style={{
-            color: color ?? disabled ? colors.disabledText : colors.text,
-          }}>
+          style={[
+            {
+              color: color ?? disabled ? colors.disabledText : colors.text,
+            },
+            styles.text,
+          ]}>
           {children}
         </Text>
       ) : (
@@ -47,4 +50,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
   },
+  text: {textAlign: 'center'},
 });

@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingHorizontal: 40,
     gap: 20,
   },
   inputs: {

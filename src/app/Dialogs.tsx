@@ -4,6 +4,7 @@ import {
   IconsLibrary,
   NewProjectDialog,
 } from '../components';
+import {ProjectSettings} from '../components/Dialog';
 
 const Dialogs = () => {
   return (
@@ -11,6 +12,7 @@ const Dialogs = () => {
       <NewProjectDialog />
       <AddRecordSampleDialog />
       <IconsLibrary />
+      <ProjectSettings />
     </>
   );
 };

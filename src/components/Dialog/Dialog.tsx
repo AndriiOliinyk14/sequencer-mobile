@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingVertical: 10,
+    paddingHorizontal: 40,
     flexDirection: 'column',
   },
   title: {

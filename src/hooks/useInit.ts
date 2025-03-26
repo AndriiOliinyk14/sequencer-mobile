@@ -1,16 +1,16 @@
 import {useEffect} from 'react';
 
 import {counterModule} from '../NativeModules';
-import {useGlobalContext} from '../context/globalContext';
+import {useProjectContext} from '../context';
 
 function useInit() {
-  const {state} = useGlobalContext();
+  const {state} = useProjectContext();
   const {bpm, patternLength} = state;
 
   useEffect(() => {
     counterModule.setPatternLength(patternLength);
     counterModule.setBpm(bpm);
-  }, []);
+  }, [bpm, patternLength]);
 }
 
 export {useInit};

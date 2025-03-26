@@ -16,6 +16,9 @@ const initialState = {
     [DialogEnum.ADD_RECORD_SAMPLE]: {
       visible: false,
     },
+    [DialogEnum.PROJECT_SETTINGS]: {
+      visible: false,
+    },
   },
 };
 
