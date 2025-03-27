@@ -28,17 +28,15 @@ const IconsLibrary = () => {
       isVisible={iconsLibraryInfo.visible}
       title="Icons Library"
       onClose={handleOnClose}>
-      <View style={styles.root}>
-        <Card style={styles.content}>
-          {iconsList.map(icon => (
-            <TouchableOpacity
-              style={styles.iconButton}
-              onPress={() => handleOnPress(icon.uri)}>
-              <Image style={styles.icon} source={icon.uri} />
-            </TouchableOpacity>
-          ))}
-        </Card>
-      </View>
+      <Card style={styles.content}>
+        {iconsList.map(icon => (
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => handleOnPress(icon.uri)}>
+            <Image style={styles.icon} source={icon.uri} />
+          </TouchableOpacity>
+        ))}
+      </Card>
     </Dialog>
   );
 };
@@ -46,9 +44,6 @@ const IconsLibrary = () => {
 export {IconsLibrary};
 
 const styles = StyleSheet.create({
-  root: {
-    gap: 12,
-  },
   content: {
     display: 'flex',
     flexDirection: 'row',
@@ -58,7 +53,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {},
   icon: {
-    width: 36,
-    height: 36,
+    width: 24,
+    height: 24,
   },
 });

@@ -1,11 +1,16 @@
 import {useEffect} from 'react';
 
 import {counterModule} from '../NativeModules';
-import {useProjectContext} from '../context';
+import {useProjectContext, useSamplesContext} from '../context';
 
 function useInit() {
   const {state} = useProjectContext();
+  const {actions} = useSamplesContext();
   const {bpm, patternLength} = state;
+
+  useEffect(() => {
+    actions.getAllSamples();
+  }, []);
 
   useEffect(() => {
     counterModule.setPatternLength(patternLength);

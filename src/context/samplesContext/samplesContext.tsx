@@ -63,7 +63,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
         binaryData: base64Audio,
       });
 
-      const sample = new SampleEntity(id, name, savedUri);
+      const sample = new SampleEntity(id, name, savedUri, icon);
 
       await sampleStorageService.save(sample);
 

@@ -10,21 +10,33 @@ import {useTheme} from '../../hooks';
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;
+  error?: string;
 }
 
 const TextInput: FC<TextInputProps> = props => {
   const {colors} = useTheme();
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.disabled}]}>
-      {props?.label && (
-        <Text style={[styles.label, {color: colors.text}]}>{props.label}</Text>
+    <View style={styles.root}>
+      <View style={[styles.container, {backgroundColor: colors.disabled}]}>
+        {props?.label && (
+          <Text style={[styles.label, {color: colors.text}]}>
+            {props.label}
+          </Text>
+        )}
+        <View>
+          <RNTextInput
+            {...props}
+            style={[props.style, styles.input, {color: colors.primary}]}
+            placeholderTextColor={'white'}
+          />
+        </View>
+      </View>
+      {props?.error && (
+        <Text style={[styles.error, {color: colors.error}]}>
+          {props?.error}
+        </Text>
       )}
-      <RNTextInput
-        {...props}
-        style={[props.style, styles.input, {color: colors.primary}]}
-        placeholderTextColor={'white'}
-      />
     </View>
   );
 };
@@ -32,6 +44,9 @@ const TextInput: FC<TextInputProps> = props => {
 export {TextInput};
 
 const styles = StyleSheet.create({
+  root: {
+    display: 'flex',
+  },
   container: {
     paddingVertical: 4,
     paddingHorizontal: 10,
@@ -53,4 +68,5 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     backgroundColor: 'transparent',
   },
+  error: {},
 });

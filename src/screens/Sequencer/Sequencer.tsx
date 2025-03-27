@@ -80,7 +80,6 @@ const Sequencer = ({route, navigation}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Transport />
-
         <Indicator />
       </View>
 

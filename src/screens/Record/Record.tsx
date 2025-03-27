@@ -2,14 +2,18 @@ import {useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
-import {Button, PlayButton, RecButton} from '../../components';
+import {Button, Card, PlayButton, RecButton, TextInput} from '../../components';
+import {icons} from '../../components/icons';
 import {useSamplesContext} from '../../context';
-import {recorderModule} from '../../NativeModules';
-import {icons, iconsList} from '../../components/icons';
+import {playerModule, recorderModule} from '../../NativeModules';
 
 const Record = ({navigation, route}) => {
   const {colors} = useTheme();
   const {actions} = useSamplesContext();
+
+  const [name, setName] = useState('');
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [trackId, setTrackId] = useState('');
 
@@ -21,8 +25,6 @@ const Record = ({navigation, route}) => {
     isRecording: false,
     isReadyToPlay: false,
   });
-
-  const [playingState, setPlayingState] = useState({isPlaying: false});
 
   const [recordDuration, setRecordDuration] = useState<number>(0);
 
@@ -78,6 +80,7 @@ const Record = ({navigation, route}) => {
 
     if (response?.path) {
       setFile(response);
+      await playerModule.load(response.path);
 
       setRecordState(prev => ({
         ...prev,
@@ -88,57 +91,61 @@ const Record = ({navigation, route}) => {
   };
 
   const handleOnPlay = () => {
-    setPlayingState(prev => ({...prev, isPlaying: true}));
-  };
-
-  const handleOnStop = () => {
-    recorderModule.stopRecording();
-    setPlayingState(prev => ({...prev, isPlaying: true}));
+    playerModule.play();
   };
 
   const handleOnImport = () => {
     if (!file) return;
 
-    actions.importSample(
-      trackId,
-      file?.format,
-      icons.mic.uri,
-      file.path,
-      () => {
-        recorderModule.cleanup();
-        navigation.goBack();
-      },
-    );
+    if (!name) {
+      setErrors(prev => ({...prev, name: 'Name is required'}));
+      return;
+    }
+
+    actions.importSample(name, file?.format, icons.mic.uri, file.path, () => {
+      recorderModule.cleanup();
+      navigation.goBack();
+    });
   };
 
   const handleOnPressRec = (isRecording: boolean) => {
     isRecording ? handleOnStopRecording() : handleOnStartRecord();
   };
 
-  const handleOnPressPlay = (isPlaying: boolean) => {
-    handleOnPlay();
+  const handleOnChangeName = (value: string) => {
+    setErrors({});
+    setName(value);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={{color: colors.primary}}>Recording ID: {trackId}</Text>
-      <Text style={[styles.duration, {color: colors.text}]}>
-        {`Record duration: ${recordDuration} sec`}
-      </Text>
-      <View style={styles.controlButtons}>
-        <RecButton
-          isActive={recordState.isRecording}
-          onPress={() => handleOnPressRec(recordState.isRecording)}
-        />
-        <PlayButton
-          onPress={handleOnPlay}
-          isActive={false} // disabled={!recordState.isReadyToPlay}
-          disabled={!recordState.isReadyToPlay}
-        />
-      </View>
-      {file?.path && (
-        <Button onPress={handleOnImport}>Import sample to library</Button>
-      )}
+      <Card style={styles.body}>
+        <Text style={[styles.duration, {color: colors.text}]}>
+          {`Record duration: ${recordDuration} sec`}
+        </Text>
+        <View style={styles.controlButtons}>
+          <RecButton
+            isActive={recordState.isRecording}
+            onPress={() => handleOnPressRec(recordState.isRecording)}
+          />
+          <PlayButton
+            onPress={handleOnPlay}
+            isActive={false}
+            disabled={!recordState.isReadyToPlay}
+          />
+        </View>
+        {file?.path && (
+          <>
+            <TextInput
+              label="Name"
+              onChangeText={handleOnChangeName}
+              value={name}
+              error={errors?.name}
+            />
+            <Button onPress={handleOnImport}>Import sample to library</Button>
+          </>
+        )}
+      </Card>
     </View>
   );
 };
@@ -148,6 +155,8 @@ export default Record;
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
+  },
+  body: {
     display: 'flex',
     gap: 20,
   },

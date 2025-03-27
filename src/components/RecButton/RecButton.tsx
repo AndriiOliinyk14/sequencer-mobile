@@ -11,7 +11,7 @@ const RecButton: FC<RecButtonInterface> = ({isActive, onPress}) => {
   const [isPresed, setPresed] = useState(false);
 
   const {colors} = useTheme();
-  const opacity = useRef(new Animated.Value(1)).current; // Persist opacity across renders
+  const opacity = useRef(new Animated.Value(1)).current;
   const animation = useRef<any>(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const RecButton: FC<RecButtonInterface> = ({isActive, onPress}) => {
         styles.container,
         {
           borderColor: colors.error,
-          backgroundColor: isPresed ? colors.notification : 'transparent',
+          backgroundColor: isPresed ? colors.warning : 'transparent',
         },
       ]}
       onPressIn={handleOnPressIn}

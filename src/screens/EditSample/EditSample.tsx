@@ -1,6 +1,14 @@
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Alert, Button, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Card, Player, TextInput} from '../../components';
 import {useGlobalContext, useSamplesContext} from '../../context';
 import {fsService, sampleStorageService} from '../../services';
@@ -105,40 +113,42 @@ const EditSample = () => {
   const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Card>
-          <Player path={absolutePath} onTrim={data => setTrimmedPath(data)} />
-        </Card>
-        <Card style={styles.row}>
-          <Text style={{color: colors.text}}>Icon: </Text>
-          {sample?.icon && (
-            <Image style={styles.icon} source={sample.icon as any} />
-          )}
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <Card>
+            <Player path={absolutePath} onTrim={data => setTrimmedPath(data)} />
+          </Card>
+          <Card style={styles.row}>
+            <Text style={{color: colors.text}}>Icon: </Text>
+            {sample?.icon && (
+              <Image style={styles.icon} source={sample.icon as any} />
+            )}
+            <Button
+              title={sample.icon ? 'Change icon' : 'Add icon'}
+              onPress={handleOpenLibraryDialog}
+            />
+          </Card>
+          <Card>
+            <TextInput
+              label="Sample name"
+              style={{backgroundColor: colors.card}}
+              placeholder="Enter sample name"
+              value={values.name}
+              onChangeText={text => handleOnInput({name: text})}
+            />
+          </Card>
+        </View>
+        <View style={styles.bottom}>
+          <Button title="Save" onPress={() => handleOnSave(sample, values)} />
           <Button
-            title={sample.icon ? 'Change icon' : 'Add icon'}
-            onPress={handleOpenLibraryDialog}
+            color={'red'}
+            onPress={() => handleOnRemove(sample)}
+            title="Remove Sample"
           />
-        </Card>
-        <Card>
-          <TextInput
-            label="Sample name"
-            style={{backgroundColor: colors.card}}
-            placeholder="Enter sample name"
-            value={values.name}
-            onChangeText={text => handleOnInput({name: text})}
-          />
-        </Card>
+        </View>
       </View>
-      <View style={styles.bottom}>
-        <Button title="Save" onPress={() => handleOnSave(sample, values)} />
-        <Button
-          color={'red'}
-          onPress={() => handleOnRemove(sample)}
-          title="Remove Sample"
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 

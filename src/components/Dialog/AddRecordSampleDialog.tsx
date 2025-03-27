@@ -7,6 +7,7 @@ import {Dialog} from './Dialog';
 import {pick, types} from '@react-native-documents/picker';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {Button} from '../Button';
+import {icons} from '../icons';
 
 const AddRecordSampleDialog = () => {
   const [file, setFile] = useState<{
@@ -47,10 +48,15 @@ const AddRecordSampleDialog = () => {
   const handleOnImport = () => {
     if (!file) return;
 
-    actions.importSample(file?.name, file?.format, file?.uri, id =>
-      navigation.navigate('Samples Library', {
-        type: dialogs.ADD_RECORD_SAMPLE?.options?.type,
-      }),
+    actions.importSample(
+      file?.name,
+      file?.format,
+      icons.snare.uri,
+      file?.uri,
+      () =>
+        navigation.navigate('Samples Library', {
+          type: dialogs.ADD_RECORD_SAMPLE?.options?.type,
+        }),
     );
 
     handleOnClose();
@@ -102,5 +108,6 @@ const styles = StyleSheet.create({
   },
   file: {
     alignItems: 'center',
+    gap: 16,
   },
 });

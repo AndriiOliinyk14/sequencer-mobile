@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {Card} from '../../../../components';
-import {useGlobalContext, useProjectContext} from '../../../../context';
+import {useProjectContext, useSamplesContext} from '../../../../context';
 import {Step} from './Step';
 
 interface PatternProps {
@@ -11,13 +11,12 @@ interface PatternProps {
   icon?: string;
 }
 
-const Pattern: FC<PatternProps> = ({id, pattern, icon}) => {
-  const {
-    actions: {openDialog},
-  } = useGlobalContext();
+const Pattern: FC<PatternProps> = ({id, pattern}) => {
+  const {state: samples} = useSamplesContext();
   const {state, actions} = useProjectContext();
   const {patternLength} = state;
   const {updatePattern} = actions;
+  const sample = samples.samplesObj[id];
 
   const handleOnPress = (index: number, value: {isOn: boolean}) => {
     const newPattern = [...(state?.patterns?.[id] || [])];
@@ -33,7 +32,7 @@ const Pattern: FC<PatternProps> = ({id, pattern, icon}) => {
     <Card>
       <View style={styles.container}>
         {/* <TouchableOpacity style={styles.instrument} onPress={handleEditSample}> */}
-        <Image style={styles.instrumentIcon} source={icon as any} />
+        <Image style={styles.instrumentIcon} source={sample.icon as any} />
         {/* </TouchableOpacity> */}
         <View style={styles.steps}>
           {Array.from({length: patternLength}).map((_, index) => (
