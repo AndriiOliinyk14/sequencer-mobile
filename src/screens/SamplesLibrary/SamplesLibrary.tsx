@@ -32,14 +32,13 @@ const SamplesLibrary: FC<{
   }, []);
 
   const samples = useMemo(() => {
-    return search
-      ? state.samples.filter(item => {
-          console.log(item.name.toLocaleLowerCase());
-          return item.name
-            .toLocaleLowerCase()
-            .includes(search.toLocaleLowerCase().trim());
-        })
-      : state.samples;
+    if (search) {
+      return state.samples.filter(item => {
+        return item.name.toLowerCase().includes(search.toLowerCase().trim());
+      });
+    }
+
+    return state.samples;
   }, [search, state.samples]);
 
   return (

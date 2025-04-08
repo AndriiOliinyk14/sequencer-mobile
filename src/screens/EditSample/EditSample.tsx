@@ -1,4 +1,4 @@
-import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -10,7 +10,12 @@ import {
   View,
 } from 'react-native';
 import {Card, Player, TextInput} from '../../components';
-import {useGlobalContext, useSamplesContext} from '../../context';
+import {
+  useGlobalContext,
+  useProjectContext,
+  useSamplesContext,
+} from '../../context';
+import {useTheme} from '../../hooks';
 import {fsService, sampleStorageService} from '../../services';
 import {DialogEnum, SampleEntity} from '../../types';
 
@@ -25,6 +30,7 @@ const EditSample = () => {
   const [values, setValues] = useState<{name: string}>({name: ''});
 
   const {actions} = useSamplesContext();
+  const {state: projectState, actions: projectActions} = useProjectContext();
   const {
     actions: {openDialog},
   } = useGlobalContext();
@@ -69,9 +75,19 @@ const EditSample = () => {
       await handleOnSaveTrimmed();
 
       const data = {...sample, ...values};
-      console.log('data: ', data);
+
       await sampleStorageService.update(data);
+
       actions.getAllSamples();
+
+      if (projectState.samples[data.id]) {
+        const sampleToUpdate = {
+          ...data,
+          settings: projectState.samples[data.id].settings,
+        };
+        console.log(sampleToUpdate);
+        projectActions.reloadSample(sampleToUpdate);
+      }
 
       Alert.alert('Sample was saved successfully');
     } catch (error) {

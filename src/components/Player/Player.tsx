@@ -168,8 +168,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 44,
   },
   rangeInputRow: {
+    flexGrow: 1,
     flexDirection: 'row',
   },
   range: {

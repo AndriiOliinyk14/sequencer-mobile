@@ -13,7 +13,7 @@ const useDoubleTouch = () => {
 
       timer.current = setTimeout(() => {
         timer.current = null;
-      }, 100);
+      }, 250);
     }
   };
 

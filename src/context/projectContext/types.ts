@@ -33,13 +33,8 @@ export interface ContextInterface {
       icon: string | undefined,
       settings?: SampleSettings,
     ) => void;
-    setRecordedSample: (
-      title: string,
-      filePath: string,
-      settings: SampleSettings,
-    ) => void;
-    replaceSample: (oldKey: string, newKey: string, newTitle: string) => void;
-    removeSample: (key: string) => void;
+    removeSample: (sample: Sample) => void;
+    reloadSample: (sample: Sample) => void;
     updateSampleSettings: (id: string, data: Record<string, number>) => void;
     setBpm: (bpm: number) => void;
     setPatternLength: (length: number) => void;

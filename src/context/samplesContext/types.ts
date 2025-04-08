@@ -8,7 +8,6 @@ export interface InitialState {
 export interface ContextInterface {
   state: InitialState;
   actions: {
-    setSample: (sample: SampleEntity) => void;
     importSample: (
       name: string,
       format: string,

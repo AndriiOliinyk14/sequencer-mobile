@@ -12,18 +12,15 @@ import {ContextInterface} from './types';
 const Context = createContext<ContextInterface>({
   state: initialState,
   actions: {
-    setSample: () => {},
     importSample: () => {},
     removeSample: () => {},
-    getAllSamples: () => {},
     updateSample: () => {},
+    getAllSamples: () => {},
   },
 });
 
 const SamplesProvider = ({children}: {children: ReactNode}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const setSample = () => {};
 
   const getAllSamples = async () => {
     try {
@@ -89,7 +86,7 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
       const sample = new SampleEntity(id, name, savedUri);
 
       await sampleStorageService.save(sample);
-      console.log('SAmple was updated');
+
       await getAllSamples();
     } catch (error) {
       console.error('SamplesProvider.importSample: ', error);
@@ -111,37 +108,10 @@ const SamplesProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
-  const addAllSamples = async () => {
-    try {
-      const samples = state.samples;
-
-      for (const sample of samples) {
-        const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
-
-        try {
-          await SamplerModule.addSample(
-            sample.id,
-            absolutePath,
-            {
-              volume: 1,
-              pan: 0,
-              reverb: 0,
-            },
-            () => {},
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (error) {}
-  };
-
   const actions = {
-    setSample,
     importSample,
     removeSample,
     getAllSamples,
-    addAllSamples,
     updateSample,
   };
   return (

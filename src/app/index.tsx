@@ -11,17 +11,17 @@ import App from './App';
 
 const RootApp = () => {
   return (
-    <CountProvider>
-      <GlobalContextProvider>
-        <ProjectContextProvider>
-          <SamplesProvider>
+    <GlobalContextProvider>
+      <CountProvider>
+        <SamplesProvider>
+          <ProjectContextProvider>
             <NavigationContainer theme={MainTheme}>
               <App />
             </NavigationContainer>
-          </SamplesProvider>
-        </ProjectContextProvider>
-      </GlobalContextProvider>
-    </CountProvider>
+          </ProjectContextProvider>
+        </SamplesProvider>
+      </CountProvider>
+    </GlobalContextProvider>
   );
 };
 

@@ -29,9 +29,12 @@ const ChannelStrip: FC<ChannelStripInterface> = memo(({data}) => {
 
   return (
     <View style={[styles.container, {borderColor: colors.border}]}>
-      <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
-        {data.name}
-      </Text>
+      <View style={styles.labelContainer}>
+        <Text style={[styles.trackLabel, {color: colors.primary}]}>Track:</Text>
+        <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
+          {data.name}
+        </Text>
+      </View>
 
       <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
         Reverb
@@ -48,6 +51,8 @@ const ChannelStrip: FC<ChannelStripInterface> = memo(({data}) => {
         value={(data.settings.pan + 1) * 50}
         onChange={handleOnPanChange}
         onDoubleTouch={() => handleOnPanChange(50)}
+        direction="horizontal"
+        steps={[{label: 'L'}, {label: 'R'}]}
       />
       <Text numberOfLines={1} style={[styles.name, {color: colors.primary}]}>
         Volume
@@ -69,6 +74,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: 100,
     gap: 24,
+    paddingVertical: 24,
+  },
+  labelContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  trackLabel: {
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   name: {
     fontSize: 10,

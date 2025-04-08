@@ -24,16 +24,10 @@ const Pattern: FC<PatternProps> = ({id, pattern}) => {
     updatePattern(id, newPattern as any);
   };
 
-  const handleEditSample = () => {
-    // openDialog(DialogEnum.ADD_SAMPLE, {type: 'EDIT_SAMPLE', key: id});
-  };
-
   return (
     <Card>
       <View style={styles.container}>
-        {/* <TouchableOpacity style={styles.instrument} onPress={handleEditSample}> */}
         <Image style={styles.instrumentIcon} source={sample.icon as any} />
-        {/* </TouchableOpacity> */}
         <View style={styles.steps}>
           {Array.from({length: patternLength}).map((_, index) => (
             <View

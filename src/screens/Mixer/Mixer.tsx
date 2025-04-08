@@ -32,13 +32,13 @@ export default Mixer;
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'space-between',
     paddingVertical: 10,
     paddingBottom: 40,
     height: '100%',
   },
   channelStips: {
     paddingHorizontal: 20,
+    paddingTop: 40,
     gap: 10,
   },
 });

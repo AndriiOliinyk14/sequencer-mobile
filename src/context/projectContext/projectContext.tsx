@@ -3,7 +3,13 @@ import {counterModule, samplerModule} from '../../NativeModules';
 
 import {DEFAULT_SAMPLE_SETTINGS} from '../../const';
 import {fsService} from '../../services';
-import {Pattern, PlayerState, Project, SampleSettings} from '../../types';
+import {
+  Pattern,
+  PlayerState,
+  Project,
+  Sample,
+  SampleSettings,
+} from '../../types';
 import {PROJECT_ACTION_TYPES} from './actionTypes';
 import {initialState} from './initialState';
 import reducer from './reducer';
@@ -16,14 +22,13 @@ const Context = createContext<ContextInterface>({
     updatePattern: () => {},
     setPatterns: () => {},
     setSample: () => {},
-    setRecordedSample: () => {},
     updateSampleSettings: () => {},
-    replaceSample: () => {},
     removeSample: () => {},
     setBpm: () => {},
     setPatternLength: () => {},
     setProject: () => {},
     resetState: () => {},
+    reloadSample: () => {},
   },
 });
 
@@ -47,6 +52,15 @@ export const ProjectContextProvider = ({children}: any) => {
     });
   };
 
+  const loadSample = async (sample: Sample) => {
+    const absolutePath = `${fsService.SamplesDirectoryPath}/${sample.path}`;
+    return await samplerModule.addSample(
+      sample.id,
+      absolutePath,
+      sample.settings,
+    );
+  };
+
   const setSample = async (
     id: string,
     name: string,
@@ -54,13 +68,11 @@ export const ProjectContextProvider = ({children}: any) => {
     icon: string | undefined,
     settings: SampleSettings,
   ) => {
-    const absolutePath = `${fsService.SamplesDirectoryPath}/${path}`;
-
     if (state.sampleIds.some((itemId: any) => itemId === id)) {
       return;
     }
 
-    const response = await samplerModule.addSample(id, absolutePath, settings);
+    const response = await loadSample({id, name, path, icon, settings});
 
     if (response?.id) {
       dispatch({
@@ -70,77 +82,21 @@ export const ProjectContextProvider = ({children}: any) => {
     }
   };
 
-  const setRecordedSample = (
-    title: string,
-    filePath: string,
-    settings: SampleSettings,
-  ) => {
-    // const addSample = (data: any) => {
-    //   actions.setSample(data.key, data.key, {
-    //     volume: data.volume,
-    //     pan: data.pan,
-    //     reverb: data.reverb,
-    //   });
-    // };
-    // console.log(filePath);
-    // SamplerModule.addSample(title, filePath, settings, addSample);
-  };
+  const removeSample = async (sample: Sample) => {
+    const patterns = {...state.patterns};
+    delete patterns[sample.id];
 
-  const replaceSample = (oldKey: string, newKey: string, newTitle: string) => {
-    const sampleIndex = (state.samples as Array<any>).findIndex(
-      item => item.key === oldKey,
-    );
+    const sampleIds = state.sampleIds.filter((id: string) => id !== sample.id);
 
-    if (sampleIndex >= 0) {
-      const newSamples = state.samples;
+    const samples = {...state.samples};
+    delete samples[sample.id];
 
-      newSamples[sampleIndex] = {
-        ...newSamples[sampleIndex],
-        key: newKey,
-        title: newTitle,
-      };
+    await samplerModule.destroySample(sample.id);
 
-      const newPatterns = {
-        ...state.patterns,
-        [newKey]: state.patterns[oldKey],
-      };
-
-      delete newPatterns[oldKey];
-
-      // SamplerModule.addSample(
-      //   newKey,
-      //   path + `/${newKey}.wav`,
-      //   intitialSampleSettings,
-      //   () => {},
-      // );
-
-      dispatch({
-        type: PROJECT_ACTION_TYPES.REPLACE_SAMPLE,
-        payload: {samples: newSamples, patterns: newPatterns},
-      });
-    }
-  };
-
-  const removeSample = (key: string) => {
-    const sampleIndex = (state.samples as Array<any>).findIndex(
-      item => item.key === key,
-    );
-
-    if (sampleIndex >= 0) {
-      const newSamples = [...state.samples];
-      newSamples.splice(sampleIndex, 1);
-
-      const newPatterns = {
-        ...state.patterns,
-      };
-
-      delete newPatterns[key];
-
-      dispatch({
-        type: PROJECT_ACTION_TYPES.REMOVE_SAMPLE,
-        payload: {samples: newSamples, patterns: newPatterns},
-      });
-    }
+    dispatch({
+      type: PROJECT_ACTION_TYPES.REMOVE_SAMPLE,
+      payload: {patterns, sampleIds, samples},
+    });
   };
 
   const updateSampleSettings = (id: string, data: Record<string, number>) => {
@@ -168,6 +124,11 @@ export const ProjectContextProvider = ({children}: any) => {
     dispatch({type: PROJECT_ACTION_TYPES.RESET_STATE});
   };
 
+  const reloadSample = async (sample: Sample) => {
+    await samplerModule.destroySample(sample.id);
+    await loadSample(sample);
+  };
+
   const setProject = (project: Project) => {
     project.sampleIds.forEach((id: string) => {
       const sample = project.samples[id];
@@ -190,13 +151,12 @@ export const ProjectContextProvider = ({children}: any) => {
     setPatterns,
     setSample,
     updateSampleSettings,
-    setRecordedSample,
     setProject,
-    replaceSample,
     removeSample,
     setBpm,
     setPatternLength,
     resetState,
+    reloadSample,
   } as ContextInterface['actions'];
 
   return (

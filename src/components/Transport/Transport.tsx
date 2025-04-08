@@ -1,13 +1,13 @@
 import {Link} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {useGlobalContext, useProjectContext} from '../../context';
 import {useCountContext} from '../../context/countContext';
-import {PlayerState} from '../../types/enums/PlayerStatus';
-import {PlayButton} from '../PlayButton';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {useTheme} from '../../hooks';
 import {DialogEnum} from '../../types';
+import {PlayerState} from '../../types/enums/PlayerStatus';
+import {PlayButton} from '../PlayButton';
 
 const Transport = () => {
   const {
@@ -30,9 +30,9 @@ const Transport = () => {
   //   actions.setBpm(value);
   // };
 
-  const handlePatternLengthChange = (value: number) => {
-    actions.setPatternLength(value);
-  };
+  // const handlePatternLengthChange = (value: number) => {
+  //   actions.setPatternLength(value);
+  // };
 
   const handleOpenProjectSettings = () => {
     actions.setPlayerStatus(PlayerState.STOPPED);
@@ -43,37 +43,17 @@ const Transport = () => {
     <View style={styles.container}>
       <PlayButton isActive={isPlaying} onPress={handlePress} />
       <Text style={[styles.count, {color: colors.primary}]}>{count}</Text>
-      {/* <TouchableNativeFeedback
-        disabled={patternLength === 16}
-        onPress={() => handlePatternLengthChange(16)}>
-        <Text
-          style={[
-            styles.patternLength,
-            {color: colors.text},
-            patternLength === 16 && styles.patternLengthIsActive,
-          ]}>
-          16
-        </Text>
-      </TouchableNativeFeedback>
-      <TouchableNativeFeedback
-        disabled={patternLength === 32}
-        onPress={() => handlePatternLengthChange(32)}>
-        <Text
-          style={[
-            styles.patternLength,
-            {color: colors.text},
-            patternLength === 32 && styles.patternLengthIsActive,
-          ]}>
-          32
-        </Text>
-      </TouchableNativeFeedback> */}
+
       <Icon
         name="gear"
         size={24}
         color={colors.primary}
         onPress={handleOpenProjectSettings}
       />
-      {/* <Link screen={'Mixer'}>Mixer</Link> */}
+
+      <Link screen={'Mixer'}>
+        <Icon name="sliders" size={24} color={colors.primary} />
+      </Link>
     </View>
   );
 };

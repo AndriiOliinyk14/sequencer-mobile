@@ -15,6 +15,7 @@ const reducer = (state: InitialState, action: any) => {
       return {
         ...state,
         patterns: action.payload.patterns,
+        sampleIds: action.payload.sampleIds,
         samples: action.payload.samples,
       };
 

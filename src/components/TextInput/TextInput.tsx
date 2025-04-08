@@ -46,6 +46,7 @@ export {TextInput};
 const styles = StyleSheet.create({
   root: {
     display: 'flex',
+    flexGrow: 1,
   },
   container: {
     paddingVertical: 4,
